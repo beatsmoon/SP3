@@ -9,7 +9,7 @@ using namespace std;
 CProjectile::CProjectile(void)
 	: bStatus(false)
 	, dLifetime(0.0f)
-	, fSpeed(1.0f)
+	, fSpeed(2.0f)
 	, pSource(NULL)
 {
 }

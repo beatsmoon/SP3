@@ -98,10 +98,10 @@ bool CHUD::Init(void)
 		vec3Scale.x = 0.1;
 		vec3Scale.y = 0.1;
 		// load and create a texture 
-		iTextureID = LoadTexture("Images/GUI/pistol_HUD.tga");
+		iTextureID = LoadTexture("Images/GUI/rifle_HUD.tga");
 		if (iTextureID == 0)
 		{
-			cout << "Unable to load ImageS/GUI/pistol_HUD.tga" << endl;
+			cout << "Unable to load ImageS/GUI/rifle_HUD.tga" << endl;
 			return false;
 		}
 		break;
@@ -139,33 +139,91 @@ bool CHUD::GetStatus(void) const
 
 void CHUD::Update(const double dElapsedTime)
 {
+	
 	switch (type)
 	{
 	case H_HOLDING_GUN:
+	{
+		// prevent updating texture after the 1st update
+		static bool isActivated = false;
+		// 1 == rifle
+		// 2 == pistol
+		// set the prev weapon
+		static int prevWeapon = 2;
+
 		if (cPlayer3D->GetWeapon() == cPlayer3D->GetInventoryWeapon(0))
 		{
-			iTextureID = LoadTexture("Images/GUI/holding_rifle.tga");
+			if (prevWeapon != 1)
+			{
+				isActivated = false;
+			}
+			if (!isActivated && prevWeapon != 1)
+			{
+				iTextureID = LoadTexture("Images/GUI/holding_rifle.tga");
+				isActivated = true;
+				prevWeapon = 1;
+			}
 		}
 		else
 		{
-			iTextureID = LoadTexture("Images/GUI/holding_pistol.tga");
+			if (prevWeapon != 2)
+			{
+				isActivated = false;
+			}
+			if (!isActivated && prevWeapon != 2)
+			{
+				iTextureID = LoadTexture("Images/GUI/holding_pistol.tga");
+				isActivated = true;
+				prevWeapon = 2;
+			}
+
 		}
 
 		break;
+	}
+		
 	case H_SELECTION_GUN:
+	{
+		// prevent updating texture after the 1st update
+		static bool isActivated = false;
+		// 1 == rifle
+		// 2 == pistol
+		// set the prev weapon
+		static int prevWeapon = 2;
 		if (cPlayer3D->GetWeapon() == cPlayer3D->GetInventoryWeapon(0))
 		{
-			iTextureID = LoadTexture("Images/GUI/rifle_HUD.tga");
+			if (prevWeapon != 1)
+			{
+				isActivated = false;
+			}
+			if (!isActivated && prevWeapon != 1)
+			{
+				iTextureID = LoadTexture("Images/GUI/rifle_HUD.tga");
+				isActivated = true;
+				prevWeapon = 1;
+			}
 		}
 		else
 		{
-			iTextureID = LoadTexture("Images/GUI/pistol_HUD.tga");
+			if (prevWeapon != 2)
+			{
+				isActivated = false;
+			}
+			if (!isActivated && prevWeapon != 2)
+			{
+				iTextureID = LoadTexture("Images/GUI/pistol_HUD.tga");
+				isActivated = true;
+				prevWeapon = 2;
+			}
+
 		}
+
 		break;
+	}
+		
 	default:
 		break;
 	}
-	
 }
 
 void CHUD::PreRender(void)

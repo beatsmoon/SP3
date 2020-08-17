@@ -384,13 +384,33 @@ void CScene3D::Update(const double dElapsedTime)
 	// Weapon interaction
 	if (CKeyboardController::GetInstance()->IsKeyPressed(GLFW_KEY_1))
 	{
-		cSoundController->PlaySoundByID(8);
-		cPlayer3D->SetCurrentWeapon(0);
+		static double InputDelay = 5.f;
+		if (InputDelay < 5.f)
+		{
+			InputDelay += 1.f;
+
+		}
+		else
+		{
+			InputDelay = 0.f;
+			cSoundController->PlaySoundByID(8);
+			cPlayer3D->SetCurrentWeapon(0);
+		}
 	}
 	if (CKeyboardController::GetInstance()->IsKeyPressed(GLFW_KEY_2))
 	{
-		cSoundController->PlaySoundByID(8);
-		cPlayer3D->SetCurrentWeapon(1);
+		static double InputDelay = 5.f;
+		if (InputDelay < 5.f)
+		{
+			InputDelay += 1.f;
+
+		}
+		else
+		{
+			InputDelay = 0.f;
+			cSoundController->PlaySoundByID(8);
+			cPlayer3D->SetCurrentWeapon(1);
+		}
 	}
 	if (CKeyboardController::GetInstance()->IsKeyPressed(GLFW_KEY_R))
 	{

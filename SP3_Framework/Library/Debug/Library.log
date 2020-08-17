@@ -1,1 +1,13 @@
-﻿  Library.vcxproj -> D:\Admin\Desktop\Sem1\Sem1\DM2231_GDEV\Assignments\A2\A2\A2\190543D_DM2231_ASSIGNMENT_2\DM2231_Base_Framework\Debug\Library.lib
+﻿  Settings.cpp
+  JoystickController.cpp
+  KeyboardController.cpp
+  MouseController.cpp
+  Collider.cpp
+  Entity3D.cpp
+  TextRenderer.cpp
+D:\Admin\Documents\GitHub\SP3\SP3_Framework\Library\Source\RenderControl\TextRenderer.cpp(125,24): warning C4838: conversion from 'FT_Pos' to 'GLuint' requires a narrowing conversion
+  ImageLoader.cpp
+  LoadOBJ.cpp
+  StopWatch.cpp
+  Generating Code...
+  Library.vcxproj -> D:\Admin\Documents\GitHub\SP3\SP3_Framework\Debug\Library.lib
