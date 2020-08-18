@@ -1,3 +1,7 @@
 ignore/SP3_Framework/vs/
 ignore/SP3_Framework/Debug/
 ignore/SP3_Framework/Release/
+ignore/SP3_Framework/App/Debug/
+ignore/SP3_Framework/App/Release/
+ignore/SP3_Framework/Release//Debug/
+ignore/SP3_Framework/Release/Release/
