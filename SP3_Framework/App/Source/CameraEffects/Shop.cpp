@@ -110,6 +110,7 @@ void CShop::SetProjection(glm::mat4 projection)
 	this->projection = projection;
 }
 
+//Check if Shop UI is active
 bool CShop::GetStatus(void) const
 {
     return bShopActive;
@@ -121,25 +122,88 @@ void CShop::Update(const double dElapsedTime)
 	glfwGetCursorPos(cSettings->pWindow, &dMouse_X, &dMouse_Y);
 	CMouseController::GetInstance()->UpdateMousePosition(dMouse_X, dMouse_Y);
 
+	//Logic for buying in Shop UI
 	if (bShopActive)
 	{
 		if (cMouseController->IsButtonPressed(CMouseController::BUTTON_TYPE::LMB))
 		{
 			cout << "Clicked in shop" << endl;
-			if ((cMouseController->GetMousePositionX() >= 135 && cMouseController->GetMousePositionX() < 240) && (cMouseController->GetMousePositionY() >= 310 && cMouseController->GetMousePositionY() < 400))
+			//Top Left Box
+			if ((cMouseController->GetMousePositionX() >= 80 && cMouseController->GetMousePositionX() <= 210)
+				&& (cMouseController->GetMousePositionY() >= 75 && cMouseController->GetMousePositionY() <= 225))
+			{
+				cout << "Top Left Box" << endl;
+			}
+
+			//Top Right Box
+			if ((cMouseController->GetMousePositionX() >= 590 && cMouseController->GetMousePositionX() <= 720)
+				&& (cMouseController->GetMousePositionY() >= 75 && cMouseController->GetMousePositionY() <= 225))
+			{
+				cout << "Top Right Box" << endl;
+			}
+
+			//Middle Left Box
+			if ((cMouseController->GetMousePositionX() >= 135 && cMouseController->GetMousePositionX() <= 240) 
+				&& (cMouseController->GetMousePositionY() >= 310 && cMouseController->GetMousePositionY() <= 400))
 			{
 				cPlayer3D->GetInventoryWeapon(0)->AddRounds(30);
-				cout << "Bought ammo" << endl;
+				cout << "Ammo Bought" << endl;
 			}
+			
+			//Middle Box
+			if ((cMouseController->GetMousePositionX() >= 335 && cMouseController->GetMousePositionX() <= 465)
+				&& (cMouseController->GetMousePositionY() >= 230 && cMouseController->GetMousePositionY() <= 380))
+			{
+				cout << "Middle Box" << endl;
+			}
+
+			//Middle Right Box
+			if ((cMouseController->GetMousePositionX() >= 560 && cMouseController->GetMousePositionX() <= 665)
+				&& (cMouseController->GetMousePositionY() >= 310 && cMouseController->GetMousePositionY() <= 400))
+			{
+				cout << "Middle Right Box" << endl;
+			}
+
+			//Bottom Left Box
+			if ((cMouseController->GetMousePositionX() >= 75 && cMouseController->GetMousePositionX() <= 180)
+				&& (cMouseController->GetMousePositionY() >= 465 && cMouseController->GetMousePositionY() <= 550))
+			{
+				cout << "Bottom Left Box" << endl;
+			}
+
+			//Bottom Middle Left Box
+			if ((cMouseController->GetMousePositionX() >= 255 && cMouseController->GetMousePositionX() <= 360)
+				&& (cMouseController->GetMousePositionY() >= 465 && cMouseController->GetMousePositionY() <= 550))
+			{
+				cout << "Bottom Middle Left Box" << endl;
+			}
+
+			//Bottom Middle Right Box
+			if ((cMouseController->GetMousePositionX() >= 435 && cMouseController->GetMousePositionX() <= 540)
+				&& (cMouseController->GetMousePositionY() >= 465 && cMouseController->GetMousePositionY() <= 550))
+			{
+				cout << "Bottom Middle Right Box" << endl;
+			}
+
+			//Bottom Right Box
+			if ((cMouseController->GetMousePositionX() >= 620 && cMouseController->GetMousePositionX() <= 725)
+				&& (cMouseController->GetMousePositionY() >= 465 && cMouseController->GetMousePositionY() <= 550))
+			{
+				cout << "Bottom Right Box" << endl;
+			}
+
+
 		}
 	}
 }
 
+//Activate Shop UI
 void CShop::ActivateShop(void)
 {
 	bShopActive = true;
 }
 
+//Deactivate Shop UI
 void CShop::DeactivateShop(void)
 {
 	bShopActive = false;
