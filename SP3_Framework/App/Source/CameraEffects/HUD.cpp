@@ -85,6 +85,7 @@ bool CHUD::Init(void)
 		vec3Scale.x = 0.5;
 		vec3Scale.y = 0.5;
 		// load and create a texture 
+		//iTextureID = LoadTexture("Images/GUI/holding_rifle.tga");
 		iTextureID = LoadTexture("Images/GUI/holding_rifle.tga");
 		if (iTextureID == 0)
 		{

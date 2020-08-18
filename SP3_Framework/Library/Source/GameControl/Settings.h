@@ -72,6 +72,9 @@ public:
 	// Convert an index number of a tile to a coordinate in UV Space
 	float ConvertIndexToUVSpace(const AXIS sAxis, const int iIndex, const bool bInvert, const float fOffset = 0.0f);
 
+	//Sets mouse pointer to be visible on screen
+	void SetMousePointer(bool bDisableMousePointer, bool bShowMousePointer);
+
 protected:
 	// Constructor
 	CSettings(void);

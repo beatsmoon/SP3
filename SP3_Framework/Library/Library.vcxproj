@@ -11,7 +11,6 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\..\..\..\Desktop\Sem1\Sem1\DM2210_ACOMG\Assignments\190543D_LeongWaiMen_ACOMG_A1\Common\Source\Vector3.cpp" />
     <ClCompile Include="Source\GameControl\Settings.cpp" />
     <ClCompile Include="Source\Inputs\JoystickController.cpp" />
     <ClCompile Include="Source\Inputs\KeyboardController.cpp" />
@@ -21,10 +20,10 @@
     <ClCompile Include="Source\RenderControl\TextRenderer.cpp" />
     <ClCompile Include="Source\System\ImageLoader.cpp" />
     <ClCompile Include="Source\System\LoadOBJ.cpp" />
+    <ClCompile Include="Source\System\Vector3.cpp" />
     <ClCompile Include="Source\TimeControl\StopWatch.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\..\..\..\Desktop\Sem1\Sem1\DM2210_ACOMG\Assignments\190543D_LeongWaiMen_ACOMG_A1\Common\Source\Vector3.h" />
     <ClInclude Include="Source\DesignPatterns\SingletonTemplate.h" />
     <ClInclude Include="Source\GameControl\Settings.h" />
     <ClInclude Include="Source\Inputs\JoystickController.h" />
@@ -38,6 +37,7 @@
     <ClInclude Include="Source\System\ImageLoader.h" />
     <ClInclude Include="Source\System\LoadOBJ.h" />
     <ClInclude Include="Source\System\MyMath.h" />
+    <ClInclude Include="Source\System\Vector3.h" />
     <ClInclude Include="Source\TimeControl\StopWatch.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">

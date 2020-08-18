@@ -54,7 +54,7 @@
     <ClCompile Include="Source\System\LoadOBJ.cpp">
       <Filter>System</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\..\..\Desktop\Sem1\Sem1\DM2210_ACOMG\Assignments\190543D_LeongWaiMen_ACOMG_A1\Common\Source\Vector3.cpp">
+    <ClCompile Include="Source\System\Vector3.cpp">
       <Filter>System</Filter>
     </ClCompile>
   </ItemGroup>
@@ -101,7 +101,7 @@
     <ClInclude Include="Source\System\MyMath.h">
       <Filter>System</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\..\..\Desktop\Sem1\Sem1\DM2210_ACOMG\Assignments\190543D_LeongWaiMen_ACOMG_A1\Common\Source\Vector3.h">
+    <ClInclude Include="Source\System\Vector3.h">
       <Filter>System</Filter>
     </ClInclude>
   </ItemGroup>

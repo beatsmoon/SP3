@@ -158,6 +158,9 @@
     <ClCompile Include="Source\Meshes\Mtx44.cpp">
       <Filter>Meshes</Filter>
     </ClCompile>
+    <ClCompile Include="Source\CameraEffects\Shop.cpp">
+      <Filter>CameraEffects</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Application.h">
@@ -276,6 +279,9 @@
     </ClInclude>
     <ClInclude Include="Source\Meshes\Mtx44.h">
       <Filter>Meshes</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\CameraEffects\Shop.h">
+      <Filter>CameraEffects</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

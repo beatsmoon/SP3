@@ -195,12 +195,8 @@ bool Application::Init(void)
 
 	// Additional customisation for the GLFW environment
 	
-	if (cSettings->bDisableMousePointer == true)
-		glfwSetInputMode(cSettings->pWindow, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
-	else
-		// Hide the cursor
-		if (cSettings->bShowMousePointer == false)
-			glfwSetInputMode(cSettings->pWindow, GLFW_CURSOR, GLFW_CURSOR_HIDDEN);
+	
+		
 
 	// glewExperimental is a variable that is already defined by GLEW. You must set it to GL_TRUE before calling glewInit(). 
 	glewExperimental = GL_TRUE;
@@ -250,9 +246,6 @@ void Application::Run(void)
 	while (!glfwWindowShouldClose(cSettings->pWindow)
 		&& (!CKeyboardController::GetInstance()->IsKeyReleased(GLFW_KEY_ESCAPE)))
 	{
-
-		
-
 
 		//// Call the cScene2D's Update method
 		//cScene2D->Update(dElapsedTime);
@@ -349,6 +342,16 @@ void Application::UpdateInputDevices(void)
 {
 	// Update Keyboard Input
 	//CKeyboardController::GetInstance()->Update();
+
+	if (cSettings->bDisableMousePointer == true)
+		glfwSetInputMode(cSettings->pWindow, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+	else
+		// Hide the cursor
+		if (cSettings->bShowMousePointer == false)
+			glfwSetInputMode(cSettings->pWindow, GLFW_CURSOR, GLFW_CURSOR_HIDDEN);
+	// Show the cursor
+		else
+			glfwSetInputMode(cSettings->pWindow, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
 
 	// Update Mouse Input
 	double dMouse_X, dMouse_Y;

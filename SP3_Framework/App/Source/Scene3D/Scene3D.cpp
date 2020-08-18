@@ -63,6 +63,7 @@ CScene3D::CScene3D(void)
 	, cCrossHair(NULL)
 	, cHUD(NULL)
 	, cRenderHoldingGun(NULL)
+	, cShop(NULL)
 {
 }
 
@@ -123,6 +124,12 @@ CScene3D::~CScene3D(void)
 	{
 		delete cRenderHoldingGun;
 		cRenderHoldingGun = NULL;
+	}
+
+	if (cShop)
+	{
+		delete cShop;
+		cShop = NULL;
 	}
 
 	// We won't delete this since it was created elsewhere
@@ -333,6 +340,11 @@ bool CScene3D::Init(void)
 	cHUD->SetShader(cGUIShader);
 	cHUD->Init();
 
+	//Initialise Shop UI
+	cShop = new CShop();
+	cShop->SetShader(cGUIShader);
+	cShop->Init();
+
 	cRenderHoldingGun = new CHUD(HUD_Type::H_HOLDING_GUN);
 	cRenderHoldingGun->SetShader(cGUIShader);
 	cRenderHoldingGun->Init();
@@ -453,6 +465,35 @@ void CScene3D::Update(const double dElapsedTime)
 			else
 			{
 				cPlayer3D->SetShootingMode(1);
+			}
+		}
+	}
+
+	if (CKeyboardController::GetInstance()->IsKeyPressed(GLFW_KEY_P))
+	{
+		static double InputDelay = 5.f;
+		if (InputDelay < 5.f)
+		{
+			InputDelay += 1.f;
+
+		}
+
+		else
+		{
+			InputDelay = 0.f;
+			if (cShop->GetStatus() == false)
+			{
+				cShop->ActivateShop();
+				cSettings->SetMousePointer(false, true);
+				/*cSettings->bDisableMousePointer = false;
+				cSettings->bShowMousePointer = true;
+				!cMouseController->GetKeepMouseCentered();*/
+			}
+
+			else
+			{
+				cShop->DeactivateShop();
+				cSettings->SetMousePointer(true, false);
 			}
 		}
 	}
@@ -590,6 +631,8 @@ void CScene3D::Update(const double dElapsedTime)
 		}
 	}
 
+	cShop->Update(dElapsedTime);
+
 	// Post Update Camera
 	cMouseController->PostUpdate();
 
@@ -618,6 +661,7 @@ void CScene3D::Update(const double dElapsedTime)
 
 	cRenderHoldingGun->Update(dElapsedTime);
 	cHUD->Update(dElapsedTime);
+
 	
 }
 
@@ -707,6 +751,9 @@ void CScene3D::Render(void)
 
 		// deactivate
 		cMinimap->Deactivate();
+
+		
+
 	}
 	// Part 2: Render the entire scene as per normal
 	// Get the camera view and projection
@@ -777,6 +824,9 @@ void CScene3D::Render(void)
 		cHUD->PostRender();
 	}
 	
+	cShop->PreRender();
+	cShop->Render();
+	cShop->PostRender();
 
 	cCrossHair->PreRender();
 	cCrossHair->Render();
@@ -794,12 +844,14 @@ void CScene3D::Render(void)
 	//cTextRenderer->Render(glm::to_string(cPlayer3D->GetPosition()), 10.0f, 30.0f, 0.5f, glm::vec3(1.0f, 1.0f, 0.0f));
 	
 	// Render Player Position
-	cTextRenderer->Render(glm::to_string(cPlayer3D->GetPosition()),
-						  10.0f, 30.0f, 0.5f,
-					  	  glm::vec3(1.0f, 1.0f, 1.0f));
+	cTextRenderer->Render(glm::to_string(cPlayer3D->GetPosition()),  10.0f, 30.0f, 0.5f,  glm::vec3(1.0f, 1.0f, 1.0f));
 	   
 	// Render Camera Position
 	cTextRenderer->Render(glm::to_string(cCamera->vec3Position), 10.0f, 10.0f, 0.5f, glm::vec3(1.0f, 1.0f, 0.0f));
+
+	cTextRenderer->Render(to_string(cMouseController->GetMousePositionY()), 10.0f, 50.0f, 0.5f, glm::vec3(1.0f, 1.0f, 1.0f));
+
+	cTextRenderer->Render(to_string(cMouseController->GetMousePositionX()), 10.0f, 70.0f, 0.5f, glm::vec3(1.0f, 1.0f, 1.0f));
 
 	// Call the cTextRenderer's PostRender()
 	cTextRenderer->PostRender();

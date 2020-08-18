@@ -60,6 +60,8 @@
 // Include HUD
 #include "../App/Source/CameraEffects/HUD.h"
 
+#include "../App/Source/CameraEffects/Shop.h"
+
 
 class CSettings;
 
@@ -161,6 +163,10 @@ protected:
 	CHUD* cHUD;
 
 	CHUD* cRenderHoldingGun;
+
+	CShop* cShop;
+
+
 	
 	// Constructor
 	CScene3D(void);
