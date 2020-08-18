@@ -259,22 +259,25 @@ void CStructure3D::Render(void)
 		model = glm::translate(model, glm::vec3(vec3Position.x, vec3Position.y, vec3Position.z));
 		model = glm::rotate(model, (float)90.f, glm::vec3(0.0f, 1.0f, 0.0f));
 		model = glm::scale(model, vec3Scale);
+		break;
 	}
-	break;
+	
 	case RIFLE_AMMO:
 	{
 		model = glm::mat4(1.0f); // make sure to initialize matrix to identity matrix first
 		model = glm::translate(model, vec3Position);
 		model = glm::scale(model, vec3Scale);
+		break;
 	}
-	break;
+
 	default:
 	{
 		model = glm::mat4(1.0f); // make sure to initialize matrix to identity matrix first
 		model = glm::translate(model, vec3Position);
 		model = glm::scale(model, vec3Scale);
+		break;
 	}
-	break;
+
 	}
 	
 
@@ -302,7 +305,7 @@ void CStructure3D::Render(void)
 	glDisableVertexAttribArray(0);
 
 	// Render the CCollider if needed
-	if ((cCollider) && (cCollider->bIsDisplayed))
+	/*if ((cCollider) && (cCollider->bIsDisplayed))
 	{
 		model = glm::mat4(1.0f);
 		model = glm::translate(model, vec3Position);
@@ -312,7 +315,7 @@ void CStructure3D::Render(void)
 		cCollider->view = view;
 		cCollider->projection = projection;
 		cCollider->Render();
-	}
+	}*/
 }
 
 /**

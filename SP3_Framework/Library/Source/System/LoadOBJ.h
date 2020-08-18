@@ -3,13 +3,15 @@
 #include <includes/glm.hpp>
 #include <vector>
 
-struct Vertex
-{
-	glm::vec3 pos;
-	glm::vec3 normal;
-	glm::vec2 texCoord;
-	Vertex() {}
-};
+#include "../App/Source/Meshes/Vertex.h"
+
+//struct Vertex
+//{
+//	glm::vec3 pos;
+//	glm::vec3 normal;
+//	glm::vec2 texCoord;
+//	Vertex() {}
+//};
 
 bool LoadOBJ(
 	const char* file_path,

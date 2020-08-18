@@ -6,6 +6,7 @@
 #include "Player3D.h"
 
 #include <iostream>
+
 using namespace std;
 
 void CPlayer3D::UpdateJumpFall(const double dElapsedTime)
@@ -557,6 +558,28 @@ void CPlayer3D::PreRender(void)
 {
 	// Draw ground tile as last
 	glDepthFunc(GL_LEQUAL);  // change depth function so depth test passes when values are equal to depth buffer's content
+}
+
+void CPlayer3D::RenderMesh(Mesh* mesh)
+{
+	glActiveTexture(GL_TEXTURE0);
+	glBindTexture(GL_TEXTURE_2D, iTextureID);
+
+	// create transformations
+	model = glm::mat4(1.0f); // make sure to initialize matrix to identity matrix first
+	//model = glm::rotate(model, (float)glfwGetTime()/10.0f, glm::vec3(0.0f, 0.0f, 1.0f));
+	model = glm::translate(model, glm::vec3(vec3Position.x, vec3Position.y, vec3Position.z));
+	model = glm::scale(model, vec3Scale);
+
+	// note: currently we set the projection matrix each frame, but since the projection 
+	// matrix rarely changes it's often best practice to set it outside the main loop only once.
+	cShader->setMat4("projection", projection);
+	cShader->setMat4("view", view);
+	cShader->setMat4("model", model);
+
+	// render OBJ
+	mesh->Render();
+
 }
 
 /**

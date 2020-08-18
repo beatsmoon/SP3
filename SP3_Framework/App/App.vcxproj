@@ -18,6 +18,10 @@
     <ClCompile Include="Source\CSVReader\CSVReader.cpp" />
     <ClCompile Include="Source\CSVWriter\CSVWriter.cpp" />
     <ClCompile Include="Source\main.cpp" />
+    <ClCompile Include="Source\Meshes\MatrixStack.cpp" />
+    <ClCompile Include="Source\Meshes\Mesh.cpp" />
+    <ClCompile Include="Source\Meshes\MeshBuilder.cpp" />
+    <ClCompile Include="Source\Meshes\Mtx44.cpp" />
     <ClCompile Include="Source\Scene2D\AnimatedSprites.cpp" />
     <ClCompile Include="Source\Scene2D\Bullets2D.cpp" />
     <ClCompile Include="Source\Scene2D\Enemy2D.cpp" />
@@ -53,6 +57,12 @@
     <ClInclude Include="Source\CameraEffects\ProgressBar.h" />
     <ClInclude Include="Source\CSVReader\CSVReader.h" />
     <ClInclude Include="Source\CSVWriter\CSVWriter.h" />
+    <ClInclude Include="Source\Meshes\Material.h" />
+    <ClInclude Include="Source\Meshes\MatrixStack.h" />
+    <ClInclude Include="Source\Meshes\Mesh.h" />
+    <ClInclude Include="Source\Meshes\MeshBuilder.h" />
+    <ClInclude Include="Source\Meshes\Mtx44.h" />
+    <ClInclude Include="Source\Meshes\Vertex.h" />
     <ClInclude Include="Source\Scene2D\AnimatedSprites.h" />
     <ClInclude Include="Source\Scene2D\Bullets2D.h" />
     <ClInclude Include="Source\Scene2D\Enemy2D.h" />

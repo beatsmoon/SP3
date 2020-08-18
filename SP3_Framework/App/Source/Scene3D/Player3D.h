@@ -34,6 +34,9 @@
 // Include LoadOBJs
 #include "../Library/Source/System/LoadOBJ.h"
 
+//
+#include "../Meshes/Mesh.h"
+
 // An abstract camera class that processes input and calculates the corresponding Euler Angles, Vectors and Matrices for use in OpenGL
 class CPlayer3D : public CSingletonTemplate<CPlayer3D>, public CEntity3D
 {
@@ -123,6 +126,7 @@ public:
 
 	// PreRender
 	virtual void PreRender(void);
+	void RenderMesh(Mesh* mesh);
 	// Render
 	virtual void Render(void);
 	// PostRender

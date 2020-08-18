@@ -39,6 +39,9 @@
     <Filter Include="SoundController">
       <UniqueIdentifier>{51792da7-5171-4fc9-be02-1ece8e2b03aa}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Meshes">
+      <UniqueIdentifier>{c221cc85-12f2-4466-a10f-28c645b4f66b}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\Application.cpp">
@@ -143,6 +146,18 @@
     <ClCompile Include="Source\CameraEffects\HUD.cpp">
       <Filter>CameraEffects</Filter>
     </ClCompile>
+    <ClCompile Include="Source\Meshes\Mesh.cpp">
+      <Filter>Meshes</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Meshes\MeshBuilder.cpp">
+      <Filter>Meshes</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Meshes\MatrixStack.cpp">
+      <Filter>Meshes</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Meshes\Mtx44.cpp">
+      <Filter>Meshes</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Application.h">
@@ -243,6 +258,24 @@
     </ClInclude>
     <ClInclude Include="Source\CameraEffects\HUD.h">
       <Filter>CameraEffects</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Meshes\Mesh.h">
+      <Filter>Meshes</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Meshes\MeshBuilder.h">
+      <Filter>Meshes</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Meshes\Material.h">
+      <Filter>Meshes</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Meshes\Vertex.h">
+      <Filter>Meshes</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Meshes\MatrixStack.h">
+      <Filter>Meshes</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Meshes\Mtx44.h">
+      <Filter>Meshes</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

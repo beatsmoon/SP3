@@ -178,7 +178,7 @@ void IndexVBO(
 			Vertex v;
 			v.pos = glm::vec3(in_vertices[i].x, in_vertices[i].y, in_vertices[i].z);
 			v.texCoord = glm::vec2(in_uvs[i].x, in_uvs[i].y);
-			v.normal = glm::vec3(in_normals[i].x, in_normals[i].y, in_normals[i].z);
+			
 
 			out_vertices.push_back(v);
 			unsigned newindex = (unsigned)out_vertices.size() - 1;

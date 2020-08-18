@@ -5,6 +5,9 @@
  */
 #include "Enemy3D.h"
 
+#include "../Meshes/MeshBuilder.h"
+#include "../Meshes/Mtx44.h"
+
 #include <iostream>
 using namespace std;
 
@@ -126,7 +129,10 @@ bool CEnemy3D::Init(void)
 
 	cSoundController = CSoundController::GetInstance();
 
-	std::vector<glm::vec3> vertices;
+	vec3Scale = glm::vec3(1, 1, 1);
+	vec3ColliderScale = glm::vec3(1, 1, 1);
+
+	/*std::vector<glm::vec3> vertices;
 	std::vector<glm::vec2> uvs;
 	std::vector<glm::vec3> normals;
 
@@ -154,8 +160,18 @@ bool CEnemy3D::Init(void)
 	glBufferData(GL_ARRAY_BUFFER, vertex_buffer_data.size() * sizeof(Vertex), &vertex_buffer_data[0], GL_STATIC_DRAW);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, IBO);
 	glBufferData(GL_ELEMENT_ARRAY_BUFFER, index_buffer_data.size() * sizeof(GLuint), &index_buffer_data[0], GL_STATIC_DRAW);
-	index_buffer_size = index_buffer_data.size();
+	index_buffer_size = index_buffer_data.size();*/
 
+	//// load and create a texture 
+	//iTextureID = LoadTexture("Images/chicken.tga");
+	//if (iTextureID == 0)
+	//{
+	//	cout << "Unable to load Images/chicken.tga" << endl;
+	//	return false;
+	//}
+
+	//enemyMesh = MeshBuilder::GenerateCube("enemy", glm::vec3(0,0,0), 1.f);
+	enemyMesh = MeshBuilder::GenerateOBJ("enemy", "OBJ/chicken.obj");
 	// load and create a texture 
 	iTextureID = LoadTexture("Images/chicken.tga");
 	if (iTextureID == 0)
@@ -163,8 +179,6 @@ bool CEnemy3D::Init(void)
 		cout << "Unable to load Images/chicken.tga" << endl;
 		return false;
 	}
-
-	
 
 	return true;
 }
@@ -335,6 +349,28 @@ void CEnemy3D::PreRender(void)
 	glDepthFunc(GL_LEQUAL);  // change depth function so depth test passes when values are equal to depth buffer's content
 }
 
+void CEnemy3D::RenderMesh(Mesh* mesh)
+{
+	glActiveTexture(GL_TEXTURE0);
+	glBindTexture(GL_TEXTURE_2D, iTextureID);
+
+	// create transformations
+	model = glm::mat4(1.0f); // make sure to initialize matrix to identity matrix first
+	//model = glm::rotate(model, (float)glfwGetTime()/10.0f, glm::vec3(0.0f, 0.0f, 1.0f));
+	model = glm::translate(model, glm::vec3(vec3Position.x, vec3Position.y, vec3Position.z));
+	model = glm::scale(model, vec3Scale);
+
+	// note: currently we set the projection matrix each frame, but since the projection 
+	// matrix rarely changes it's often best practice to set it outside the main loop only once.
+	cShader->setMat4("projection", projection);
+	cShader->setMat4("view", view);
+	cShader->setMat4("model", model);
+
+	// render OBJ
+	mesh->Render();
+
+}
+
 /**
 @brief Render Render this instance
 @param cShader A Shader* variable which contains the Shader to use in this class instance
@@ -351,38 +387,42 @@ void CEnemy3D::Render(void)
 	// Activate shader
 	cShader->use();
 
-	// bind textures on corresponding texture units
-	glActiveTexture(GL_TEXTURE0);
-	glBindTexture(GL_TEXTURE_2D, iTextureID);
+	//// bind textures on corresponding texture units
+	//glActiveTexture(GL_TEXTURE0);
+	//glBindTexture(GL_TEXTURE_2D, iTextureID);
 
-	// create transformations
-	model = glm::mat4(1.0f); // make sure to initialize matrix to identity matrix first
-	//model = glm::rotate(model, (float)glfwGetTime()/10.0f, glm::vec3(0.0f, 0.0f, 1.0f));
-	model = glm::translate(model, glm::vec3(vec3Position.x, vec3Position.y - 0.5f, vec3Position.z));
-	model = glm::scale(model, vec3Scale);
+	//// create transformations
+	//model = glm::mat4(1.0f); // make sure to initialize matrix to identity matrix first
+	////model = glm::rotate(model, (float)glfwGetTime()/10.0f, glm::vec3(0.0f, 0.0f, 1.0f));
+	//model = glm::translate(model, glm::vec3(vec3Position.x, vec3Position.y - 0.5f, vec3Position.z));
+	//model = glm::scale(model, vec3Scale);
 
-	// note: currently we set the projection matrix each frame, but since the projection 
-	// matrix rarely changes it's often best practice to set it outside the main loop only once.
-	cShader->setMat4("projection", projection);
-	cShader->setMat4("view", view);
-	cShader->setMat4("model", model);
+	//// note: currently we set the projection matrix each frame, but since the projection 
+	//// matrix rarely changes it's often best practice to set it outside the main loop only once.
+	//cShader->setMat4("projection", projection);
+	//cShader->setMat4("view", view);
+	//cShader->setMat4("model", model);
 
-	// render OBJ
-	glBindVertexArray(VAO);
-	
-	glEnableVertexAttribArray(0);
-	glEnableVertexAttribArray(1);
+	//// render OBJ
+	//glBindVertexArray(VAO);
+	//
+	//glEnableVertexAttribArray(0);
+	//glEnableVertexAttribArray(1);
 
-	glBindBuffer(GL_ARRAY_BUFFER, VBO);
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)0);
-	glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)(sizeof(glm::vec3) + sizeof(glm::vec3)));
+	//glBindBuffer(GL_ARRAY_BUFFER, VBO);
+	//glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)0);
+	//glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)(sizeof(glm::vec3) + sizeof(glm::vec3)));
 
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, IBO);
-	glDrawElements(GL_TRIANGLES, index_buffer_size, GL_UNSIGNED_INT, 0);
+	//glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, IBO);
+	//glDrawElements(GL_TRIANGLES, index_buffer_size, GL_UNSIGNED_INT, 0);
 
-	
-	glDisableVertexAttribArray(1);
-	glDisableVertexAttribArray(0);
+	//
+	//glDisableVertexAttribArray(1);
+	//glDisableVertexAttribArray(0);
+
+	modelStack.PushMatrix();
+	RenderMesh(enemyMesh);
+	modelStack.PopMatrix();
 
 	// Render the CCollider if needed
 	if ((cCollider) && (cCollider->bIsDisplayed))

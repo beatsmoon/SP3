@@ -26,6 +26,10 @@
 
 #include "../App/Source/SoundController/SoundController.h"
 
+#include "../Meshes/Mesh.h"
+
+#include "../Meshes/MatrixStack.h"
+
 // An abstract camera class that processes input and calculates the corresponding Euler Angles, Vectors and Matrices for use in OpenGL
 class CEnemy3D : public CEntity3D
 {
@@ -82,6 +86,7 @@ public:
 
 	// PreRender
 	virtual void PreRender(void);
+	void RenderMesh(Mesh* mesh);
 	// Render
 	virtual void Render(void);
 	// PostRender
@@ -107,6 +112,12 @@ protected:
 	int iMaxNumMovement;
 
 	int health;
+
+	Mesh* enemyMesh;
+
+	MS modelStack;
+	MS viewStack;
+	MS projectionStack;
 
 	// The handle to the CCamera class instance
 	CCamera* cCamera;
