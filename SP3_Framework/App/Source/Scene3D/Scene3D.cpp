@@ -751,9 +751,6 @@ void CScene3D::Render(void)
 
 		// deactivate
 		cMinimap->Deactivate();
-
-		
-
 	}
 	// Part 2: Render the entire scene as per normal
 	// Get the camera view and projection
@@ -824,13 +821,15 @@ void CScene3D::Render(void)
 		cHUD->PostRender();
 	}
 	
-	cShop->PreRender();
-	cShop->Render();
-	cShop->PostRender();
+	
 
 	cCrossHair->PreRender();
 	cCrossHair->Render();
 	cCrossHair->PostRender();
+
+	cShop->PreRender();
+	cShop->Render();
+	cShop->PostRender();
 
 	// Call the cTextRenderer's PreRender()
 	cTextRenderer->PreRender();
@@ -856,7 +855,7 @@ void CScene3D::Render(void)
 	// Call the cTextRenderer's PostRender()
 	cTextRenderer->PostRender();
 
-	if (cPlayer3D->GetScopeMode() == false)
+	if (cPlayer3D->GetScopeMode() == false && cShop->GetStatus() == false)
 	{
 		// call the cTextRenderer's Postrender()
 		cMinimap->Render();

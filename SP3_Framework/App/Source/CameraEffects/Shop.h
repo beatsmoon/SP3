@@ -16,6 +16,8 @@
 
 #include "Inputs/MouseController.h"
 
+//#include "GameControl/Settings.h"
+
 
 
 class CShop : public CEntity3D
@@ -63,6 +65,8 @@ protected:
 	CPlayer3D* cPlayer3D;
 
 	CMouseController* cMouseController;
+
+
 
 	bool bActive;
 	bool bShopActive;

@@ -46,9 +46,12 @@ bool CEntityManager::Init(void)
 	// Initialise the cPlayer3D
 	cPlayer3D = CPlayer3D::GetInstance();
 
+
 	cCameraEffects = CCameraEffects::GetInstance();
 
+
 	cSoundController = CSoundController::GetInstance();
+
 
 	return true;
 }

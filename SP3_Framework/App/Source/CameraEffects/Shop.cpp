@@ -48,6 +48,8 @@ bool CShop::Init(void)
 
 	cMouseController = CMouseController::GetInstance();
 
+	cSettings = CSettings::GetInstance();
+
 	transform = glm::mat4(1.0f); // make sure to initialize matrix to identity matrix first
 
 	// set up vertex data (and buffer(s)) and configure vertex attributes
@@ -83,7 +85,7 @@ bool CShop::Init(void)
 		return false;
 	}
 
-	// load and create a texture 
+	// load and create a texture
 	iTextureID = LoadTexture("Images/GUI/ShopUIv2.tga");
 	if (iTextureID == 0)
 	{
@@ -118,9 +120,13 @@ bool CShop::GetStatus(void) const
 
 void CShop::Update(const double dElapsedTime)
 {
+	
 	double dMouse_X, dMouse_Y;
 	glfwGetCursorPos(cSettings->pWindow, &dMouse_X, &dMouse_Y);
 	CMouseController::GetInstance()->UpdateMousePosition(dMouse_X, dMouse_Y);
+
+	int m_windowWidth = cSettings->iWindowWidth;
+	int m_windowHeight = cSettings->iWindowHeight;
 
 	//Logic for buying in Shop UI
 	if (bShopActive)
@@ -128,69 +134,72 @@ void CShop::Update(const double dElapsedTime)
 		if (cMouseController->IsButtonPressed(CMouseController::BUTTON_TYPE::LMB))
 		{
 			cout << "Clicked in shop" << endl;
+			cout << "m_windowwidth: " << m_windowWidth << ", m_windowHeight: " << m_windowHeight << endl;
 			//Top Left Box
-			if ((cMouseController->GetMousePositionX() >= 80 && cMouseController->GetMousePositionX() <= 210)
-				&& (cMouseController->GetMousePositionY() >= 75 && cMouseController->GetMousePositionY() <= 225))
+			if ((cMouseController->GetMousePositionX() >= m_windowWidth * 0.1 && cMouseController->GetMousePositionX() <= m_windowWidth * 0.2625)
+				&& (cMouseController->GetMousePositionY() >= m_windowHeight * 0.125 && cMouseController->GetMousePositionY() <= m_windowHeight * 0.375))
 			{
 				cout << "Top Left Box" << endl;
 			}
 
+
 			//Top Right Box
-			if ((cMouseController->GetMousePositionX() >= 590 && cMouseController->GetMousePositionX() <= 720)
-				&& (cMouseController->GetMousePositionY() >= 75 && cMouseController->GetMousePositionY() <= 225))
+			if ((cMouseController->GetMousePositionX() >= m_windowWidth * 0.7375 && cMouseController->GetMousePositionX() <= m_windowWidth * 0.9)
+				&& (cMouseController->GetMousePositionY() >= m_windowHeight * 0.125 && cMouseController->GetMousePositionY() <= m_windowHeight * 0.375))
 			{
 				cout << "Top Right Box" << endl;
 			}
 
 			//Middle Left Box
-			if ((cMouseController->GetMousePositionX() >= 135 && cMouseController->GetMousePositionX() <= 240) 
-				&& (cMouseController->GetMousePositionY() >= 310 && cMouseController->GetMousePositionY() <= 400))
+			if ((cMouseController->GetMousePositionX() >= m_windowWidth * 0.16875 && cMouseController->GetMousePositionX() <= m_windowWidth * 0.3)
+				&& (cMouseController->GetMousePositionY() >= m_windowHeight * 0.51667 && cMouseController->GetMousePositionY() <= m_windowHeight * 0.66667))
 			{
 				cPlayer3D->GetInventoryWeapon(0)->AddRounds(30);
 				cout << "Ammo Bought" << endl;
 			}
 			
 			//Middle Box
-			if ((cMouseController->GetMousePositionX() >= 335 && cMouseController->GetMousePositionX() <= 465)
-				&& (cMouseController->GetMousePositionY() >= 230 && cMouseController->GetMousePositionY() <= 380))
+			if ((cMouseController->GetMousePositionX() >= m_windowWidth * 0.41875 && cMouseController->GetMousePositionX() <= m_windowWidth * 0.58125)
+				&& (cMouseController->GetMousePositionY() >= m_windowHeight * 0.38333 && cMouseController->GetMousePositionY() <= m_windowHeight * 0.63333))
 			{
 				cout << "Middle Box" << endl;
 			}
 
 			//Middle Right Box
-			if ((cMouseController->GetMousePositionX() >= 560 && cMouseController->GetMousePositionX() <= 665)
-				&& (cMouseController->GetMousePositionY() >= 310 && cMouseController->GetMousePositionY() <= 400))
+			if ((cMouseController->GetMousePositionX() >= m_windowWidth * 0.7 && cMouseController->GetMousePositionX() <= m_windowWidth * 0.83125)
+				&& (cMouseController->GetMousePositionY() >= m_windowHeight * 0.51667 && cMouseController->GetMousePositionY() <= m_windowHeight * 0.66667))
 			{
 				cout << "Middle Right Box" << endl;
 			}
 
 			//Bottom Left Box
-			if ((cMouseController->GetMousePositionX() >= 75 && cMouseController->GetMousePositionX() <= 180)
-				&& (cMouseController->GetMousePositionY() >= 465 && cMouseController->GetMousePositionY() <= 550))
+			if ((cMouseController->GetMousePositionX() >= m_windowWidth * 0.09375 && cMouseController->GetMousePositionX() <= m_windowWidth * 0.225)
+				&& (cMouseController->GetMousePositionY() >= m_windowHeight * 0.775 && cMouseController->GetMousePositionY() <= m_windowHeight * 0.91667))
 			{
 				cout << "Bottom Left Box" << endl;
 			}
 
 			//Bottom Middle Left Box
-			if ((cMouseController->GetMousePositionX() >= 255 && cMouseController->GetMousePositionX() <= 360)
-				&& (cMouseController->GetMousePositionY() >= 465 && cMouseController->GetMousePositionY() <= 550))
+			if ((cMouseController->GetMousePositionX() >= m_windowWidth * 0.31875 && cMouseController->GetMousePositionX() <= m_windowWidth * 0.45)
+				&& (cMouseController->GetMousePositionY() >= m_windowHeight * 0.775 && cMouseController->GetMousePositionY() <= m_windowHeight * 0.91667))
 			{
 				cout << "Bottom Middle Left Box" << endl;
 			}
 
 			//Bottom Middle Right Box
-			if ((cMouseController->GetMousePositionX() >= 435 && cMouseController->GetMousePositionX() <= 540)
-				&& (cMouseController->GetMousePositionY() >= 465 && cMouseController->GetMousePositionY() <= 550))
+			if ((cMouseController->GetMousePositionX() >= m_windowWidth * 0.54375 && cMouseController->GetMousePositionX() <= m_windowWidth * 0.675)
+				&& (cMouseController->GetMousePositionY() >= m_windowHeight * 0.775 && cMouseController->GetMousePositionY() <= m_windowHeight * 0.91667))
 			{
 				cout << "Bottom Middle Right Box" << endl;
 			}
 
 			//Bottom Right Box
-			if ((cMouseController->GetMousePositionX() >= 620 && cMouseController->GetMousePositionX() <= 725)
-				&& (cMouseController->GetMousePositionY() >= 465 && cMouseController->GetMousePositionY() <= 550))
+			if ((cMouseController->GetMousePositionX() >= m_windowWidth * 0.775 && cMouseController->GetMousePositionX() <= m_windowWidth * 0.90625)
+				&& (cMouseController->GetMousePositionY() >= m_windowHeight * 0.775 && cMouseController->GetMousePositionY() <= m_windowHeight * 0.91667))
 			{
 				cout << "Bottom Right Box" << endl;
 			}
+
 
 
 		}
