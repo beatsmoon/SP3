@@ -18,7 +18,7 @@ using namespace std;
 #include "WeaponInfo/Weapon.h"
 
 // Include CEnemy3D
-#include "Enemy3D.h"
+#include "Entity/Enemy3D.h"
 
 // Include MyMath.h
 #include "../Library/Source/System/MyMath.h"

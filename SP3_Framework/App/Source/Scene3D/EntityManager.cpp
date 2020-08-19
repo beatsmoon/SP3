@@ -1,6 +1,6 @@
 #include "EntityManager.h"
 
-#include "Enemy3D.h"
+#include "Entity/Enemy3D.h"
 #include "Structure3D.h"
 
 #include <iostream>
