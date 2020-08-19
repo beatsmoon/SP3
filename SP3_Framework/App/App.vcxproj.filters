@@ -42,6 +42,9 @@
     <Filter Include="Meshes">
       <UniqueIdentifier>{c221cc85-12f2-4466-a10f-28c645b4f66b}</UniqueIdentifier>
     </Filter>
+    <Filter Include="SceneControl">
+      <UniqueIdentifier>{af87ebe2-f1e9-4aca-a390-99fc4a9eaed5}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\Application.cpp">
@@ -87,9 +90,6 @@
       <Filter>Scene2D</Filter>
     </ClCompile>
     <ClCompile Include="Source\Scene3D\Camera.cpp">
-      <Filter>Scene3D</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Scene3D\Scene3D.cpp">
       <Filter>Scene3D</Filter>
     </ClCompile>
     <ClCompile Include="Source\Scene3D\Player3D.cpp">
@@ -158,6 +158,21 @@
     <ClCompile Include="Source\Meshes\Mtx44.cpp">
       <Filter>Meshes</Filter>
     </ClCompile>
+    <ClCompile Include="Source\SceneControl\SceneManager.cpp">
+      <Filter>SceneControl</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Scene3D\SceneGame3D.cpp">
+      <Filter>Scene3D</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Scene3D\Scene3D.cpp">
+      <Filter>Scene3D</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Scene3D\SceneMenu3D.cpp">
+      <Filter>Scene3D</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Scene3D\SceneShop3D.cpp">
+      <Filter>Scene3D</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Application.h">
@@ -200,9 +215,6 @@
       <Filter>Scene2D</Filter>
     </ClInclude>
     <ClInclude Include="Source\Scene3D\Camera.h">
-      <Filter>Scene3D</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Scene3D\Scene3D.h">
       <Filter>Scene3D</Filter>
     </ClInclude>
     <ClInclude Include="Source\Scene3D\Player3D.h">
@@ -276,6 +288,21 @@
     </ClInclude>
     <ClInclude Include="Source\Meshes\Mtx44.h">
       <Filter>Meshes</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\SceneControl\SceneManager.h">
+      <Filter>SceneControl</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Scene3D\SceneGame3D.h">
+      <Filter>Scene3D</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Scene3D\Scene3D.h">
+      <Filter>Scene3D</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Scene3D\SceneMenu3D.h">
+      <Filter>Scene3D</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Scene3D\SceneShop3D.h">
+      <Filter>Scene3D</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

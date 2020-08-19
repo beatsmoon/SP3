@@ -27,6 +27,7 @@ public:
 		STRUCTURE,	// Buildings etc
 		PISTOL_AMMO,
 		RIFLE_AMMO,
+		EXPLOSIVE_BARREL,
 		OTHERS,		// Default value: Other entities such as ground and skybox
 		NUM_TYPES
 	};
@@ -81,8 +82,21 @@ public:
 	virtual void SetToDelete(const bool bToDelete);
 	virtual const bool IsToDelete(void) const;
 
+	// Add to despawn time to queue the entity for despawning
+	virtual void AddDespawnTime(const double add);
+	virtual double GetDespawnTime() const;
+	virtual void SetDespawnQueue(const bool bQueue);
+	virtual const bool GetDespawnQueue() const;
+
 	// Activate the CCollider for this class instance
 	virtual void ActivateCollider(Shader* cLineShader = NULL);
+	// Get and set the collider scale
+	virtual void SetColliderScale(glm::vec3 vec3ColliderScale);
+	virtual glm::vec3 GetColliderScale() const;
+
+	// Set whether collision should be enabled - bState will be true if enabled, false if disabled
+	virtual void SetCollisionState(const bool bState);
+	virtual const bool GetCollisionState() const;
 
 	// Check for collision with another CCollider
 	virtual bool CheckForCollision(const CEntity3D* cEntity3D);
@@ -143,6 +157,14 @@ protected:
 
 	// Boolean flag to indicate if this CEntity3D is to be deleted
 	bool bToDelete;
+
+	// Boolean to indicate if this CEntity3D needs to check for collision
+	bool bCollisionEnabled;
+
+	// Boolean to indicate if this CEntity3D needs to be put into queue for deletion
+	bool bQueueForDelete;
+	// Double to keep track of how long this CEntity3D is in queue
+	double dDespawnTime;
 
 	// glm::vec3 variables use during for checking of collision
 	glm::vec3 tempVec3A_BottomLeft;

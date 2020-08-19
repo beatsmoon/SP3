@@ -222,12 +222,12 @@ bool Application::Init(void)
 	//	return false;
 	//}
 
-	cScene3D = CScene3D::GetInstance();
+	/*cScene3D = CScene3D::GetInstance();
 	if (cScene3D->Init() == false)
 	{
 		cout << "failed to load Scene3D" << endl;
 		return false;
-	}
+	}*/
 
 	//Initialise the CPFSCounter instance
 	cFPSCounter = CFPSCounter::GetInstance();
@@ -246,38 +246,70 @@ void Application::Run(void)
 
 	double dElapsedTime = 0.0;
 
+	// Get the handler to the CSceneManager instance
+	CSceneManager* cSceneManager = CSceneManager::GetInstance();
+
+	// Add all the necessary scenes to the manager
+	CSceneGame3D* cSceneGame3D = CSceneGame3D::GetInstance();
+	cSceneManager->AddScene(cSceneGame3D);
+
+	CSceneMenu3D* cSceneMenu3D = CSceneMenu3D::GetInstance();
+	cSceneManager->AddScene(cSceneMenu3D);
+
+	CSceneShop3D* cSceneShop3D = CSceneShop3D::GetInstance();
+	cSceneManager->AddScene(cSceneShop3D);
+
+	// Initialise the cSceneManager to initialise all the scenes added in
+	/*if (cSceneManager->Init() == false)
+		return;*/
+
+	if (cSceneMenu3D->Init() == false)
+	{
+		std::cout << "Failed to load second scene" << std::endl;
+		return;
+	}
+	if (cSceneShop3D->Init() == false)
+	{
+		std::cout << "Failed to load scene" << std::endl;
+		return;
+	}
+	if (cSceneManager->GetScene()->Init() == false)
+	{
+		std::cout << "Failed to load cScene3D" << std::endl;
+		return;
+	}
+	
+	// Enable the starting scene
+	// TODO: Change to Scenes::MENU once development is done
+	cSceneManager->EnableScene(0);
+
+	// Get a reference to the list of scenes used
+	std::vector<CScene3D*> vActiveScenes = cSceneManager->GetSceneList();
+
 	// Render loop
 	while (!glfwWindowShouldClose(cSettings->pWindow)
-		&& (!CKeyboardController::GetInstance()->IsKeyReleased(GLFW_KEY_ESCAPE)))
+		&& (!CKeyboardController::GetInstance()->IsKeyReleased(GLFW_KEY_ESCAPE))
+		&& cSceneManager->CheckForApplicationEnd() == false)
 	{
-
+		// TODO: Add conditions for how scenes should be changed. E.g. Press A to change to second scene
 		
+		for (size_t i = 0; i < vActiveScenes.size(); ++i)
+		{
+			if (vActiveScenes.at(i)->GetSceneStatus())
+			{
+				// Call the cScene3D's Update method
+				vActiveScenes.at(i)->Update(dElapsedTime);
 
+				// We did not use PreRender here because we want more than one scene rendered at once
+				// PreRender calls glClear and glClearColor that clears the whole screen
 
-		//// Call the cScene2D's Update method
-		//cScene2D->Update(dElapsedTime);
+				// Call the cScene3D's Render method
+				vActiveScenes.at(i)->Render();
 
-		//// Call the cScene2D's PreRender method
-		//cScene2D->PreRender();
-
-		//// Call the cScene2D's Render method
-		//cScene2D->Render();
-
-		//// Call the cScene2D's PostRender method
-		//cScene2D->PostRender();
-
-		// Call the cScene3D's Update method
-		cScene3D->Update(dElapsedTime);
-
-		// Call the cScene3D's PreRender method
-		cScene3D->PreRender();
-
-		// Call the cScene3D's Render method
-		cScene3D->Render();
-
-		// Call the cScene3D's PostRender method
-		cScene3D->PostRender();
-
+				// Call the cScene3D's PostRender method
+				vActiveScenes.at(i)->PostRender();
+			}
+		}
 
 		// glfw: swap buffers and poll IO events (keys pressed/released, mouse moved etc.)
 		// -------------------------------------------------------------------------------
@@ -296,6 +328,9 @@ void Application::Run(void)
 		// Frame rate limiter. Limits each frame to a specified time in ms.   
 		cStopWatch.WaitUntil(cSettings->frameTime);
 	}
+
+	cSceneManager->Exit();
+	cSceneManager->Destroy();
 }
 
 /**
