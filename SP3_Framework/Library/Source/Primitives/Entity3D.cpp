@@ -31,6 +31,9 @@ CEntity3D::CEntity3D()
 	, vec4Colour(1.0f)
 	, fMovementSpeed(2.5f)
 	, bToDelete(false)
+	, bQueueForDelete(false)
+	, bCollisionEnabled(true)
+	, dDespawnTime(0.0)
 {
 }
 
@@ -172,6 +175,26 @@ const bool CEntity3D::IsToDelete(void) const
 	return bToDelete;
 }
 
+void CEntity3D::AddDespawnTime(const double add)
+{
+	dDespawnTime += add;
+}
+
+double CEntity3D::GetDespawnTime() const
+{
+	return dDespawnTime;
+}
+
+void CEntity3D::SetDespawnQueue(const bool bQueue)
+{
+	bQueueForDelete = bQueue;
+}
+
+const bool CEntity3D::GetDespawnQueue() const
+{
+	return bQueueForDelete;
+}
+
 /**
 @brief Activate the CCollider for this class instance
 @param cLineShader A Shader* variable which stores a shader which renders lines
@@ -181,6 +204,26 @@ void CEntity3D::ActivateCollider(Shader* cLineShader)
 	cCollider = new CCollider();
 	cCollider->Init();
 	cCollider->SetLineShader(cLineShader);
+}
+
+void CEntity3D::SetColliderScale(glm::vec3 vec3ColliderScale)
+{
+	this->vec3ColliderScale = vec3ColliderScale;
+}
+
+glm::vec3 CEntity3D::GetColliderScale() const
+{
+	return vec3ColliderScale;
+}
+
+void CEntity3D::SetCollisionState(const bool bState)
+{
+	bCollisionEnabled = bState;
+}
+
+const bool CEntity3D::GetCollisionState() const
+{
+	return bCollisionEnabled;
 }
 
 /**

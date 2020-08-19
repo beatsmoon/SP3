@@ -11,6 +11,10 @@
  */
 #define _DEBUGMODE 1;
 
+#define _CRTDBG_MAP_ALLOC
+#include <stdlib.h>
+#include <crtdbg.h>
+
 /**
  @brief This function is the main function which is called by the operating system when you run the executables
  @return This function returns the error codes
@@ -31,9 +35,10 @@ int main(void)
 		pApp = NULL;
 
 		// Return 0 since the application successfully ran
-		return 0;
+		//return 0;
 	}
+	_CrtDumpMemoryLeaks();
 
 	// Return 1 if the application failed to run
-	return 1;
+	return 0;
 }

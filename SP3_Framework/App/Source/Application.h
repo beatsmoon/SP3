@@ -11,10 +11,12 @@
 #include "TimeControl\StopWatch.h"
 
 #include "TimeControl\FPSCounter.h"
+//
+//#include "Scene2D/Scene2D.h"
+//
+//#include "Scene3D/Scene3D.h"
 
-#include "Scene2D/Scene2D.h"
-
-#include "Scene3D/Scene3D.h"
+#include "SceneControl/SceneManager.h"
 
 
 
@@ -48,7 +50,7 @@ protected:
 	// the handlder to the cscene2d instance
 	//CScene2D* cScene2D;
 
-	// the handlder to the cScene2D instance
+	// the handler to the cScene3D instance
 	CScene3D* cScene3D;
 
 	CFPSCounter* cFPSCounter;

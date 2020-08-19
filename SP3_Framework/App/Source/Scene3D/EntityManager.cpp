@@ -1,7 +1,7 @@
 #include "EntityManager.h"
 
-#include "Entity/Enemy3D.h"
-#include "Entity/RangeIndicator.h"
+#include "Enemy3D.h"
+#include "Structure3D.h"
 
 #include <iostream>
 using namespace std;
@@ -149,29 +149,6 @@ bool CEntityManager::CollisionCheck(CEntity3D* cEntity3D)
 				// Quit this loop since a collision has been found
 				break;
 			}
-			case CEntity3D::TYPE::NPC_ATTACK_RANGE:
-			{
-				// Rollback the cEntity3D's position
-				static double damageDelay = 15.0f;
-				if (damageDelay < 15.0f)
-				{
-					damageDelay += 1.f;
-
-				}
-				else
-				{
-					damageDelay = 0.f;
-					cEntity3D->RollbackPosition();
-					// Rollback the NPC's position
-					(*it)->RollbackPosition();
-					cout << "** Collision between Player and range ***" << endl;
-					cCameraEffects->Activate_BloodScreen();
-					cPlayer3D->SetCurrHealth(cPlayer3D->GetCurrHealth() - 10);
-					bResult = true;
-				}
-				// Quit this loop since a collision has been found
-				break;
-			}
 			case CEntity3D::TYPE::PROJECTILE:
 			{
 				// Mark the projectile for deletion
@@ -234,6 +211,13 @@ void CEntityManager::Update(const double dElapsedTime)
 	for (it = lEntity3D.begin(); it != end; ++it)
 	{
 		(*it)->Update(dElapsedTime);
+		if ((*it)->GetDespawnQueue())
+		{
+			(*it)->AddDespawnTime(dElapsedTime);
+			std::cout << (*it)->GetDespawnTime() << std::endl;
+			if ((*it)->GetDespawnTime() > 5.0)
+				(*it)->SetToDelete(true);
+		}
 	}
 
 	// Check for collisions among them
@@ -247,6 +231,8 @@ void CEntityManager::Update(const double dElapsedTime)
 			{
 				continue;
 			}
+			else if ((*it_other)->GetCollisionState() == false)
+				continue;
 		
 			// Check for collisions between the 2 entities
 			if ((*it)->CheckForCollision(*it_other) == true)
@@ -285,6 +271,47 @@ void CEntityManager::Update(const double dElapsedTime)
 					{
 						(*it_other)->SetToDelete(true);
 					}
+					cout << "** Collision between Explosive Barrel and Projectile ***" << endl;
+				}
+				else if (((*it)->GetType() == CEntity3D::TYPE::PROJECTILE) &&
+					((*it_other)->GetType() == CEntity3D::TYPE::EXPLOSIVE_BARREL))
+				{
+					//(*it_other)->RollbackPosition();
+					(*it)->SetToDelete(true);
+				
+					CStructure3D* cExplosiveBarrel = dynamic_cast<CStructure3D*>(*it_other);
+					if (cExplosiveBarrel->GetHealth() > 0)
+					{
+						cExplosiveBarrel->SetHealth(cExplosiveBarrel->GetHealth() - 10);
+						cSoundController->PlaySoundByID(5);
+					}
+					else if (cExplosiveBarrel->GetDespawnQueue() == false)
+					{
+						cExplosiveBarrel->SetCollisionState(false);
+						cExplosiveBarrel->SetColliderScale(cExplosiveBarrel->GetColliderScale() * 2.f);
+						cExplosiveBarrel->SetDespawnQueue(true);
+					}
+					cout << "** Collision between NPC and Explosive Barrel ***" << endl;
+				}
+				else if (((*it)->GetType() == CEntity3D::TYPE::EXPLOSIVE_BARREL) &&
+					((*it_other)->GetType() == CEntity3D::TYPE::PROJECTILE))
+				{
+					//(*it_other)->RollbackPosition();
+					(*it_other)->SetToDelete(true);
+
+					CStructure3D* cExplosiveBarrel = static_cast<CStructure3D*>(*it);
+					//CEnemy3D* enemy = dynamic_cast<CEnemy3D*>(*it_other);
+					if (cExplosiveBarrel->GetHealth() > 0)
+					{
+						cExplosiveBarrel->SetHealth(cExplosiveBarrel->GetHealth() - 10);
+						cSoundController->PlaySoundByID(5);
+					}
+					else if(cExplosiveBarrel->GetDespawnQueue() == false)
+					{
+						cExplosiveBarrel->SetCollisionState(false);
+						cExplosiveBarrel->SetColliderScale(cExplosiveBarrel->GetColliderScale() * 2.f);
+						cExplosiveBarrel->SetDespawnQueue(true);
+					}
 					cout << "** Collision between NPC and Projectile ***" << endl;
 				}
 			}
@@ -304,7 +331,6 @@ void CEntityManager::CleanUp(void)
 	{
 		if ((*it)->IsToDelete())
 		{
-			
 			// Delete the CEntity3D
 			delete *it;
 			// Go to the next iteration after erasing from the list
