@@ -17,6 +17,7 @@ using namespace std;
  */
 CStructure3D::CStructure3D(void)
 	: cGroundMap(NULL)
+	, iStructureHealth(100)
 {
 	// Set the default position to the origin
 	vec3Position = glm::vec3(0.0f, 0.0f, 0.0f);
@@ -31,6 +32,7 @@ CStructure3D::CStructure3D(void)
  */
 CStructure3D::CStructure3D(const glm::vec3 vec3Position, CEntity3D::TYPE type, const glm::vec3 vec3Front, const float fYaw, const float fPitch)
 	: cGroundMap(NULL)
+	, iStructureHealth(100)
 {
 	// Set the default position to the origin
 	this->vec3Position = vec3Position;
@@ -103,6 +105,21 @@ bool CStructure3D::Init(void)
 			 cout << "Unable to load Images/rifle.tga" << endl;
 			 return false;
 		 }
+	}
+	case EXPLOSIVE_BARREL:
+	{
+		// init structureMesh
+		vec3Scale = glm::vec3(0.02, 0.02, 0.02); // OBJ scale
+		vec3ColliderScale = glm::vec3(1.0, 1.0, 1.0); // collider scale
+		// load structureMesh OBJ
+		structureMesh = MeshBuilder::GenerateOBJ("ExplosiveBarrel", "OBJ/TrainingBot.obj");
+		// load and create a texture 
+		iTextureID = LoadTexture("Images/TrainingBot.tga");
+		if (iTextureID == 0)
+		{
+			cout << "Unable to load Images/TrainingBot.tga" << endl;
+			return false;
+		}
 	}
 		break;
 	default:
@@ -213,7 +230,13 @@ void CStructure3D::RenderMesh(Mesh* mesh)
 		model = glm::scale(model, vec3Scale);
 		break;
 	}
-
+	case EXPLOSIVE_BARREL:
+	{
+		model = glm::mat4(1.0f); // make sure to initialize matrix to identity matrix first
+		model = glm::translate(model, vec3Position);
+		model = glm::scale(model, vec3Scale * 3.f);
+		break;
+	}
 	default:
 	{
 		model = glm::mat4(1.0f); // make sure to initialize matrix to identity matrix first
@@ -274,4 +297,14 @@ void CStructure3D::Render(void)
 void CStructure3D::PostRender(void)
 {
 	glDepthFunc(GL_LESS); // set depth function back to default
+}
+
+void CStructure3D::SetHealth(const int iStructureHealth)
+{
+	this->iStructureHealth = iStructureHealth;
+}
+
+int CStructure3D::GetHealth()
+{
+	return iStructureHealth;
 }

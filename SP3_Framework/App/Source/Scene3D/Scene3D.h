@@ -63,24 +63,23 @@
 
 class CSettings;
 
-class CScene3D : public CSingletonTemplate<CScene3D>
+class CScene3D
 {
-	friend CSingletonTemplate<CScene3D>;
 public:
 	// Init
-	bool Init(void);
+	virtual bool Init(void);
 
 	// Update
-	void Update(const double dElapsedTime);
+	virtual void Update(const double dElapsedTime) = 0;
 
 	// PreRender
-	void PreRender(void);
+	virtual void PreRender(void) = 0;
 
 	// Render
-	void Render(void);
+	virtual void Render(void) = 0;
 
 	// PostRender
-	void PostRender(void);
+	virtual void PostRender(void) = 0;
 
 	// Handler to the Shader Program instance
 	Shader* cShader;
@@ -130,41 +129,17 @@ protected:
 	// Handler to the camera class
 	CCamera* cCamera;
 
-	// Handler to the player class
-	CPlayer3D* cPlayer3D;
+	bool bSceneEnabled;
 
-	//Handler to the entityManager class
-	CEntityManager* cEntityManager;
-
-	// Handler to the skybox class
-	CSkyBox* cSkybox;
-
-	// Handler to the ground class
-	CGroundMap* cGroundMap;
-
-	// Handler to the minimap class
-	CMinimap* cMinimap;
-
-	// Handler to the cCameraEffects
-	CCameraEffects* cCameraEffects;
-
-	// Handler to the cProgressBar
-	CProgressBar* cHealthBar; // health
-
-	CProgressBar* cBulletsPerMagBar; // bullet per magazine
-
-	CProgressBar* cTotalBulletsBar; // total bullet
-
-	// Handler to the CCrossHair
-	CCrossHair* cCrossHair;
-
-	CHUD* cHUD;
-
-	CHUD* cRenderHoldingGun;
-	
+public:
 	// Constructor
 	CScene3D(void);
 	// Destructor
 	virtual ~CScene3D(void);
+
+	void EnableScene();
+	void DisableScene();
+
+	bool GetSceneStatus() const;
 };
 

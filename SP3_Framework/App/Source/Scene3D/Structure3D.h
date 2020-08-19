@@ -68,6 +68,9 @@ public:
 	// PostRender
 	virtual void PostRender(void);
 
+	void SetHealth(const int iStructureHealth);
+	int GetHealth();
+
 protected:
 	// The handle to the CGroundMap class instance
 	CGroundMap* cGroundMap;
@@ -77,4 +80,7 @@ protected:
 	MS modelStack;
 	MS viewStack;
 	MS projectionStack;
+
+	
+	int iStructureHealth;
 };
