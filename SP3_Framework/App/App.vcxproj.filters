@@ -161,6 +161,9 @@
     <ClCompile Include="Source\CameraEffects\Shop.cpp">
       <Filter>CameraEffects</Filter>
     </ClCompile>
+    <ClCompile Include="Source\Scene3D\Wave.cpp">
+      <Filter>Scene3D</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Application.h">
@@ -282,6 +285,9 @@
     </ClInclude>
     <ClInclude Include="Source\CameraEffects\Shop.h">
       <Filter>CameraEffects</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Scene3D\Wave.h">
+      <Filter>Scene3D</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

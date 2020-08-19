@@ -261,6 +261,11 @@ bool CScene3D::Init(void)
 	cSoundController->LoadSound(FileSystem::getPath("Sounds\\gunreload.ogg"), 7, true);
 	cSoundController->LoadSound(FileSystem::getPath("Sounds\\switchgun.ogg"), 8, true);
 	cSoundController->LoadSound(FileSystem::getPath("Sounds\\click.ogg"), 9, true);
+	
+	for (int i = 0; i < 9; ++i)
+	{
+		cSoundController->MasterVolumeDecrease();
+	}
 	// Create and initialise the TextRenderer
 	cTextRenderer = CTextRenderer::GetInstance();
 	// Set a shader to this class
@@ -496,6 +501,15 @@ void CScene3D::Update(const double dElapsedTime)
 				cSettings->SetMousePointer(true, false);
 			}
 		}
+	}
+
+	if (cKeyboardController->GetInstance()->IsKeyPressed(GLFW_KEY_U))
+	{
+		CEnemy3D* cEnemy3D = new CEnemy3D(glm::vec3(Math::RandFloatMinMax(-10.0f, 10.0f), 0.5f, Math::RandFloatMinMax(-10.0f, 10.0f)));
+		cEnemy3D->SetShader(cShader);
+		cEnemy3D->Init();
+		cEnemy3D->ActivateCollider(cSimpleShader);
+		cEntityManager->Add(cEnemy3D);
 	}
 
 	// update the joystick

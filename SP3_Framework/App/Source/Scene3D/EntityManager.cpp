@@ -12,6 +12,8 @@ CEntityManager::CEntityManager(void)
 	: model(glm::mat4(1.0f))
 	, view(glm::mat4(1.0f))
 	, projection(glm::mat4(1.0f))
+	, iWaveCounter(0)
+	, bWaveActive(false)
 {
 }
 
@@ -296,6 +298,7 @@ void CEntityManager::CleanUp(void)
 	}
 }
 
+
 /**
  @brief Render this class instance
  */
@@ -312,4 +315,58 @@ void CEntityManager::Render(void)
 		(*it)->Render();
 		(*it)->PostRender();
 	}
+}
+
+
+//Set the number and stats of enemies in each wave
+void CEntityManager::SetWave(int waveNumber, CEnemy3D* cEnemy3D, int numberOfZombies)
+{
+	CWave* cWave = new CWave();
+	if (waveNumber == 1)
+	{
+		for (int i = 0; i < numberOfZombies; ++i)
+		{
+			cWave->AddToEnemyVec1(cEnemy3D);
+		}
+	}
+}
+
+
+//Start a new wave
+void  CEntityManager::StartWave()
+{
+	if (iWaveCounter != 0)
+	{
+		if (iWaveCounter == 1)
+		{
+
+		}
+	}
+	else
+		return;
+}
+
+//Get the current wave number
+int  CEntityManager::GetWaveNumber()
+{
+	return iWaveCounter;
+}
+
+//Set the current wave number
+void  CEntityManager::SetWaveNumber(int waveNumber)
+{
+	iWaveCounter = waveNumber;
+}
+
+
+//Set the status for wave
+void CEntityManager::SetWaveStatus(bool waveStatus)
+{
+	bWaveActive = waveStatus;
+}
+
+//Get the status of wave
+bool CEntityManager::GetWaveStatus(void)
+{
+	return bWaveActive;
 }

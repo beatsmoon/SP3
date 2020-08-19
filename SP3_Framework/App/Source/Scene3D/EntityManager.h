@@ -23,6 +23,8 @@
 // Include 
 #include "../App/Source/SoundController/SoundController.h"
 
+#include "Wave.h"
+
 class CEntityManager : public CSingletonTemplate<CEntityManager>
 {
 	friend class CSingletonTemplate<CEntityManager>;
@@ -55,6 +57,29 @@ public:
 	// Render this class instance
 	virtual void Render(void);
 
+
+	//Wave Control Functions
+
+	//Set the number and stats of enemies in each wave
+	virtual void SetWave(int waveNumber, CEnemy3D* cEnemy3D, int numberOfZombies);
+
+	//Start a new wave
+	virtual void StartWave(void);
+
+	//Get the current wave number
+	virtual int GetWaveNumber(void);
+
+	//Set the current wave number
+	virtual void SetWaveNumber(int waveNumber);
+
+	//Set the status for wave
+	virtual void SetWaveStatus(bool waveStatus);
+
+	//Get the status of wave
+	virtual bool GetWaveStatus(void);
+	
+
+
 protected:
 	// Render Settings
 	glm::mat4 model;
@@ -64,14 +89,24 @@ protected:
 	// List of CEntity3D
 	std::list<CEntity3D*> lEntity3D;
 
+
+
 	CPlayer3D* cPlayer3D;
 
 	CCameraEffects* cCameraEffects;
 
 	CSoundController* cSoundController;
 
+	vector<CWave*> vecCWave;
+
 	// Default Constructor
 	CEntityManager(void);
 	// Destructor
 	virtual ~CEntityManager(void);
+
+	//Wave Control members
+	int iWaveCounter;
+	bool bWaveActive;
+
+
 };
