@@ -49,7 +49,7 @@ bool CSceneShop3D::Init(void)
 	if (!CScene3D::Init())
 		return false;
 
-	cShop = new CShop();
+	cShop = CShop::GetInstance();
 	cShop->SetShader(cGUIShader);
 
 	if (cShop->Init() == false)
@@ -68,34 +68,34 @@ void CSceneShop3D::Update(const double dElapsedTime)
 {
 	cShop->Update(dElapsedTime);
 
-	if (CKeyboardController::GetInstance()->IsKeyPressed(GLFW_KEY_P))
-	{
-		static double InputDelay = 5.f;
-		if (InputDelay < 5.f)
-		{
-			InputDelay += 1.f;
+	//if (CKeyboardController::GetInstance()->IsKeyPressed(GLFW_KEY_P))
+	//{
+	//	static double InputDelay = 5.f;
+	//	if (InputDelay < 5.f)
+	//	{
+	//		InputDelay += 1.f;
 
-		}
+	//	}
 
-		else
-		{
-			InputDelay = 0.f;
-			if (cShop->GetStatus() == false)
-			{
-				cShop->ActivateShop();
-				cSettings->SetMousePointer(false, true);
-				/*cSettings->bDisableMousePointer = false;
-				cSettings->bShowMousePointer = true;
-				!cMouseController->GetKeepMouseCentered();*/
-			}
+	//	else
+	//	{
+	//		InputDelay = 0.f;
+	//		if (cShop->GetStatus() == false)
+	//		{
+	//			cShop->ActivateShop();
+	//			cSettings->SetMousePointer(false, true);
+	//			/*cSettings->bDisableMousePointer = false;
+	//			cSettings->bShowMousePointer = true;
+	//			!cMouseController->GetKeepMouseCentered();*/
+	//		}
 
-			else
-			{
-				cShop->DeactivateShop();
-				cSettings->SetMousePointer(true, false);
-			}
-		}
-	}
+	//		else
+	//		{
+	//			cShop->DeactivateShop();
+	//			cSettings->SetMousePointer(true, false);
+	//		}
+	//	}
+	//}
 
 	
 }

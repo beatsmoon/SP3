@@ -260,24 +260,8 @@ void Application::Run(void)
 	cSceneManager->AddScene(cSceneShop3D);
 
 	// Initialise the cSceneManager to initialise all the scenes added in
-	/*if (cSceneManager->Init() == false)
-		return;*/
-
-	if (cSceneMenu3D->Init() == false)
-	{
-		std::cout << "Failed to load second scene" << std::endl;
+	if (cSceneManager->Init() == false)
 		return;
-	}
-	if (cSceneShop3D->Init() == false)
-	{
-		std::cout << "Failed to load scene" << std::endl;
-		return;
-	}
-	if (cSceneGame3D->Init() == false)
-	{
-		std::cout << "Failed to load cScene3D" << std::endl;
-		return;
-	}
 	
 	// Enable the starting scene
 	// TODO: Change to Scenes::MENU once development is done
@@ -293,11 +277,47 @@ void Application::Run(void)
 		&& cSceneManager->CheckForApplicationEnd() == false)
 	{
 		// TODO: Add conditions for how scenes should be changed. E.g. Press A to change to second scene
-		if (CKeyboardController::GetInstance()->IsKeyPressed(GLFW_KEY_P))
+
+		static bool bShopKey = false;
+		if (!bShopKey && CKeyboardController::GetInstance()->IsKeyPressed(GLFW_KEY_P) && CShop::GetInstance()->GetStatus() == false)
 		{
-			CSceneManager::GetInstance()->EnableScene(SCENES::SHOP);
-			CSceneManager::GetInstance()->DisableScene(SCENES::GAME);
+			static double InputDelay = 5.f;
+			if (InputDelay < 5.f)
+			{
+				InputDelay += 1.f;
+
+			}
+			else
+			{
+				InputDelay = 0.f;
+				CShop::GetInstance()->ActivateShop();
+				cSettings->SetMousePointer(false, true);
+				CSceneManager::GetInstance()->DisableScene(SCENES::GAME);
+				CSceneManager::GetInstance()->EnableScene(SCENES::SHOP);
+				
+				
+				bShopKey = true;
+			}
 		}
+		else if (bShopKey && CKeyboardController::GetInstance()->IsKeyPressed(GLFW_KEY_P) && CShop::GetInstance()->GetStatus() == true)
+		{
+			static double InputDelay = 5.f;
+			if (InputDelay < 5.f)
+			{
+				InputDelay += 1.f;
+
+			}
+			else
+			{
+				InputDelay = 0.f;
+				CSceneManager::GetInstance()->DisableScene(SCENES::SHOP);
+				CSceneManager::GetInstance()->EnableScene(SCENES::GAME);
+				CShop::GetInstance()->DeactivateShop();
+				cSettings->SetMousePointer(true, false);
+				bShopKey = false;
+			}
+		}
+
 		for (size_t i = 0; i < vActiveScenes.size(); ++i)
 		{
 			if (vActiveScenes.at(i)->GetSceneStatus())

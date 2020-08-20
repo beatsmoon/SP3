@@ -214,9 +214,16 @@ void CEntityManager::Update(const double dElapsedTime)
 		if ((*it)->GetDespawnQueue())
 		{
 			(*it)->AddDespawnTime(dElapsedTime);
-			std::cout << (*it)->GetDespawnTime() << std::endl;
-			if ((*it)->GetDespawnTime() > 5.0)
-				(*it)->SetToDelete(true);
+			switch ((*it)->GetType())
+			{
+			case CEntity3D::EXPLOSIVE_BARREL:
+			{
+				if ((*it)->GetDespawnTime() > EXPLOSIVE_BARREL_DESPAWN_TIME)
+					(*it)->SetToDelete(true);
+				break;
+			}
+
+			}
 		}
 	}
 

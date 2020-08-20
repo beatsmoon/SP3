@@ -19,9 +19,9 @@
 //#include "GameControl/Settings.h"
 
 
-
-class CShop : public CEntity3D
+class CShop : public CEntity3D, public CSingletonTemplate<CShop>
 {
+	friend class CSingletonTemplate<CShop>;
 public:
 
 	// Constructor
@@ -39,7 +39,7 @@ public:
 	// Set projection
 	void SetProjection(glm::mat4 projection);
 
-	// Get crosshair status
+	// Get Shop status
 	bool GetStatus(void) const;
 
 	// Update this class instance
@@ -66,9 +66,6 @@ protected:
 
 	CMouseController* cMouseController;
 
-
-
-	bool bActive;
 	bool bShopActive;
 
 	//float fHeight, fWidth;

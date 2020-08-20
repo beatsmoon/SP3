@@ -5,8 +5,7 @@
 using namespace std;
 
 CShop::CShop(void)
-	: bActive(true)
-	, cPlayer3D(NULL)
+	: cPlayer3D(NULL)
 	, bShopActive(false)
 	, cMouseController(NULL)
 {

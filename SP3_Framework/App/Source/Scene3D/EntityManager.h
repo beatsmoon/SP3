@@ -26,6 +26,8 @@
 class CEntityManager : public CSingletonTemplate<CEntityManager>
 {
 	friend class CSingletonTemplate<CEntityManager>;
+	
+	const double EXPLOSIVE_BARREL_DESPAWN_TIME = 5.0;
 
 public:
 	// Initialise this class instance
