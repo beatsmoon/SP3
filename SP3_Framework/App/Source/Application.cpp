@@ -117,6 +117,7 @@ Application::Application(void)
 	//, cScene2D(NULL)
 	,cScene3D(NULL)
 	, cFPSCounter(NULL)
+	, isShopOpened(false)
 {
 }
 
@@ -293,10 +294,43 @@ void Application::Run(void)
 		&& cSceneManager->CheckForApplicationEnd() == false)
 	{
 		// TODO: Add conditions for how scenes should be changed. E.g. Press A to change to second scene
-		if (CKeyboardController::GetInstance()->IsKeyPressed(GLFW_KEY_P))
+		if (CKeyboardController::GetInstance()->IsKeyPressed(GLFW_KEY_P) && !isShopOpened)
 		{
-			CSceneManager::GetInstance()->EnableScene(SCENES::SHOP);
-			CSceneManager::GetInstance()->DisableScene(SCENES::GAME);
+			static double InputDelay = 5.f;
+			if (InputDelay < 5.f)
+			{
+				InputDelay += 1.f;
+
+			}
+
+			else
+			{
+				InputDelay = 0.f;
+				cSettings->SetMousePointer(false, true);
+				CSceneManager::GetInstance()->EnableScene(SCENES::SHOP);
+				CSceneManager::GetInstance()->DisableScene(SCENES::GAME);
+
+				isShopOpened = true;
+			}
+		}
+		else if (CKeyboardController::GetInstance()->IsKeyPressed(GLFW_KEY_P) && isShopOpened)
+		{
+			static double InputDelay = 5.f;
+			if (InputDelay < 5.f)
+			{
+				InputDelay += 1.f;
+
+			}
+
+			else
+			{
+				InputDelay = 0.f;
+				cSettings->SetMousePointer(true, false);
+				CSceneManager::GetInstance()->DisableScene(SCENES::SHOP);
+				CSceneManager::GetInstance()->EnableScene(SCENES::GAME);
+
+				isShopOpened = false;
+			}
 		}
 		for (size_t i = 0; i < vActiveScenes.size(); ++i)
 		{

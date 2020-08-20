@@ -83,7 +83,7 @@ void CSceneShop3D::Update(const double dElapsedTime)
 			if (cShop->GetStatus() == false)
 			{
 				cShop->ActivateShop();
-				cSettings->SetMousePointer(false, true);
+				
 				/*cSettings->bDisableMousePointer = false;
 				cSettings->bShowMousePointer = true;
 				!cMouseController->GetKeepMouseCentered();*/
@@ -92,7 +92,7 @@ void CSceneShop3D::Update(const double dElapsedTime)
 			else
 			{
 				cShop->DeactivateShop();
-				cSettings->SetMousePointer(true, false);
+				
 			}
 		}
 	}

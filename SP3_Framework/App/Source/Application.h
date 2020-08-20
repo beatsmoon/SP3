@@ -55,6 +55,8 @@ protected:
 
 	CFPSCounter* cFPSCounter;
 
+	bool isShopOpened;
+
 	// Constructor
 	Application(void);
 
