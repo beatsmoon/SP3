@@ -61,6 +61,8 @@
 #include "../App/Source/CameraEffects/HUD.h"
 
 
+
+
 class CSettings;
 
 class CScene3D

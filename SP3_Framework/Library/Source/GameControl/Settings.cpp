@@ -51,6 +51,12 @@ float CSettings::ConvertIndexToUVSpace(const AXIS sAxis, const int iIndex, const
 	return fResult;
 }
 
+void CSettings::SetMousePointer(bool bDisableMousePointer, bool bShowMousePointer)
+{
+	this->bDisableMousePointer = bDisableMousePointer;
+	this->bShowMousePointer = bShowMousePointer;
+}
+
 // Update the specifications of the map
 void CSettings::UpdateSpecifications(void)
 {

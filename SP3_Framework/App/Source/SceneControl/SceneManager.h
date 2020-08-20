@@ -1,14 +1,14 @@
 #include <vector>
-
-#include "../Scene2D/Scene2D.h"
-#include "../Scene3D/Scene3D.h"
+//
+//#include "../Scene2D/Scene2D.h"
+//#include "../Scene3D/Scene3D.h"
 #include "../Scene3D/SceneMenu3D.h"
 #include "../Scene3D/SceneGame3D.h"
 #include "../Scene3D/SceneShop3D.h"
 
 #include "../Library/Source/DesignPatterns/SingletonTemplate.h"
 
-namespace Scenes
+namespace SCENES
 {
 	const unsigned int MENU = 0;
 	const unsigned int GAME = 1;

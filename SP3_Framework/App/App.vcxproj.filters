@@ -179,6 +179,9 @@
     <ClCompile Include="Source\SceneControl\SceneManager.cpp">
       <Filter>SceneControl</Filter>
     </ClCompile>
+    <ClCompile Include="Source\CameraEffects\Shop.cpp">
+      <Filter>CameraEffects</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Application.h">
@@ -312,6 +315,9 @@
     </ClInclude>
     <ClInclude Include="Source\SceneControl\SceneManager.h">
       <Filter>SceneControl</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\CameraEffects\Shop.h">
+      <Filter>CameraEffects</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
