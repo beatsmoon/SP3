@@ -37,14 +37,14 @@
 #include "Player3D.h"
 // Include Camera
 #include "Camera.h"
-// Include MiniMap
-#include "Minimap.h"
+//// Include MiniMap
+//#include "Minimap.h"
 // Iniclude the CameraEffects
 #include "../CameraEffects/CameraEffects.h"
 // Include the Progression bar
 #include "../CameraEffects/ProgressBar.h"
 // Include the CrossHair
-#include "CrossHair/CrossHair.h"
+//#include "CrossHair/CrossHair.h"
 
 // Include SkyBox
 #include "SkyBox.h"
@@ -60,6 +60,8 @@
 // Include HUD
 #include "../App/Source/CameraEffects/HUD.h"
 #include "../App/Source/Scene3D/Scene3D.h"
+
+#include "../App/Source/CameraEffects/Shop.h"
 
 class CSettings;
 
@@ -87,6 +89,8 @@ protected:
 	CSceneShop3D(void);
 	// Destructor
 	virtual ~CSceneShop3D(void);
+
+	CShop* cShop;
 	
 public:
 };

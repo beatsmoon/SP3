@@ -182,11 +182,16 @@
     <ClCompile Include="Source\SceneControl\SceneManager.cpp">
       <Filter>SceneControl</Filter>
     </ClCompile>
+<<<<<<< HEAD
     <ClCompile Include="Source\Scene3D\WeaponInfo\WeaponAttachments\AttachmentBarrel.cpp">
       <Filter>Scene3D\WeaponInfo\WeaponAttachments</Filter>
     </ClCompile>
     <ClCompile Include="Source\Scene3D\WeaponInfo\WeaponAttachments\AttachmentExtMag.cpp">
       <Filter>Scene3D\WeaponInfo\WeaponAttachments</Filter>
+=======
+    <ClCompile Include="Source\CameraEffects\Shop.cpp">
+      <Filter>CameraEffects</Filter>
+>>>>>>> origin/shop-merge
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -322,11 +327,16 @@
     <ClInclude Include="Source\SceneControl\SceneManager.h">
       <Filter>SceneControl</Filter>
     </ClInclude>
+<<<<<<< HEAD
     <ClInclude Include="Source\Scene3D\WeaponInfo\WeaponAttachments\AttachmentBarrel.h">
       <Filter>Scene3D\WeaponInfo\WeaponAttachments</Filter>
     </ClInclude>
     <ClInclude Include="Source\Scene3D\WeaponInfo\WeaponAttachments\AttachmentExtMag.h">
       <Filter>Scene3D\WeaponInfo\WeaponAttachments</Filter>
+=======
+    <ClInclude Include="Source\CameraEffects\Shop.h">
+      <Filter>CameraEffects</Filter>
+>>>>>>> origin/shop-merge
     </ClInclude>
   </ItemGroup>
 </Project>

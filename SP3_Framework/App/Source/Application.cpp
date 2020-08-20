@@ -195,12 +195,12 @@ bool Application::Init(void)
 
 	// Additional customisation for the GLFW environment
 	
-	if (cSettings->bDisableMousePointer == true)
-		glfwSetInputMode(cSettings->pWindow, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
-	else
-		// Hide the cursor
-		if (cSettings->bShowMousePointer == false)
-			glfwSetInputMode(cSettings->pWindow, GLFW_CURSOR, GLFW_CURSOR_HIDDEN);
+	//if (cSettings->bDisableMousePointer == true)
+	//	glfwSetInputMode(cSettings->pWindow, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+	//else
+	//	// Hide the cursor
+	//	if (cSettings->bShowMousePointer == false)
+	//		glfwSetInputMode(cSettings->pWindow, GLFW_CURSOR, GLFW_CURSOR_HIDDEN);
 
 	// glewExperimental is a variable that is already defined by GLEW. You must set it to GL_TRUE before calling glewInit(). 
 	glewExperimental = GL_TRUE;
@@ -250,11 +250,11 @@ void Application::Run(void)
 	CSceneManager* cSceneManager = CSceneManager::GetInstance();
 
 	// Add all the necessary scenes to the manager
-	CSceneGame3D* cSceneGame3D = CSceneGame3D::GetInstance();
-	cSceneManager->AddScene(cSceneGame3D);
-
 	CSceneMenu3D* cSceneMenu3D = CSceneMenu3D::GetInstance();
 	cSceneManager->AddScene(cSceneMenu3D);
+
+	CSceneGame3D* cSceneGame3D = CSceneGame3D::GetInstance();
+	cSceneManager->AddScene(cSceneGame3D);
 
 	CSceneShop3D* cSceneShop3D = CSceneShop3D::GetInstance();
 	cSceneManager->AddScene(cSceneShop3D);
@@ -273,7 +273,7 @@ void Application::Run(void)
 		std::cout << "Failed to load scene" << std::endl;
 		return;
 	}
-	if (cSceneManager->GetScene()->Init() == false)
+	if (cSceneGame3D->Init() == false)
 	{
 		std::cout << "Failed to load cScene3D" << std::endl;
 		return;
@@ -281,7 +281,8 @@ void Application::Run(void)
 	
 	// Enable the starting scene
 	// TODO: Change to Scenes::MENU once development is done
-	cSceneManager->EnableScene(0);
+	cSceneManager->EnableScene(SCENES::GAME);
+	//cSceneManager->EnableScene(1);
 
 	// Get a reference to the list of scenes used
 	std::vector<CScene3D*> vActiveScenes = cSceneManager->GetSceneList();
@@ -292,7 +293,11 @@ void Application::Run(void)
 		&& cSceneManager->CheckForApplicationEnd() == false)
 	{
 		// TODO: Add conditions for how scenes should be changed. E.g. Press A to change to second scene
-		
+		if (CKeyboardController::GetInstance()->IsKeyPressed(GLFW_KEY_P))
+		{
+			CSceneManager::GetInstance()->EnableScene(SCENES::SHOP);
+			CSceneManager::GetInstance()->DisableScene(SCENES::GAME);
+		}
 		for (size_t i = 0; i < vActiveScenes.size(); ++i)
 		{
 			if (vActiveScenes.at(i)->GetSceneStatus())
@@ -384,6 +389,16 @@ void Application::UpdateInputDevices(void)
 {
 	// Update Keyboard Input
 	//CKeyboardController::GetInstance()->Update();
+
+	if (cSettings->bDisableMousePointer == true)
+		glfwSetInputMode(cSettings->pWindow, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+	else
+		// Hide the cursor
+		if (cSettings->bShowMousePointer == false)
+			glfwSetInputMode(cSettings->pWindow, GLFW_CURSOR, GLFW_CURSOR_HIDDEN);
+	// Show the cursor
+	else
+		glfwSetInputMode(cSettings->pWindow, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
 
 	// Update Mouse Input
 	double dMouse_X, dMouse_Y;
