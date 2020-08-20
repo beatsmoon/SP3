@@ -79,6 +79,11 @@ CPlayer3D::CPlayer3D(void)
 	, cGroundMap(NULL)
 	, scopeMode(false)
 	, shootingMode(true)
+	, fCameraRecoilAngle(0.0f)
+	, fCameraRecoilDeltaAngle(2.0f)
+	, bCameraRecoilDirection(true) //false = down , true = up
+	, bCameraRecoilActive(true)
+	, bUpdateCameraRecoil(false)
 {
 	// Set the default position so it is above the ground
 	vec3Position = glm::vec3(0.0f, 0.5f, 0.0f);
@@ -111,6 +116,11 @@ CPlayer3D::CPlayer3D(const glm::vec3 vec3Position,
 	, cSoundController(NULL)
 	, scopeMode(false)
 	, shootingMode(true)
+	, fCameraRecoilAngle(0.0f)
+	, fCameraRecoilDeltaAngle(2.0f)
+	, bCameraRecoilDirection(true) //false = down , true = up
+	, bCameraRecoilActive(true)
+	, bUpdateCameraRecoil(false)
 {
 	// Set the default position so it is above the ground
 	this->vec3Position = glm::vec3(0.0f, 0.5f, 0.0f);
@@ -317,21 +327,21 @@ void CPlayer3D::ProcessRotate(float fXOffset, float fYOffset, const bool constra
 	fXOffset *= fMouseSensitivity;
 	fYOffset *= fMouseSensitivity;
 
-	if (scopeMode == true)
-	{
-		if (GetWeapon()->GetScopeZoom() == 2.0f) // pistol
-		{
+	//if (scopeMode == true)
+	//{
+	//	if (GetWeapon()->GetScopeZoom() == 2.0f) // pistol
+	//	{
 
-			fXOffset *= 0.9;
-			fYOffset *= 0.9;
-		}
-		else // rifle
-		{
+	//		fXOffset *= 0.9;
+	//		fYOffset *= 0.9;
+	//	}
+	//	else // rifle
+	//	{
 
-			fXOffset *= 0.7;
-			fYOffset *= 0.7;
-		}
-	}
+	//		fXOffset *= 0.7;
+	//		fYOffset *= 0.7;
+	//	}
+	//}
 
 	fYaw += fXOffset;
 	fPitch += fYOffset;
@@ -359,7 +369,7 @@ void CPlayer3D::SetPosition(glm::vec3 pos)
 	vec3Position = pos;
 }
 
-void CPlayer3D::SetWeapon(const int iSlot, CWeaponInfo* cWeaponInfo)
+void CPlayer3D::SetWeapon(const int iSlot, CWeapon* cWeaponInfo)
 {
 	if (iSlot == 0)
 	{
@@ -372,7 +382,7 @@ void CPlayer3D::SetWeapon(const int iSlot, CWeaponInfo* cWeaponInfo)
 
 }
 
-CWeaponInfo* CPlayer3D::GetWeapon(void) const
+CWeapon* CPlayer3D::GetWeapon(void) const
 {
 	if (iCurrentWeapon == 0)
 	{
@@ -385,7 +395,7 @@ CWeaponInfo* CPlayer3D::GetWeapon(void) const
 	return NULL;
 }
 
-CWeaponInfo* CPlayer3D::GetInventoryWeapon(const int iSlot) const
+CWeapon* CPlayer3D::GetInventoryWeapon(const int iSlot) const
 {
 	switch (iSlot)
 	{
@@ -398,21 +408,49 @@ CWeaponInfo* CPlayer3D::GetInventoryWeapon(const int iSlot) const
 	}
 }
 
+glm::vec3 CPlayer3D::CalculateBulletDir()
+{
+	glm::vec3 front;
+	front.x = cos(glm::radians(fYaw + Math::RandFloatMinMax(-10, 10))) * cos(glm::radians(fPitch));
+	front.y = sin(glm::radians(fPitch));
+	front.z = sin(glm::radians(fYaw)) * cos(glm::radians(fPitch));
+	vec3Front = glm::normalize(front);
+
+	return vec3Front;
+}
+
+void CPlayer3D::TriggerRecoil()
+{
+	//Indicate that camera recoil is to be updated
+	if (bCameraRecoilActive)
+		bUpdateCameraRecoil = true;
+}
+
+
+
 void CPlayer3D::SetCurrentWeapon(const int iSlot)
 {
 	iCurrentWeapon = iSlot;
 }
 
-CProjectile* CPlayer3D::DischargeWeapon(void) const
+CProjectile* CPlayer3D::DischargeWeapon(void)
 {
 	if ((iCurrentWeapon == 0) && (cPrimaryWeapon))
 	{
-		return cPrimaryWeapon->Discharge(vec3Position, vec3Front, (CEntity3D*)this);
+		if (cPrimaryWeapon->GetWeaponName() == Weapon_Type::W_SHOTGUN)
+			return cPrimaryWeapon->Discharge(vec3Position, CalculateBulletDir(), (CEntity3D*)this);
+		else
+			return cPrimaryWeapon->Discharge(vec3Position, vec3Front, (CEntity3D*)this);
+
 	}
 	else if ((iCurrentWeapon == 1) && (cSecondaryWeapon))
 	{
-		return cSecondaryWeapon->Discharge(vec3Position, vec3Front, (CEntity3D*)this);
+		if (cSecondaryWeapon->GetWeaponName() == Weapon_Type::W_SHOTGUN)
+			return cSecondaryWeapon->Discharge(vec3Position, CalculateBulletDir(), (CEntity3D*)this);
+		else
+			return cSecondaryWeapon->Discharge(vec3Position, vec3Front, (CEntity3D*)this);
 	}
+	return NULL;
 
 	return NULL;
 }
@@ -528,6 +566,41 @@ void CPlayer3D::Update(const double dElapsedTime)
 		}
 		bUpdateCameraSway = false;
 	}
+
+	//update
+//Implement player/camera recoil
+	if ((bUpdateCameraRecoil) && (bCameraRecoilActive))
+	{
+		glm::mat4 rotationMat(1);// Creates a identity matrix
+		rotationMat = glm::rotate(rotationMat, glm::radians(fCameraRecoilAngle), vec3Right);
+		vec3Up = glm::vec3(rotationMat * glm::vec4(vec3WorldUp, 1.0f));
+
+		if (bCameraRecoilDirection == true)
+		{
+			//track how much angle it move due to recoil
+			//fCameraRecoilAngle += fCameraRecoilDeltaAngle;
+			fCameraRecoilAngle += GetWeapon()->GetRecoilAngle();
+			if (GetWeapon()->GetBarrel() != NULL)
+				fCameraRecoilAngle -= GetWeapon()->GetBarrel()->GetRecoilReduction();
+			//add to pitch to tilt up
+			fPitch += GetWeapon()->GetRecoilAngle();;
+			if (fPitch > fCameraSwayAngle_UpLimit)
+			{
+				fPitch = fCameraSwayAngle_UpLimit;
+				//bCameraSwayDirection = !bCameraSwayDirection;
+			}
+		}
+		UpdatePlayerVectors();
+		bUpdateCameraRecoil = false;
+	}
+	if (fCameraRecoilAngle > 0)
+	{
+		fCameraRecoilAngle -= 0.1;
+		fPitch -= 0.1;
+	}
+	UpdatePlayerVectors();
+	if (fCameraRecoilAngle < 0)
+		fCameraRecoilAngle = 0;
 }
 
 /**

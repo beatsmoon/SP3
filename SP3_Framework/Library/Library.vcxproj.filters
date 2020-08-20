@@ -83,9 +83,6 @@
     <ClInclude Include="Source\Primitives\Collider.h">
       <Filter>primitives</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Primitives\Entity3D.h">
-      <Filter>primitives</Filter>
-    </ClInclude>
     <ClInclude Include="Source\Inputs\KeyboardController.h">
       <Filter>Inputs</Filter>
     </ClInclude>
@@ -103,6 +100,9 @@
     </ClInclude>
     <ClInclude Include="Source\System\Vector3.h">
       <Filter>System</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Primitives\Entity3D.h">
+      <Filter>primitives</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

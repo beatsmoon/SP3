@@ -147,7 +147,7 @@ bool CSceneGame3D::Init(void)
 	cPistol->SetShader(cSimpleShader);
 	cPlayer3D->SetWeapon(1, cPistol);
 
-	CWeapon* rifle = new CWeapon(Weapon_Type::W_RIFLE);
+	CWeapon* rifle = new CWeapon(Weapon_Type::W_M4);
 	rifle->Init();
 	rifle->SetShader(cSimpleShader);
 	cPlayer3D->SetWeapon(0, rifle);
@@ -225,7 +225,7 @@ bool CSceneGame3D::Init(void)
 		cRangeIndicator->ActivateCollider(cSimpleShader);
 		cEntityManager->Add(cRangeIndicator);
 
-		CStructure3D* rifleAmmo = new CStructure3D(glm::vec3(Math::RandFloatMinMax(-10.0f, 10.0f), 0.5f, Math::RandFloatMinMax(-10.0f, 10.0f))
+		/*CStructure3D* rifleAmmo = new CStructure3D(glm::vec3(Math::RandFloatMinMax(-10.0f, 10.0f), 0.5f, Math::RandFloatMinMax(-10.0f, 10.0f))
 			, CEntity3D::TYPE::RIFLE_AMMO);
 		rifleAmmo->SetShader(cShader);
 		rifleAmmo->Init();
@@ -237,7 +237,7 @@ bool CSceneGame3D::Init(void)
 		pistolAmmo->SetShader(cShader);
 		pistolAmmo->Init();
 		pistolAmmo->ActivateCollider(cSimpleShader);
-		cEntityManager->Add(pistolAmmo);
+		cEntityManager->Add(pistolAmmo);*/
 
 	}
 
@@ -435,7 +435,7 @@ void CSceneGame3D::Update(const double dElapsedTime)
 											CMouseController::SCROLL_TYPE::SCROLL_TYPE_YOFFSET));
 	}
 
-	if (cPlayer3D->GetScopeMode() == true)
+	/*if (cPlayer3D->GetScopeMode() == true)
 	{
 		cCamera->fZoom = 45.f - cPlayer3D->GetWeapon()->GetScopeZoom();
 		cCrossHair->SetStatus(true);
@@ -444,7 +444,7 @@ void CSceneGame3D::Update(const double dElapsedTime)
 	{
 		cCrossHair->SetStatus(false);
 		cCamera->fZoom = 45.f;
-	}
+	}*/
 
 
 

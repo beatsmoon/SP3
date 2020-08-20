@@ -211,7 +211,7 @@ void CEntity3D::SetColliderScale(glm::vec3 vec3ColliderScale)
 	this->vec3ColliderScale = vec3ColliderScale;
 }
 
-glm::vec3 CEntity3D::GetColliderScale() const
+const glm::vec3 CEntity3D::GetColliderScale() const
 {
 	return vec3ColliderScale;
 }
@@ -353,4 +353,18 @@ int CEntity3D::LoadTexture(const char* filename)
 	free(data);
 
 	return iTextureID;
+}
+
+const float CEntity3D::GetCollisionDamage(void) const
+{
+	return fCollisionDamage;
+}
+void CEntity3D::SetCollisionDamage(float fdamage)
+{
+	fCollisionDamage = fdamage;
+}
+
+void CEntity3D::ResetDefaultHealthStatus(float fhealth)
+{
+	fHealth = fhealth;
 }

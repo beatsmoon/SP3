@@ -48,6 +48,9 @@
     <Filter Include="SceneControl">
       <UniqueIdentifier>{44e61f96-6ef7-498f-8880-3c0835fe1fbf}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Scene3D\WeaponInfo\WeaponAttachments">
+      <UniqueIdentifier>{09889898-ccc3-4c11-87b6-78d850d80b1a}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\Application.cpp">
@@ -178,6 +181,12 @@
     </ClCompile>
     <ClCompile Include="Source\SceneControl\SceneManager.cpp">
       <Filter>SceneControl</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Scene3D\WeaponInfo\WeaponAttachments\AttachmentBarrel.cpp">
+      <Filter>Scene3D\WeaponInfo\WeaponAttachments</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Scene3D\WeaponInfo\WeaponAttachments\AttachmentExtMag.cpp">
+      <Filter>Scene3D\WeaponInfo\WeaponAttachments</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -312,6 +321,12 @@
     </ClInclude>
     <ClInclude Include="Source\SceneControl\SceneManager.h">
       <Filter>SceneControl</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Scene3D\WeaponInfo\WeaponAttachments\AttachmentBarrel.h">
+      <Filter>Scene3D\WeaponInfo\WeaponAttachments</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Scene3D\WeaponInfo\WeaponAttachments\AttachmentExtMag.h">
+      <Filter>Scene3D\WeaponInfo\WeaponAttachments</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

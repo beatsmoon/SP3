@@ -14,7 +14,9 @@
 // Include Projectile
 #include "Projectile.h"
 
-#include "../App/Source/SoundController/SoundController.h"
+#include "WeaponAttachments/AttachmentBarrel.h"
+#include "WeaponAttachments/AttachmentExtMag.h"
+//#include "../Player3D.h"
 
 class CWeaponInfo
 {
@@ -45,6 +47,9 @@ public:
 	// Get the max total number of rounds currently carried by this player
 	virtual int GetMaxTotalRound(void) const;
 
+	virtual double GetReloadElapsed(void) const;
+	virtual double GetReloadTime(void) const;
+
 	// Set the time between shots
 	virtual void SetTimeBetweenShots(const double dTimeBetweenShots);
 	// Set the firing rate in rounds per min
@@ -58,9 +63,7 @@ public:
 	virtual int GetFiringRate(void) const;
 	// Get the firing flag
 	virtual bool GetCanFire(void) const;
-
-	// Get scopeZoom
-	virtual int GetScopeZoom(void) const;
+	virtual bool GetIsReloadStatus(void) const;
 
 	// Initialise this instance to default values
 	virtual void Init(void);
@@ -76,11 +79,32 @@ public:
 	// Print Self
 	virtual void PrintSelf(void);
 
+	enum FIRINGTYPE
+	{
+		SINGLE = 0,
+		BURST,
+		AUTO,
+		NUM_FIRINGTYPE
+	};
+
+	void SetFiringType(const FIRINGTYPE sStatus);
+	FIRINGTYPE GetFiringType(void) const;
+
+	void SetBarrel(CGunBarrel* cEntity3D);
+	CGunBarrel* GetBarrel(void) const;
+
+	void SetExtMag(CGunExtMag* cEntity3D);
+	CGunExtMag* GetExtMag(void) const;
+
+	void SetRecoilAngle(float fAngle);
+	float GetRecoilAngle(void) const;
+
+	virtual float GetDamageOutput(void) const;
+	virtual void SetDamageOutput(const float fdamage);
+
 protected:
 	// Handler to the Shader Program instance
 	Shader* cShader;
-
-	CSoundController* cSoundController;
 
 	// The number of ammunition in a magazine for this weapon
 	int iMagRounds;
@@ -98,7 +122,15 @@ protected:
 	// Boolean flag to indicate if weapon can fire now
 	bool bFire;
 
-	// scope 
-	float scopeZoom;
-	
+	double dReloadTime;
+	double dReloadElapsedTime;
+	bool bIsReloading;
+
+	float fRecoilDeltaAngle;
+	float fDamage;
+	FIRINGTYPE FiringTypeStatus;
+
+	CGunBarrel* m_Barrel;
+	CEntity3D* m_Sight;
+	CGunExtMag* m_ExtMag;
 };

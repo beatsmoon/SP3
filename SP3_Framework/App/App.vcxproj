@@ -49,6 +49,8 @@
     <ClCompile Include="Source\Scene3D\Structure3D.cpp" />
     <ClCompile Include="Source\Scene3D\WeaponInfo\Projectile.cpp" />
     <ClCompile Include="Source\Scene3D\WeaponInfo\Weapon.cpp" />
+    <ClCompile Include="Source\Scene3D\WeaponInfo\WeaponAttachments\AttachmentBarrel.cpp" />
+    <ClCompile Include="Source\Scene3D\WeaponInfo\WeaponAttachments\AttachmentExtMag.cpp" />
     <ClCompile Include="Source\Scene3D\WeaponInfo\WeaponInfo.cpp" />
     <ClCompile Include="Source\SceneControl\SceneManager.cpp" />
     <ClCompile Include="Source\SoundController\SoundController.cpp" />
@@ -95,6 +97,8 @@
     <ClInclude Include="Source\Scene3D\Structure3D.h" />
     <ClInclude Include="Source\Scene3D\WeaponInfo\Projectile.h" />
     <ClInclude Include="Source\Scene3D\WeaponInfo\Weapon.h" />
+    <ClInclude Include="Source\Scene3D\WeaponInfo\WeaponAttachments\AttachmentBarrel.h" />
+    <ClInclude Include="Source\Scene3D\WeaponInfo\WeaponAttachments\AttachmentExtMag.h" />
     <ClInclude Include="Source\Scene3D\WeaponInfo\WeaponInfo.h" />
     <ClInclude Include="Source\SceneControl\SceneManager.h" />
     <ClInclude Include="Source\SoundController\SoundController.h" />

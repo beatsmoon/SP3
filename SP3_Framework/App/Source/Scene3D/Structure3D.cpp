@@ -75,37 +75,37 @@ bool CStructure3D::Init(void)
 	// switch type of structure
 	switch (eType)
 	{
-	case PISTOL_AMMO:
-	{
-		 // init structureMesh
-		 vec3Scale = glm::vec3(0.2, 0.2, 0.2); // OBJ scale
-		 vec3ColliderScale = glm::vec3(1.0, 1.0, 1.0); // collider scale
-		 // load structureMesh OBJ
-		 structureMesh = MeshBuilder::GenerateOBJ("enemy", "OBJ/pistol.obj");
-		 // load and create a texture 
-		 iTextureID = LoadTexture("Images/pistol.tga");
-		 if (iTextureID == 0)
-		 {
-			 cout << "Unable to load Images/pistol.tga" << endl;
-			 return false;
-		 }
-	}
-		break;
-	case RIFLE_AMMO:
-	{
-		 // init structureMesh
-		 vec3Scale = glm::vec3(0.02, 0.02, 0.02); // OBJ scale
-		 vec3ColliderScale = glm::vec3(1.0, 1.0, 1.0); // collider scale
-		 // load structureMesh OBJ
-		 structureMesh = MeshBuilder::GenerateOBJ("enemy", "OBJ/rifle.obj");
-		 // load and create a texture 
-		 iTextureID = LoadTexture("Images/rifle.tga");
-		 if (iTextureID == 0)
-		 {
-			 cout << "Unable to load Images/rifle.tga" << endl;
-			 return false;
-		 }
-	}
+	//case PISTOL_AMMO:
+	//{
+	//	 // init structureMesh
+	//	 vec3Scale = glm::vec3(0.2, 0.2, 0.2); // OBJ scale
+	//	 vec3ColliderScale = glm::vec3(1.0, 1.0, 1.0); // collider scale
+	//	 // load structureMesh OBJ
+	//	 structureMesh = MeshBuilder::GenerateOBJ("enemy", "OBJ/pistol.obj");
+	//	 // load and create a texture 
+	//	 iTextureID = LoadTexture("Images/pistol.tga");
+	//	 if (iTextureID == 0)
+	//	 {
+	//		 cout << "Unable to load Images/pistol.tga" << endl;
+	//		 return false;
+	//	 }
+	//}
+	//	break;
+	//case RIFLE_AMMO:
+	//{
+	//	 // init structureMesh
+	//	 vec3Scale = glm::vec3(0.02, 0.02, 0.02); // OBJ scale
+	//	 vec3ColliderScale = glm::vec3(1.0, 1.0, 1.0); // collider scale
+	//	 // load structureMesh OBJ
+	//	 structureMesh = MeshBuilder::GenerateOBJ("enemy", "OBJ/rifle.obj");
+	//	 // load and create a texture 
+	//	 iTextureID = LoadTexture("Images/rifle.tga");
+	//	 if (iTextureID == 0)
+	//	 {
+	//		 cout << "Unable to load Images/rifle.tga" << endl;
+	//		 return false;
+	//	 }
+	//}
 	case EXPLOSIVE_BARREL:
 	{
 		// init structureMesh
@@ -214,22 +214,22 @@ void CStructure3D::RenderMesh(Mesh* mesh)
 	// create transformations
 	switch (eType)
 	{
-	case PISTOL_AMMO:
-	{
-		model = glm::mat4(1.0f); // make sure to initialize matrix to identity matrix first
-		model = glm::translate(model, glm::vec3(vec3Position.x, vec3Position.y, vec3Position.z));
-		model = glm::rotate(model, (float)90.f, glm::vec3(0.0f, 1.0f, 0.0f));
-		model = glm::scale(model, vec3Scale);
-		break;
-	}
+	//case PISTOL_AMMO:
+	//{
+	//	model = glm::mat4(1.0f); // make sure to initialize matrix to identity matrix first
+	//	model = glm::translate(model, glm::vec3(vec3Position.x, vec3Position.y, vec3Position.z));
+	//	model = glm::rotate(model, (float)90.f, glm::vec3(0.0f, 1.0f, 0.0f));
+	//	model = glm::scale(model, vec3Scale);
+	//	break;
+	//}
 
-	case RIFLE_AMMO:
-	{
-		model = glm::mat4(1.0f); // make sure to initialize matrix to identity matrix first
-		model = glm::translate(model, vec3Position);
-		model = glm::scale(model, vec3Scale);
-		break;
-	}
+	//case RIFLE_AMMO:
+	//{
+	//	model = glm::mat4(1.0f); // make sure to initialize matrix to identity matrix first
+	//	model = glm::translate(model, vec3Position);
+	//	model = glm::scale(model, vec3Scale);
+	//	break;
+	//}
 	case EXPLOSIVE_BARREL:
 	{
 		model = glm::mat4(1.0f); // make sure to initialize matrix to identity matrix first

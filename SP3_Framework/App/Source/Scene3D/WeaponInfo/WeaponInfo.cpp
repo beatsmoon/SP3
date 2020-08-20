@@ -15,7 +15,13 @@ CWeaponInfo::CWeaponInfo()
 	, dTimeBetweenShots(0.5)
 	, dElapsedTime(0.0)
 	, bFire(true)
-	, cSoundController(NULL)
+	, FiringTypeStatus(SINGLE)
+	, dReloadTime(0)
+	, dReloadElapsedTime(0)
+	, bIsReloading(false)
+	, m_Barrel(NULL)
+	, m_Sight(NULL)
+	, m_ExtMag(NULL)
 {
 }
 
@@ -26,8 +32,6 @@ CWeaponInfo::~CWeaponInfo()
 {
 	// We set it to NULL only since it was declared somewhere else
 	cShader = NULL;
-
-	cSoundController = NULL;
 }
 
 /**
@@ -128,6 +132,51 @@ void CWeaponInfo::SetCanFire(const bool bFire)
 	this->bFire = bFire;
 }
 
+CWeaponInfo::FIRINGTYPE CWeaponInfo::GetFiringType(void) const
+{
+	return FiringTypeStatus;
+}
+void CWeaponInfo::SetFiringType(const FIRINGTYPE sStatus)
+{
+	FiringTypeStatus = sStatus;
+}
+
+void CWeaponInfo::SetRecoilAngle(float fAngle)
+{
+	fRecoilDeltaAngle = fAngle;
+}
+float CWeaponInfo::GetRecoilAngle(void) const
+{
+	return fRecoilDeltaAngle;
+}
+float CWeaponInfo::GetDamageOutput(void) const
+{
+	return fDamage;
+}
+void CWeaponInfo::SetDamageOutput(const float fdamage)
+{
+	fDamage = fdamage;
+}
+bool CWeaponInfo::GetIsReloadStatus(void) const
+{
+	return bIsReloading;
+}
+void CWeaponInfo::SetBarrel(CGunBarrel* cEntity3D)
+{
+	m_Barrel = cEntity3D;
+}
+CGunBarrel* CWeaponInfo::GetBarrel(void) const
+{
+	return m_Barrel;
+}
+void CWeaponInfo::SetExtMag(CGunExtMag* cEntity3D)
+{
+	m_ExtMag = cEntity3D;
+}
+CGunExtMag* CWeaponInfo::GetExtMag(void) const
+{
+	return m_ExtMag;
+}
 /**
  @brief Get the time between shots
  */
@@ -152,11 +201,6 @@ bool CWeaponInfo::GetCanFire(void) const
 	return bFire;
 }
 
-int CWeaponInfo::GetScopeZoom(void) const
-{
-	return scopeZoom;
-}
-
 /**
  @brief Initialise this instance to default values
  */
@@ -177,8 +221,6 @@ void CWeaponInfo::Init(void)
 	dElapsedTime = 0.0;
 	// Boolean flag to indicate if weapon can fire now
 	bFire = true;
-
-	cSoundController = CSoundController::GetInstance();
 }
 
 /**
@@ -186,18 +228,43 @@ void CWeaponInfo::Init(void)
  */
 void CWeaponInfo::Update(const double dt)
 {
-
-	
-
 	// If the weapon can fire, then don't check further
 	if (bFire)
 		return;
 
-	dElapsedTime += dt;
-	if (dElapsedTime > dTimeBetweenShots)
+	if (bIsReloading)
 	{
-		bFire = true;
-		dElapsedTime = 0.0;
+		dReloadElapsedTime += dt;
+
+		if (dReloadElapsedTime > dReloadTime)
+		{
+			if (iMagRounds < iMaxMagRounds)
+			{
+				if (iMaxMagRounds - iMagRounds <= iTotalRounds)
+				{
+					iTotalRounds -= iMaxMagRounds - iMagRounds;
+					iMagRounds = iMaxMagRounds;
+				}
+				else
+				{
+					iMagRounds += iTotalRounds;
+					iTotalRounds = 0;
+				}
+			}
+			bIsReloading = false;
+			bFire = true;
+			dReloadElapsedTime = 0.0;
+			cout << "Reload done" << endl;
+		}
+	}
+	else
+	{
+		dElapsedTime += dt;
+		if (dElapsedTime > dTimeBetweenShots)
+		{
+			bFire = true;
+			dElapsedTime = 0.0;
+		}
 	}
 }
 
@@ -211,22 +278,26 @@ CProjectile* CWeaponInfo::Discharge(glm::vec3 vec3Position, glm::vec3 vec3Front,
 		// If there is still ammo in the magazine, then fire
 		if (iMagRounds > 0)
 		{
-			cSoundController->PlaySoundByID(6);
 			// Create a projectile. 
 			// Its position is slightly in front of the player to prevent collision
 			// Its direction is same as the player.
 			// It will last for 2.0 seconds and travel at 20 units per frame
+			//vec3Front.x += 10;
+
+			iMagRounds--;
+
 			CProjectile* aProjectile = new CProjectile();
 			aProjectile->SetShader(cShader);
 			aProjectile->Init(vec3Position + vec3Front * 0.75f, vec3Front, 2.0f, 20.0f);
+			//aProjectile->SetFront(glm::vec3(vec3Front.x + 0.3, vec3Front.y, vec3Front.z));
 			aProjectile->ActivateCollider(cShader);
 			aProjectile->SetStatus(true);
 			aProjectile->SetSource(pSource);
-			
+			aProjectile->SetCollisionDamage(fDamage);
 			// Lock the weapon after this discharge
 			bFire = false;
 			// Reduce the rounds by 1
-			iMagRounds--;
+			
 
 			return aProjectile;
 		}
@@ -239,22 +310,19 @@ CProjectile* CWeaponInfo::Discharge(glm::vec3 vec3Position, glm::vec3 vec3Front,
  */
 void CWeaponInfo::Reload(void)
 {
-	if (iMagRounds < iMaxMagRounds)
-	{
-		cSoundController->PlaySoundByID(7);
-		if (iMaxMagRounds - iMagRounds <= iTotalRounds)
-		{
-			iTotalRounds -= iMaxMagRounds - iMagRounds;
-			iMagRounds = iMaxMagRounds;
-		}
-		else
-		{
-			iMagRounds += iTotalRounds;
-			iTotalRounds = 0;
-		}
-	}
+	PrintSelf();
+	bIsReloading = true;
+	bFire = false;
+	PrintSelf();
 }
-
+double CWeaponInfo::GetReloadElapsed(void) const
+{
+	return dReloadElapsedTime;
+}
+double CWeaponInfo::GetReloadTime(void) const
+{
+	return dReloadTime;
+}
 /**
  @brief Add rounds
  */

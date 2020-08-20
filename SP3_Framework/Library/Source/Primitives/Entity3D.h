@@ -10,9 +10,8 @@
 
 #include "../RenderControl/shader.h"
 
-// Include CCollider
+ // Include CCollider
 #include "Collider.h"
-
 // Include Settings
 #include "..\GameControl\Settings.h"
 
@@ -24,11 +23,13 @@ public:
 		PLAYER,
 		NPC,
 		NPC_ATTACK_RANGE,
+		AMMO,
 		PROJECTILE,
-		STRUCTURE,	// Buildings etc
-		PISTOL_AMMO,
-		RIFLE_AMMO,
+		//WEAPONAK47,
+		GUNBARREL,
+		GUNEXTMAG,
 		EXPLOSIVE_BARREL,
+		STRUCTURE,	// Buildings etc
 		OTHERS,		// Default value: Other entities such as ground and skybox
 		NUM_TYPES
 	};
@@ -37,7 +38,7 @@ public:
 	CCollider* cCollider;
 
 	// Constructor(s)
-    CEntity3D(void);
+	CEntity3D(void);
 
 	// Destructor
 	virtual ~CEntity3D(void);
@@ -66,6 +67,9 @@ public:
 	virtual void SetRotation(const float fRotationAngle, const glm::vec3 vec3RotationAxis);
 	virtual void SetColour(const glm::vec4 vec4Colour);
 	virtual void SetMovementSpeed(const float fMovementSpeed);
+	
+	virtual void ResetDefaultHealthStatus(float fhealth);
+	virtual void SetCollisionDamage(float fdamage);
 
 	// Get Methods
 	virtual const GLuint GetTextureID(void) const;
@@ -78,26 +82,24 @@ public:
 	virtual const glm::vec3 GetRotationAxis(void) const;
 	virtual const glm::vec4 GetColour(void) const;
 	virtual const float GetMovementSpeed(void) const;
-
+	
+	virtual const float GetCollisionDamage(void) const;
 	// These methods are for marking this CEntity3D for deletion
 	virtual void SetToDelete(const bool bToDelete);
 	virtual const bool IsToDelete(void) const;
 
-	// Add to despawn time to queue the entity for despawning
-	virtual void AddDespawnTime(const double add);
-	virtual double GetDespawnTime() const;
-	virtual void SetDespawnQueue(const bool bQueue);
-	virtual const bool GetDespawnQueue() const;
+	void AddDespawnTime(const double add);
+
+	double GetDespawnTime() const;
+
+	void SetDespawnQueue(const bool bQueue);
+
+	const bool GetDespawnQueue() const;
 
 	// Activate the CCollider for this class instance
 	virtual void ActivateCollider(Shader* cLineShader = NULL);
-	// Get and set the collider scale
-	virtual void SetColliderScale(glm::vec3 vec3ColliderScale);
-	virtual glm::vec3 GetColliderScale() const;
 
-	// Set whether collision should be enabled - bState will be true if enabled, false if disabled
-	virtual void SetCollisionState(const bool bState);
-	virtual const bool GetCollisionState() const;
+	/*virtual void CollisionResponse(const CEntity3D* cEntity3D);*/
 
 	// Check for collision with another CCollider
 	virtual bool CheckForCollision(const CEntity3D* cEntity3D);
@@ -116,6 +118,13 @@ public:
 	// PostRender
 	virtual void PostRender(void) = 0;
 
+	virtual void SetColliderScale(const glm::vec3 vec3Scale);
+	virtual const glm::vec3 GetColliderScale() const;
+
+	void SetCollisionState(const bool bState);
+
+	const bool GetCollisionState() const;
+
 protected:
 	// The handle to the CSettings instance
 	CSettings* cSettings;
@@ -125,6 +134,7 @@ protected:
 
 	// OpenGL objects
 	GLuint VAO, VBO, IBO;
+
 	GLuint index_buffer_size;
 
 	// The texture ID in OpenGL
@@ -146,7 +156,7 @@ protected:
 	glm::vec3 vec3Front;
 	// Scale
 	glm::vec3 vec3Scale;
-	// collider scale
+	// Scale
 	glm::vec3 vec3ColliderScale;
 	// Rotation angle and axis
 	float fRotationAngle;
@@ -156,17 +166,21 @@ protected:
 	// Movement speed
 	float fMovementSpeed;
 
+	// barrels
+	bool bQueueForDelete;
+	bool bCollisionEnabled;
+	float dDespawnTime;
+
 	// Boolean flag to indicate if this CEntity3D is to be deleted
 	bool bToDelete;
-
-	// Boolean to indicate if this CEntity3D needs to check for collision
-	bool bCollisionEnabled;
-
-	// Boolean to indicate if this CEntity3D needs to be put into queue for deletion
-	bool bQueueForDelete;
-	// Double to keep track of how long this CEntity3D is in queue
-	double dDespawnTime;
-
+	float fTotalKills;
+	bool bAmmoPickUp;
+	bool bBarrelPickUp;
+	bool bExtMagPickUp;
+	bool bWeaponPickUp;
+	TYPE eWeaponType;
+	float fHealth;
+	float fCollisionDamage;
 	// glm::vec3 variables use during for checking of collision
 	glm::vec3 tempVec3A_BottomLeft;
 	glm::vec3 tempVec3A_TopRight;

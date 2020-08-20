@@ -22,9 +22,6 @@
 // Include GroundMap
 #include "GroundMap.h"
 
-// Include WeaponInfo
-#include "WeaponInfo/WeaponInfo.h"
-
 // Include Physic3D
 #include "Physics3D.h"
 
@@ -37,6 +34,8 @@
 // Include Mesh.h and MatricStack.h for rendering 
 #include "../Meshes/Mesh.h"
 #include "../Meshes/MatrixStack.h"
+
+#include "WeaponInfo/Weapon.h"
 
 // An abstract camera class that processes input and calculates the corresponding Euler Angles, Vectors and Matrices for use in OpenGL
 class CPlayer3D : public CSingletonTemplate<CPlayer3D>, public CEntity3D
@@ -93,18 +92,22 @@ public:
 	void SetPosition(glm::vec3 pos);
 
 	// Set weapon to this class instance 
-	void SetWeapon(const int iSlot, CWeaponInfo* cWeaponInfo = NULL);
+	void SetWeapon(const int iSlot, CWeapon* cWeaponInfo = NULL);
 
 	// Get weapon for this class instance
-	CWeaponInfo* GetWeapon(void) const;
+	CWeapon* GetWeapon(void) const;
 
-	CWeaponInfo* GetInventoryWeapon(const int iSlot) const;
+	CWeapon* GetInventoryWeapon(const int iSlot) const;
+
+	glm::vec3 CalculateBulletDir();
+
+	void TriggerRecoil();
 
 	// Set current weapon
 	void SetCurrentWeapon(const int iSlot);
 
 	// Discharge current weapon
-	CProjectile* DischargeWeapon(void) const;
+	CProjectile* DischargeWeapon(void);
 
 	void DropWeapon(void);
 
@@ -157,9 +160,18 @@ protected:
 
 	CSoundController* cSoundController;
 
+	// Camera recoil
+	const float fCameraSwayAngle_UpLimit = 89.0f/*, fCameraSwayAngle_RightLimit = 2.0f*/;
+	float fCameraRecoilAngle;
+	float fCameraRecoilDeltaAngle;
+
+	bool bCameraRecoilDirection;//false = Down, true = Up 
+	bool bCameraRecoilActive;
+	bool bUpdateCameraRecoil;
+
 	// Hnadler to the WeaponInfo instance 
-	CWeaponInfo* cPrimaryWeapon;
-	CWeaponInfo* cSecondaryWeapon;
+	CWeapon* cPrimaryWeapon;
+	CWeapon* cSecondaryWeapon;
 	int iCurrentWeapon;
 	bool scopeMode;
 	bool shootingMode;

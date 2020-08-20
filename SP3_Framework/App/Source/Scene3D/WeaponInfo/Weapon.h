@@ -5,7 +5,10 @@
 enum Weapon_Type
 {
 	W_PISTOL,
-	W_RIFLE,
+	W_M4,
+	W_AK47,
+	W_SHOTGUN,
+	W_SNIPER,
 	NUM_WEAPON
 };
 
@@ -21,6 +24,8 @@ public:
 	CWeapon();
 
 	CWeapon(Weapon_Type type);
+
+	Weapon_Type GetWeaponName();
 
 	virtual ~CWeapon();
 
