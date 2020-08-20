@@ -1,0 +1,8 @@
+﻿  Settings.cpp
+  Entity3D.cpp
+D:\Admin\Documents\GitHub\SP3\SP3_Framework\Library\Source\Primitives\Entity3D.cpp(180,21): warning C4244: '+=': conversion from 'const double' to 'float', possible loss of data
+  TextRenderer.cpp
+D:\Admin\Documents\GitHub\SP3\SP3_Framework\Library\Source\RenderControl\TextRenderer.cpp(125,24): warning C4838: conversion from 'FT_Pos' to 'GLuint' requires a narrowing conversion
+  ImageLoader.cpp
+  Generating Code...
+  Library.vcxproj -> D:\Admin\Documents\GitHub\SP3\SP3_Framework\Debug\Library.lib
