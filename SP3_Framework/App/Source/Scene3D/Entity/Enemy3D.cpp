@@ -158,7 +158,7 @@ bool CEnemy3D::Init(void)
 	case E_ENEMY2:
 	{
 		vec3Scale = glm::vec3(1, 1, 1);
-		vec3ColliderScale = glm::vec3(0.8, 0.8, 0.8);
+		vec3ColliderScale = glm::vec3(5, 5, 5);
 
 		enemyMesh = MeshBuilder::GenerateOBJ("enemy", "OBJ/chicken.obj");
 		// load and create a texture 

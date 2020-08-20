@@ -40,6 +40,7 @@ CSceneGame3D::CSceneGame3D(void)
 	, cEntityManager(NULL)
 	, cSkybox(NULL)
 	, cGroundMap(NULL)
+	, cWave(NULL)
 {
 }
 
@@ -123,6 +124,12 @@ CSceneGame3D::~CSceneGame3D(void)
 		cMinimap->Destroy();
 		cMinimap = NULL;
 	}
+
+	if (cWave)
+	{
+		cWave->Destroy();
+		cWave = NULL;
+	}
 }
 
 /**
@@ -160,6 +167,10 @@ bool CSceneGame3D::Init(void)
 	// Intialise the CentityManager
 	cEntityManager = CEntityManager::GetInstance();
 	cEntityManager->Init();
+
+	//Initialise cWave
+	cWave = CWave::GetInstance();
+	cWave->Init();
 
 	//Load the Skybox
 	cSkybox = CSkyBox::GetInstance();
@@ -211,7 +222,7 @@ bool CSceneGame3D::Init(void)
 
 	for (int i = 0; i < 3; i++)
 	{
-		int k = Math::RandIntMinMax(0, 2);
+		/*int k = Math::RandIntMinMax(0, 2);
 
 		CEnemy3D* cEnemy3D = new CEnemy3D(glm::vec3(Math::RandFloatMinMax(-10.0f, 10.0f), 0.5f, Math::RandFloatMinMax(-10.0f, 10.0f)), k);
 		cEnemy3D->SetShader(cShader);
@@ -223,7 +234,7 @@ bool CSceneGame3D::Init(void)
 		cRangeIndicator->SetShader(cShader);
 		cRangeIndicator->Init();
 		cRangeIndicator->ActivateCollider(cSimpleShader);
-		cEntityManager->Add(cRangeIndicator);
+		cEntityManager->Add(cRangeIndicator);*/
 
 		CStructure3D* rifleAmmo = new CStructure3D(glm::vec3(Math::RandFloatMinMax(-10.0f, 10.0f), 0.5f, Math::RandFloatMinMax(-10.0f, 10.0f))
 			, CEntity3D::TYPE::RIFLE_AMMO);
@@ -313,7 +324,7 @@ void CSceneGame3D::Update(const double dElapsedTime)
 				cout << "there is no weapon to reload" << endl;
 			}
 		}
-		
+
 	}
 	if (CKeyboardController::GetInstance()->IsKeyPressed(GLFW_KEY_B))
 	{
@@ -336,6 +347,15 @@ void CSceneGame3D::Update(const double dElapsedTime)
 				cPlayer3D->SetShootingMode(1);
 			}
 		}
+	}
+
+
+	if (CKeyboardController::GetInstance()->IsKeyPressed(GLFW_KEY_O))
+	{
+		cout << cWave->GetWaveNumber() << endl;
+		//cEntityManager->SetWaveStarted(true);
+		cWave->SetWave(cWave->GetWaveNumber());
+		
 	}
 
 	// update the joystick
@@ -477,6 +497,21 @@ void CSceneGame3D::Update(const double dElapsedTime)
 
 	// Update cEntityManager
 	cEntityManager->Update(dElapsedTime);
+
+	//Check if wave ended
+	if (cEntityManager->CheckWave() == true)
+	{
+		cout << "Wave over" << endl;
+		cWave->SetWaveNumber(cWave->GetWaveNumber() + 1);
+		cout << cWave->GetWaveNumber() << endl;
+	}
+
+	else if(cEntityManager->CheckWave() == false)
+	{
+		cout << "Wave in progress" << endl;
+	}
+		
+	
 
 	// collision between player and entity
 	if (cEntityManager->CollisionCheck(cPlayer3D))
