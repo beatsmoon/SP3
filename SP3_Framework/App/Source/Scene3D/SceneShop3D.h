@@ -91,7 +91,5 @@ protected:
 	virtual ~CSceneShop3D(void);
 
 	CShop* cShop;
-	
-public:
 };
 

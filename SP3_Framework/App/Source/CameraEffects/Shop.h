@@ -20,14 +20,12 @@
 
 
 
-class CShop : public CEntity3D
+class CShop : public CEntity3D, public CSingletonTemplate<CShop>
 {
+	friend class CSingletonTemplate<CShop>;
 public:
 
-	// Constructor
-	CShop(void);
-	// Destructor
-	virtual ~CShop(void);
+	
 
 	// Initialise this class instance
 	bool Init(void);
@@ -66,10 +64,13 @@ protected:
 
 	CMouseController* cMouseController;
 
-
-
 	bool bActive;
 	bool bShopActive;
+
+	// Constructor
+	CShop(void);
+	// Destructor
+	virtual ~CShop(void);
 
 	//float fHeight, fWidth;
 

@@ -144,7 +144,7 @@ bool Application::Init(void)
 
 	// Get the CSettings instance
 	cSettings = CSettings::GetInstance();
-
+	
 	// Set the file location for the digital assets
 	// This is backup, in case filesystem cannot find the current directory
 	cSettings->logl_root = "D:/My Documents/2020_2021_SEM1/DM2231 Game Development Techniques/Teaching Materials/Week 01/Practical/NYP_Framework_Week01";
@@ -261,10 +261,10 @@ void Application::Run(void)
 	cSceneManager->AddScene(cSceneShop3D);
 
 	// Initialise the cSceneManager to initialise all the scenes added in
-	/*if (cSceneManager->Init() == false)
-		return;*/
+	if (cSceneManager->Init() == false)
+		return;
 
-	if (cSceneMenu3D->Init() == false)
+	/*if (cSceneMenu3D->Init() == false)
 	{
 		std::cout << "Failed to load second scene" << std::endl;
 		return;
@@ -278,7 +278,7 @@ void Application::Run(void)
 	{
 		std::cout << "Failed to load cScene3D" << std::endl;
 		return;
-	}
+	}*/
 	
 	// Enable the starting scene
 	// TODO: Change to Scenes::MENU once development is done
@@ -294,7 +294,7 @@ void Application::Run(void)
 		&& cSceneManager->CheckForApplicationEnd() == false)
 	{
 		// TODO: Add conditions for how scenes should be changed. E.g. Press A to change to second scene
-		if (CKeyboardController::GetInstance()->IsKeyPressed(GLFW_KEY_P) && !isShopOpened)
+		if (CKeyboardController::GetInstance()->IsKeyPressed(GLFW_KEY_P) && CShop::GetInstance()->GetStatus() == false)
 		{
 			static double InputDelay = 5.f;
 			if (InputDelay < 5.f)
@@ -307,13 +307,14 @@ void Application::Run(void)
 			{
 				InputDelay = 0.f;
 				cSettings->SetMousePointer(false, true);
+				CShop::GetInstance()->ActivateShop();
 				CSceneManager::GetInstance()->EnableScene(SCENES::SHOP);
 				CSceneManager::GetInstance()->DisableScene(SCENES::GAME);
 
 				isShopOpened = true;
 			}
 		}
-		else if (CKeyboardController::GetInstance()->IsKeyPressed(GLFW_KEY_P) && isShopOpened)
+		else if (CKeyboardController::GetInstance()->IsKeyPressed(GLFW_KEY_P) && CShop::GetInstance()->GetStatus() == true)
 		{
 			static double InputDelay = 5.f;
 			if (InputDelay < 5.f)
@@ -326,6 +327,7 @@ void Application::Run(void)
 			{
 				InputDelay = 0.f;
 				cSettings->SetMousePointer(true, false);
+				CShop::GetInstance()->DeactivateShop();
 				CSceneManager::GetInstance()->DisableScene(SCENES::SHOP);
 				CSceneManager::GetInstance()->EnableScene(SCENES::GAME);
 
