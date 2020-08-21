@@ -182,31 +182,11 @@ bool CEntityManager::CollisionCheck(CEntity3D* cEntity3D)
 				}
 				else
 				{
-					static_cast<CPlayer3D*>(cEntity3D)->SetCurrHealth(static_cast<CPlayer3D*>(cEntity3D)->GetCurrHealth() - 1);
+					static_cast<CPlayer3D*>(cEntity3D)->SetCurrHealth(static_cast<CPlayer3D*>(cEntity3D)->GetCurrHealth() - 10);
 					cout << "** Collision between Player and Destroyed Explosive Barrel***" << endl;
 					bResult = true;
 				}
 			}
-			//case CEntity3D::TYPE::PISTOL_AMMO:
-			//{
-			//	cPlayer3D->GetInventoryWeapon(1)->AddRounds(8);
-			//	(*it)->SetToDelete(true);
-			//	cout << "** Collision between Player and Ammo ***" << endl;
-			//	bResult = true;
-			//	cSoundController->PlaySoundByID(1);
-			//	// Quit this loop since a collision has been found
-			//	break;
-			//}
-			//case CEntity3D::TYPE::RIFLE_AMMO:
-			//{
-			//	cPlayer3D->GetInventoryWeapon(0)->AddRounds(30);
-			//	(*it)->SetToDelete(true);
-			//	cout << "** Collision between Player and Ammo ***" << endl;
-			//	bResult = true;
-			//	cSoundController->PlaySoundByID(1);
-			//	// Quit this loop since a collision has been found
-			//	break;
-			//}
 			default:
 				break;
 			}
