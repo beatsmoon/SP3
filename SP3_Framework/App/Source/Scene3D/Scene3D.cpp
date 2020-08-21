@@ -62,7 +62,7 @@ bool CScene3D::Init(void)
 
 	// Configure the camera
 	cCamera = CCamera::GetInstance();
-	cCamera->vec3Position = glm::vec3(0.0f, 0.5f, 3.0f);
+	//cCamera->vec3Position = glm::vec3(0.0f, 0.5f, 3.0f);
 
 	// Store the keyboard controller singleton instance here
 	cKeyboardController = CKeyboardController::GetInstance();

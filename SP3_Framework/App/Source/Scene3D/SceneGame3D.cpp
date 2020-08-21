@@ -159,12 +159,11 @@ bool CSceneGame3D::Init(void)
 
 	// Intialise the CentityManager
 	cEntityManager = CEntityManager::GetInstance();
-	cEntityManager->Init();
+	//cEntityManager->Init();
 
 	//Load the Skybox
+	// No need to initialise cSkybox as it is already initialised in SceneMenu3D
 	cSkybox = CSkyBox::GetInstance();
-	cSkybox->SetShader(skyBoxShader);
-	cSkybox->Init();
 
 	// Load the ground
 	cGroundMap = CGroundMap::GetInstance();

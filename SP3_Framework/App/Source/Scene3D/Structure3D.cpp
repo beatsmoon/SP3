@@ -72,56 +72,43 @@ bool CStructure3D::Init(void)
 	// Call the parent's Init()
 	CEntity3D::Init();
 
+	std::vector<glm::vec3> vertices;
+	std::vector<glm::vec2> uvs;
+	std::vector<glm::vec3> normals;
+
 	// switch type of structure
 	switch (eType)
 	{
-	//case PISTOL_AMMO:
-	//{
-	//	 // init structureMesh
-	//	 vec3Scale = glm::vec3(0.2, 0.2, 0.2); // OBJ scale
-	//	 vec3ColliderScale = glm::vec3(1.0, 1.0, 1.0); // collider scale
-	//	 // load structureMesh OBJ
-	//	 structureMesh = MeshBuilder::GenerateOBJ("enemy", "OBJ/pistol.obj");
-	//	 // load and create a texture 
-	//	 iTextureID = LoadTexture("Images/pistol.tga");
-	//	 if (iTextureID == 0)
-	//	 {
-	//		 cout << "Unable to load Images/pistol.tga" << endl;
-	//		 return false;
-	//	 }
-	//}
-	//	break;
-	//case RIFLE_AMMO:
-	//{
-	//	 // init structureMesh
-	//	 vec3Scale = glm::vec3(0.02, 0.02, 0.02); // OBJ scale
-	//	 vec3ColliderScale = glm::vec3(1.0, 1.0, 1.0); // collider scale
-	//	 // load structureMesh OBJ
-	//	 structureMesh = MeshBuilder::GenerateOBJ("enemy", "OBJ/rifle.obj");
-	//	 // load and create a texture 
-	//	 iTextureID = LoadTexture("Images/rifle.tga");
-	//	 if (iTextureID == 0)
-	//	 {
-	//		 cout << "Unable to load Images/rifle.tga" << endl;
-	//		 return false;
-	//	 }
-	//}
 	case EXPLOSIVE_BARREL:
 	{
 		// init structureMesh
 		vec3Scale = glm::vec3(0.02, 0.02, 0.02); // OBJ scale
 		vec3ColliderScale = glm::vec3(1.0, 1.0, 1.0); // collider scale
-		// load structureMesh OBJ
-		structureMesh = MeshBuilder::GenerateOBJ("ExplosiveBarrel", "OBJ/TrainingBot.obj");
-		// load and create a texture 
-		iTextureID = LoadTexture("Images/TrainingBot.tga");
-		if (iTextureID == 0)
+		std::string file_path = "OBJ/TrainingBot.obj";
+		bool success = LoadOBJ(file_path.c_str(), vertices, uvs, normals);
+		if (!success)
 		{
-			cout << "Unable to load Images/TrainingBot.tga" << endl;
-			return false;
+			return NULL;
 		}
+		break;
 	}
 		break;
+	case PLAY_BUTTON:
+	case HIGHSCORE_BUTTON:
+	case QUIT_BUTTON:
+	{
+		// init structureMesh
+		vec3Scale = glm::vec3(0.1f, 0.1f, 0.1f); // OBJ scale
+		vec3ColliderScale = glm::vec3(0.5, 0.5, 0.5); // collider scale
+		// load structureMesh OBJ
+		std::string file_path = "OBJ/button.obj";
+		bool success = LoadOBJ(file_path.c_str(), vertices, uvs, normals);
+		if (!success)
+		{
+			return NULL;
+		}
+		break;
+	}
 	default:
 	{
 		// init structureMesh
@@ -138,6 +125,45 @@ bool CStructure3D::Init(void)
 		}
 	}
 		break;
+	}
+
+	std::vector<Vertex> vertex_buffer_data;
+	std::vector<GLuint> index_buffer_data;
+	IndexVBO(vertices, uvs, normals, index_buffer_data, vertex_buffer_data);
+
+	glGenVertexArrays(1, &VAO);
+	glBindVertexArray(VAO);
+	glGenBuffers(1, &VBO);
+	glGenBuffers(1, &IBO);
+
+
+	glBindBuffer(GL_ARRAY_BUFFER, VBO);
+	glBufferData(GL_ARRAY_BUFFER, vertex_buffer_data.size() * sizeof(Vertex), &vertex_buffer_data[0], GL_STATIC_DRAW);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, IBO);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, index_buffer_data.size() * sizeof(GLuint), &index_buffer_data[0], GL_STATIC_DRAW);
+	index_buffer_size = index_buffer_data.size();
+
+	switch (eType)
+	{
+	case EXPLOSIVE_BARREL:
+		iTextureID = LoadTexture("Images/TrainingBot.tga");
+		break;
+	case PLAY_BUTTON:
+		iTextureID = LoadTexture("Images/playbutton.tga");
+		break;
+	case HIGHSCORE_BUTTON:
+		iTextureID = LoadTexture("Images/highscorebutton.tga");
+		break;
+	case QUIT_BUTTON:
+		iTextureID = LoadTexture("Images/quitbutton.tga");
+		break;
+
+	}
+
+	if (iTextureID == 0)
+	{
+		cout << "Unable to load texture for structure " << endl;
+		return false;
 	}
 
 	// Store the handler to the CGroundMap
@@ -273,10 +299,38 @@ void CStructure3D::Render(void)
 	// Activate shader
 	cShader->use();
 
-	modelStack.PushMatrix();
-	RenderMesh(structureMesh);
-	modelStack.PopMatrix();
-	
+	glActiveTexture(GL_TEXTURE0);
+	glBindTexture(GL_TEXTURE_2D, iTextureID);
+
+	// create transformations
+	model = glm::mat4(1.0f); // make sure to initialize matrix to identity matrix first
+	//model = glm::rotate(model, (float)glfwGetTime()/10.0f, glm::vec3(0.0f, 0.0f, 1.0f));
+	model = glm::translate(model, glm::vec3(vec3Position.x, vec3Position.y, vec3Position.z));
+	model = glm::scale(model, vec3Scale);
+
+	// note: currently we set the projection matrix each frame, but since the projection 
+	// matrix rarely changes it's often best practice to set it outside the main loop only once.
+	cShader->setMat4("projection", projection);
+	cShader->setMat4("view", view);
+	cShader->setMat4("model", model);
+
+	// render OBJ
+	glBindVertexArray(VAO);
+
+	glEnableVertexAttribArray(0);
+	glEnableVertexAttribArray(1);
+
+	glBindBuffer(GL_ARRAY_BUFFER, VBO);
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)0);
+	glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)(sizeof(glm::vec3) + sizeof(glm::vec3)));
+
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, IBO);
+	glDrawElements(GL_TRIANGLES, index_buffer_size, GL_UNSIGNED_INT, 0);
+
+
+	glDisableVertexAttribArray(1);
+	glDisableVertexAttribArray(0);
+
 	// Render the CCollider if needed
 	if ((cCollider) && (cCollider->bIsDisplayed))
 	{

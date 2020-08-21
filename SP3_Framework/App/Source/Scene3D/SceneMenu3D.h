@@ -66,6 +66,17 @@ class CSettings;
 class CSceneMenu3D : public CScene3D, public CSingletonTemplate<CSceneMenu3D>
 {
 	friend class CSingletonTemplate<CSceneMenu3D>;
+
+	enum MENU_CHOICES
+	{
+		M_PLAY,
+		M_HIGHSCORE,
+		M_QUIT,
+		M_END,
+	};
+
+	std::vector<CStructure3D*> vStructures;
+
 public:
 	// Init
 	bool Init(void);
@@ -88,6 +99,13 @@ protected:
 	// Destructor
 	virtual ~CSceneMenu3D(void);
 
+	CPlayer3D* cPlayer3D;
+
+	CWeapon* cPistol;
+
+	CEntityManager* cEntityManager;
+
+	CSkyBox* cSkybox;
 public:
 };
 

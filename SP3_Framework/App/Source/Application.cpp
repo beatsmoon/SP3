@@ -264,25 +264,9 @@ void Application::Run(void)
 	if (cSceneManager->Init() == false)
 		return;
 
-	/*if (cSceneMenu3D->Init() == false)
-	{
-		std::cout << "Failed to load second scene" << std::endl;
-		return;
-	}
-	if (cSceneShop3D->Init() == false)
-	{
-		std::cout << "Failed to load scene" << std::endl;
-		return;
-	}
-	if (cSceneGame3D->Init() == false)
-	{
-		std::cout << "Failed to load cScene3D" << std::endl;
-		return;
-	}*/
-	
 	// Enable the starting scene
 	// TODO: Change to Scenes::MENU once development is done
-	cSceneManager->EnableScene(SCENES::GAME);
+	cSceneManager->EnableScene(SCENES::MENU);
 	//cSceneManager->EnableScene(1);
 
 	// Get a reference to the list of scenes used
