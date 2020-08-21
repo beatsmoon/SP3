@@ -44,19 +44,12 @@ public:
 	//Set the current wave number
 	virtual void SetWaveNumber(int waveNumber);
 
-	//Set the status for wave
-	virtual void SetWaveStatus(bool waveStatus);
-
-	//Get the status of wave
-	virtual bool GetWaveStatus(void);
-
 protected:
 	
 	CEntityManager* cEntityManager;
 
+	CScore* cScore;
+
 	//Wave Control members
 	int iWaveCounter;
-	bool bWaveActive;
-	
-
 };
