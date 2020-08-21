@@ -35,6 +35,7 @@ CSceneGame3D::CSceneGame3D(void)
 	, cTotalBulletsBar(NULL)
 	, cCrossHair(NULL)
 	, cHUD(NULL)
+	, cWEAPONHUD(NULL)
 	, cRenderHoldingGun(NULL)
 	, cPlayer3D(NULL)
 	, cEntityManager(NULL)
@@ -74,6 +75,11 @@ CSceneGame3D::~CSceneGame3D(void)
 	{
 		delete cHUD;
 		cHUD = NULL;
+	}
+	if (cWEAPONHUD)
+	{
+		delete cWEAPONHUD;
+		cWEAPONHUD = NULL;
 	}
 
 	if (cRenderHoldingGun)
@@ -267,6 +273,10 @@ bool CSceneGame3D::Init(void)
 	cHUD = new CHUD(Weapon_Type::W_PISTOL);
 	cHUD->SetShader(cGUIShader);
 	cHUD->Init();
+
+	cWEAPONHUD = new CWEAPONHUD(Weapon_Type::W_PISTOL);
+	cWEAPONHUD->SetShader(cGUIShader);
+	cWEAPONHUD->Init();
 
 	cRenderHoldingGun = new CHUD(Weapon_Type::W_PISTOL);
 	cRenderHoldingGun->SetShader(cGUIShader);
@@ -650,6 +660,7 @@ void CSceneGame3D::Update(const double dElapsedTime)
 
 	cRenderHoldingGun->Update(dElapsedTime);
 	cHUD->Update(dElapsedTime);
+	cWEAPONHUD->Update(dElapsedTime);
 
 	if (cPlayer3D->GetWeapon()->GetScope() != NULL && cPlayer3D->GetScopeMode() == true)
 	{
@@ -816,6 +827,10 @@ void CSceneGame3D::Render(void)
 		cHUD->PreRender();
 		cHUD->Render();
 		cHUD->PostRender();
+
+		cWEAPONHUD->PreRender();
+		cWEAPONHUD->Render();
+		cWEAPONHUD->PostRender();
 	}
 	
 

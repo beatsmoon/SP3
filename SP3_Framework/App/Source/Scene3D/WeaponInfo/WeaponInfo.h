@@ -134,6 +134,8 @@ protected:
 
 	float fRecoilDeltaAngle;
 	float fDamage;
+	float fSpeedOfBullet;
+	
 	FIRINGTYPE FiringTypeStatus;
 
 	CGunBarrel* m_Barrel;

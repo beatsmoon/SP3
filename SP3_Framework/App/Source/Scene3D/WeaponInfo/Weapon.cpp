@@ -52,6 +52,7 @@ void CWeapon::Init(void)
 		type = Weapon_Type::W_PISTOL;
 		fRecoilDeltaAngle = 0.5f;
 		fDamage = 15;
+		fSpeedOfBullet = 30.0f;
 
 		break;
 	case W_M4:
