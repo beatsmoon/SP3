@@ -115,7 +115,7 @@ void MouseScrollCallBacks(GLFWwindow* window, double xoffset, double yoffset)
 Application::Application(void)
 	: cSettings(NULL)
 	//, cScene2D(NULL)
-	,cScene3D(NULL)
+	, cScene3D(NULL)
 	, cFPSCounter(NULL)
 	, isShopOpened(false)
 {

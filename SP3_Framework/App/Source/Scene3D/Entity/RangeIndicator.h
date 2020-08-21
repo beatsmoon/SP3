@@ -58,7 +58,6 @@ public:
 
 	// PreRender
 	virtual void PreRender(void);
-	void RenderMesh(Mesh* mesh);
 	// Render
 	virtual void Render(void);
 	// PostRender
@@ -69,12 +68,7 @@ public:
 protected:
 	
 	
-	// enemy render
-	Mesh* indicatorMesh;
-	MS modelStack;
-	MS viewStack;
-	MS projectionStack;
-
+	// curr enemy
 	CEnemy3D* currEnemy;
 
 	int type;

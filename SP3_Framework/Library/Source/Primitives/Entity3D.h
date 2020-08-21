@@ -188,5 +188,5 @@ protected:
 	glm::vec3 tempVec3B_TopRight;
 
 	// Load Ground textures
-	virtual int LoadTexture(const char* filename);
+	virtual GLuint LoadTexture(const char* filename, GLint wrap = GL_REPEAT);
 };

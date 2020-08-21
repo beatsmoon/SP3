@@ -94,7 +94,6 @@ public:
 
 	// PreRender
 	virtual void PreRender(void);
-	void RenderMesh(Mesh* mesh);
 	// Render
 	virtual void Render(void);
 	// PostRender
@@ -123,13 +122,7 @@ protected:
 	// enemy stats
 	int type;
 	int health;
-
-	// enemy render
-	Mesh* enemyMesh;
-	MS modelStack;
-	MS viewStack;
-	MS projectionStack;
-	
+	float speed;
 
 	// The handle to the CCamera class instance
 	CCamera* cCamera;

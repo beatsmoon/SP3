@@ -125,85 +125,93 @@ bool CEnemy3D::Init(void)
 	// Store the handler to the CGroundMap
 	cGroundMap = CGroundMap::GetInstance();
 
+	cSoundController = CSoundController::GetInstance();
+
 	// Movement Control
 	iCurrentNumMovement = 0;
 	iMaxNumMovement = 100;
 	angleOfSight = 0.f;
 
-	health = 10;
-
-	cSoundController = CSoundController::GetInstance();
-
-	
+	std::vector<glm::vec3> vertices;
+	std::vector<glm::vec2> uvs;
+	std::vector<glm::vec3> normals;
 
 	switch (type)
 	{
 	case E_ENEMY1:
 	{
+		health = 7;
+		speed = Math::RandFloatMinMax(0.4f, 1.0f);
+
 		vec3Scale = glm::vec3(1, 1, 1);
-		vec3ColliderScale = glm::vec3(0.8, 0.8, 0.8);
+		vec3ColliderScale = glm::vec3(0.45, 1.6, 0.45);
 
-		enemyMesh = MeshBuilder::GenerateOBJ("enemy", "OBJ/chicken.obj");
-		//enemyMesh = MeshBuilder::GenerateCube("cube", glm::vec3(0, 0, 0), 1);
-		// load and create a texture 
-		iTextureID = LoadTexture("Images/chicken.tga");
-		if (iTextureID == 0)
+		std::string file_path = "OBJ/creeper.obj";
+		bool success = LoadOBJ(file_path.c_str(), vertices, uvs, normals);
+		if (!success)
 		{
-			cout << "Unable to load Images/chicken.tga" << endl;
-			return false;
+			return NULL;
 		}
-
+		
 		break;
 	}
 	case E_ENEMY2:
 	{
+		health = 10;
+		speed = Math::RandFloatMinMax(0.7f, 1.0f);
+
 		vec3Scale = glm::vec3(1, 1, 1);
-		vec3ColliderScale = glm::vec3(0.8, 0.8, 0.8);
+		vec3ColliderScale = glm::vec3(0.45, 1.6, 0.45);
 
-		enemyMesh = MeshBuilder::GenerateOBJ("enemy", "OBJ/chicken.obj");
-		// load and create a texture 
-		iTextureID = LoadTexture("Images/chicken.tga");
-		if (iTextureID == 0)
+		std::string file_path = "OBJ/creeper.obj";
+		bool success = LoadOBJ(file_path.c_str(), vertices, uvs, normals);
+		if (!success)
 		{
-			cout << "Unable to load Images/chicken.tga" << endl;
-			return false;
+			return NULL;
 		}
-
+	
 		break;
 	}
 	case E_ENEMY3:
 	{
+		health = 14;
+		speed = Math::RandFloatMinMax(0.7f, 1.1f);
+
 		vec3Scale = glm::vec3(1, 1, 1);
-		vec3ColliderScale = glm::vec3(0.8, 0.8, 0.8);
+		vec3ColliderScale = glm::vec3(0.45, 1.6, 0.45);
 
-		enemyMesh = MeshBuilder::GenerateOBJ("enemy", "OBJ/chicken.obj");
-		// load and create a texture 
-		iTextureID = LoadTexture("Images/chicken.tga");
-		if (iTextureID == 0)
+		std::string file_path = "OBJ/creeper.obj";
+		bool success = LoadOBJ(file_path.c_str(), vertices, uvs, normals);
+		if (!success)
 		{
-			cout << "Unable to load Images/chicken.tga" << endl;
-			return false;
+			return NULL;
 		}
-
-		break;
-	}
-	default:
-	{
-		vec3Scale = glm::vec3(1, 1, 1);
-		vec3ColliderScale = glm::vec3(0.8, 0.8, 0.8);
-
-		enemyMesh = MeshBuilder::GenerateOBJ("enemy", "OBJ/chicken.obj");
-		// load and create a texture 
-		iTextureID = LoadTexture("Images/chicken.tga");
-		if (iTextureID == 0)
-		{
-			cout << "Unable to load Images/chicken.tga" << endl;
-			return false;
-		}
-
-		break;
-	}
 		
+		break;
+	}
+	}
+
+	std::vector<Vertex> vertex_buffer_data;
+	std::vector<GLuint> index_buffer_data;
+	IndexVBO(vertices, uvs, normals, index_buffer_data, vertex_buffer_data);
+
+	glGenVertexArrays(1, &VAO);
+	glBindVertexArray(VAO);
+	glGenBuffers(1, &VBO);
+	glGenBuffers(1, &IBO);
+
+
+	glBindBuffer(GL_ARRAY_BUFFER, VBO);
+	glBufferData(GL_ARRAY_BUFFER, vertex_buffer_data.size() * sizeof(Vertex), &vertex_buffer_data[0], GL_STATIC_DRAW);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, IBO);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, index_buffer_data.size() * sizeof(GLuint), &index_buffer_data[0], GL_STATIC_DRAW);
+	index_buffer_size = index_buffer_data.size();
+
+	iTextureID = LoadTexture("Images/creeper.tga");
+	if (iTextureID == 0)
+	{
+		cout << "Unable to load Images/creeper.tga" << endl;
+		return false;
 	}
 
 	return true;
@@ -272,7 +280,7 @@ bool CEnemy3D::IsCameraAttached(void)
  */
 void CEnemy3D::ProcessMovement(const Enemy_Movement direction, const float deltaTime)
 {
-	float velocity = fMovementSpeed * deltaTime;
+	float velocity = fMovementSpeed * deltaTime * speed;
 	if (direction == FORWARD)
 		vec3Position += vec3Front * velocity;
 	if (direction == BACKWARD)
@@ -337,9 +345,8 @@ void CEnemy3D::Update(const double dElapsedTime)
 		// Update the counter
 		iCurrentNumMovement++;
 	}
-
 	// rotating to face player
-	if (angleOfSight > 40.0f)
+	else if (angleOfSight > 40.0f)
 	{
 		// roate more if player is not in sight of the enemy
 		ProcessRotate(rand() % 90 - 45.0f);
@@ -349,11 +356,14 @@ void CEnemy3D::Update(const double dElapsedTime)
 	else // roate abit with player is already in sight of the enemy
 	{
 		// Randomly choose a new direction up to +30 or -30 degrees to the current direction 
-		ProcessRotate(rand() % 30 - 15.f);
-		
+		ProcessRotate(rand() % 60 - 30.f);
+
 		// Reset the counter to 0
 		iCurrentNumMovement = 0;
 	}
+
+	
+	
 
 	glm::vec3 EnemyFacingPlayerVec;
 	EnemyFacingPlayerVec = glm::normalize(cPlayer3D->GetPosition() - vec3Position);
@@ -390,30 +400,6 @@ void CEnemy3D::PreRender(void)
 	glDepthFunc(GL_LEQUAL);  // change depth function so depth test passes when values are equal to depth buffer's content
 }
 
-void CEnemy3D::RenderMesh(Mesh* mesh)
-{
-	glActiveTexture(GL_TEXTURE0);
-	glBindTexture(GL_TEXTURE_2D, iTextureID);
-
-	// create transformations
-	model = glm::mat4(1.0f); // make sure to initialize matrix to identity matrix first
-	
-	model = glm::translate(model, glm::vec3(vec3Position.x, vec3Position.y - 0.49f, vec3Position.z));
-	model = glm::rotate(model,glm::radians(-fYaw + 45.0f) , glm::vec3(0.0f, 1.0f, 0.0f));
-	model = glm::scale(model, vec3Scale);
-	
-
-	// note: currently we set the projection matrix each frame, but since the projection 
-	// matrix rarely changes it's often best practice to set it outside the main loop only once.
-	cShader->setMat4("projection", projection);
-	cShader->setMat4("view", view);
-	cShader->setMat4("model", model);
-
-	// render OBJ
-	mesh->Render();
-
-}
-
 /**
 @brief Render Render this instance
 @param cShader A Shader* variable which contains the Shader to use in this class instance
@@ -431,9 +417,37 @@ void CEnemy3D::Render(void)
 	cShader->use();
 
 	// render enemyMesh
-	modelStack.PushMatrix();
-	RenderMesh(enemyMesh);
-	modelStack.PopMatrix();
+	glActiveTexture(GL_TEXTURE0);
+	glBindTexture(GL_TEXTURE_2D, iTextureID);
+
+	// create transformations
+	model = glm::mat4(1.0f); // make sure to initialize matrix to identity matrix first
+	model = glm::translate(model, glm::vec3(vec3Position.x, vec3Position.y - 0.5f, vec3Position.z));
+	model = glm::rotate(model, glm::radians(-fYaw + 90.f), glm::vec3(0.0f, 1.0f, 0.0f));
+	model = glm::scale(model, vec3Scale);
+
+	// note: currently we set the projection matrix each frame, but since the projection 
+	// matrix rarely changes it's often best practice to set it outside the main loop only once.
+	cShader->setMat4("projection", projection);
+	cShader->setMat4("view", view);
+	cShader->setMat4("model", model);
+
+	// render OBJ
+	glBindVertexArray(VAO);
+
+	glEnableVertexAttribArray(0);
+	glEnableVertexAttribArray(1);
+
+	glBindBuffer(GL_ARRAY_BUFFER, VBO);
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)0);
+	glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)(sizeof(glm::vec3) + sizeof(glm::vec3)));
+
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, IBO);
+	glDrawElements(GL_TRIANGLES, index_buffer_size, GL_UNSIGNED_INT, 0);
+
+
+	glDisableVertexAttribArray(1);
+	glDisableVertexAttribArray(0);
 
 	// Render the CCollider if needed
 	if ((cCollider) && (cCollider->bIsDisplayed))
@@ -483,7 +497,7 @@ void CEnemy3D::UpdateEnemyVectors(void)
 	if (cPlayer3D)
 	{
 		float fDistanceToPlayer = glm::length(cPlayer3D->GetPosition() - vec3Position);
-		if (fDistanceToPlayer < 4.0f && angleOfSight < 40.0f)
+		if (fDistanceToPlayer < 6.0f && angleOfSight < 40.0f)
 		{
 			// Update the direction of the enemy
 			front = glm::normalize(glm::vec3(cPlayer3D->GetPosition() - vec3Position));

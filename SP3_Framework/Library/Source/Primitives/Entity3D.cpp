@@ -7,6 +7,8 @@
 
 // Include ImageLoader
 #include "..\System\ImageLoader.h"
+#include <GL\glew.h>
+#include "../SOIL/includes/stb_image.h"
 
 /**
 @brief Default Constructor
@@ -314,45 +316,78 @@ void CEntity3D::RollbackPosition(void)
 @param filename A const char* variable which contains the file name of the texture
 @return true if the initialisation is successful, else false
 */
-int CEntity3D::LoadTexture(const char* filename)
+GLuint CEntity3D::LoadTexture(const char* filename, GLint wrap)
 {
-	// Texture ID
-	GLuint iTextureID = 0;
+	//// Texture ID
+	//GLuint iTextureID = 0;
 
-	// Variables used in loading the texture
-	int width, height, nrChannels;
+	//// Variables used in loading the texture
+	//int width, height, nrChannels;
 
-	// texture 1
-	// ---------
-	glGenTextures(1, &iTextureID);
-	glBindTexture(GL_TEXTURE_2D, iTextureID);
-	// set the texture wrapping parameters
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-	// set texture filtering parameters
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	//// texture 1
+	//// ---------
+	//glGenTextures(1, &iTextureID);
+	//glBindTexture(GL_TEXTURE_2D, iTextureID);
+	//// set the texture wrapping parameters
+	//glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+	//glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+	//// set texture filtering parameters
+	//glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+	//glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
-	CImageLoader* cImageLoader = CImageLoader::GetInstance();
-	unsigned char *data = cImageLoader->Load(filename, width, height, nrChannels, true);
-	if (data)
+	//CImageLoader* cImageLoader = CImageLoader::GetInstance();
+	//unsigned char *data = cImageLoader->Load(filename, width, height, nrChannels, true);
+	//if (data)
+	//{
+	//	if (nrChannels == 3)
+	//		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
+	//	else if (nrChannels == 4)
+	//		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
+
+	//	// Generate mipmaps
+	//	glGenerateMipmap(GL_TEXTURE_2D);
+	//}
+	//else
+	//{
+	//	return 0;
+	//}
+	//// Free up the memory of the file data read in
+	//free(data);
+
+	//return iTextureID;
+
+	GLubyte* data;
+	GLuint		texture = 0;
+	int width, height;
+
+	int original_no_channels;
+
+	data = stbi_load(filename, &width, &height, &original_no_channels, 0);
+
+	glGenTextures(1, &texture);
+	glBindTexture(GL_TEXTURE_2D, texture);
+	if (original_no_channels == 3)
 	{
-		if (nrChannels == 3)
-			glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
-		else if (nrChannels == 4)
-			glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
-
-		// Generate mipmaps
-		glGenerateMipmap(GL_TEXTURE_2D);
+		glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
+		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
 	}
 	else
-	{
-		return 0;
-	}
-	// Free up the memory of the file data read in
-	free(data);
+		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
 
-	return iTextureID;
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_NEAREST);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+	float maxAnisotropy = 1.f;
+	glGetFloatv(GL_MAX_TEXTURE_MAX_ANISOTROPY_EXT, &maxAnisotropy);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAX_ANISOTROPY_EXT, (GLint)maxAnisotropy);
+
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, wrap);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, wrap);
+
+	glGenerateMipmap(GL_TEXTURE_2D);
+
+	stbi_image_free(data);
+
+	return texture;
 }
 
 const float CEntity3D::GetCollisionDamage(void) const

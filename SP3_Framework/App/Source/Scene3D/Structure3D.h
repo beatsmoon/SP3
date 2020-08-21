@@ -62,7 +62,6 @@ public:
 
 	// PreRender
 	virtual void PreRender(void);
-	void RenderMesh(Mesh* mesh);
 	// Render
 	virtual void Render(void);
 	// PostRender
@@ -74,13 +73,6 @@ public:
 protected:
 	// The handle to the CGroundMap class instance
 	CGroundMap* cGroundMap;
-
-	Mesh* structureMesh;
-
-	MS modelStack;
-	MS viewStack;
-	MS projectionStack;
-
 	
 	int iStructureHealth;
 };

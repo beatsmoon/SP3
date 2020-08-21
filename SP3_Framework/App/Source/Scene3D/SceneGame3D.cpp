@@ -134,6 +134,23 @@ bool CSceneGame3D::Init(void)
 	if (!CScene3D::Init())
 		return false;
 
+	// Setup the shaders
+	cShader = new Shader("Shader//Scene3D.vs", "Shader//Scene3D.fs");
+	// Setup the shaders
+	cSimpleShader = new Shader("Shader//SimpleShader.vs", "Shader//SimpleShader.fs");
+	// Setup the shaders
+	textShader = new Shader("Shader//text.vs", "Shader//text.fs");
+	// Setup the shaders
+	skyBoxShader = new Shader("Shader//SkyBox.vs", "Shader//SkyBox.fs");
+	// Setup the shaders
+	groundShader = new Shader("Shader//Ground.vs", "Shader//Ground.fs");
+	// set up the shader
+	cRenderToTextureShader = new Shader("Shader//RenderToTexture.vs", "Shader//RenderToTexture.fs");
+	// set up the shader
+	cGUIShader = new Shader("Shader//GUIShader.vs", "Shader//GUIShader.fs");
+	// set up the shader
+	cGUISimpleShader = new Shader("Shader//GUISimpleShader.vs", "Shader//GUISimpleShader.fs");
+
 	// Initialise the cPlayer3D
 	cPlayer3D = CPlayer3D::GetInstance();
 	cPlayer3D->SetShader(cShader);
@@ -224,21 +241,6 @@ bool CSceneGame3D::Init(void)
 		cRangeIndicator->Init();
 		cRangeIndicator->ActivateCollider(cSimpleShader);
 		cEntityManager->Add(cRangeIndicator);
-
-		/*CStructure3D* rifleAmmo = new CStructure3D(glm::vec3(Math::RandFloatMinMax(-10.0f, 10.0f), 0.5f, Math::RandFloatMinMax(-10.0f, 10.0f))
-			, CEntity3D::TYPE::RIFLE_AMMO);
-		rifleAmmo->SetShader(cShader);
-		rifleAmmo->Init();
-		rifleAmmo->ActivateCollider(cSimpleShader);
-		cEntityManager->Add(rifleAmmo);
-
-		CStructure3D* pistolAmmo = new CStructure3D(glm::vec3(Math::RandFloatMinMax(-10.0f, 10.0f), 0.5f, Math::RandFloatMinMax(-10.0f, 10.0f))
-			, CEntity3D::TYPE::PISTOL_AMMO);
-		pistolAmmo->SetShader(cShader);
-		pistolAmmo->Init();
-		pistolAmmo->ActivateCollider(cSimpleShader);
-		cEntityManager->Add(pistolAmmo);*/
-
 	}
 
 	CStructure3D* cExplosiveBarrel = new CStructure3D(glm::vec3(0.f, 0.5f, 0.f), CEntity3D::TYPE::EXPLOSIVE_BARREL);
@@ -246,6 +248,8 @@ bool CSceneGame3D::Init(void)
 	cExplosiveBarrel->Init();
 	cExplosiveBarrel->ActivateCollider(cSimpleShader);
 	cEntityManager->Add(cExplosiveBarrel);
+
+	
 	
 	return true;
 }
@@ -682,6 +686,8 @@ void CSceneGame3D::Render(void)
 	// Render Camera Position
 	cTextRenderer->Render(glm::to_string(cCamera->vec3Position), 10.0f, 10.0f, 0.5f, glm::vec3(1.0f, 1.0f, 0.0f));
 
+	//cTextRenderer->Render(cFPSCounter->GetFrameRateString(), 10.0f, 50.0f, 0.5f, glm::vec3(1.0f, 1.0f, 1.0f));
+
 	// Call the cTextRenderer's PostRender()
 	cTextRenderer->PostRender();
 
@@ -690,8 +696,9 @@ void CSceneGame3D::Render(void)
 		// call the cTextRenderer's Postrender()
 		cMinimap->Render();
 	}
-	
 
+	
+	
 	return;
 }
 
