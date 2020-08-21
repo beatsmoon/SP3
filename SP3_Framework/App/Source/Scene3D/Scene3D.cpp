@@ -92,6 +92,12 @@ bool CScene3D::Init(void)
 	cSoundController->LoadSound(FileSystem::getPath("Sounds\\gunreload.ogg"), 7, true);
 	cSoundController->LoadSound(FileSystem::getPath("Sounds\\switchgun.ogg"), 8, true);
 	cSoundController->LoadSound(FileSystem::getPath("Sounds\\click.ogg"), 9, true);
+
+	for (int i = 0; i < 9; ++i)
+	{
+		cSoundController->MasterVolumeDecrease();
+	}
+
 	// Create and initialise the TextRenderer
 	cTextRenderer = CTextRenderer::GetInstance();
 	// Set a shader to this class

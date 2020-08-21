@@ -72,6 +72,8 @@ bool CGunBarrel::Init(void)
 
 	// Set the type
 	SetType(CEntity3D::TYPE::GUNBARREL);
+	
+	eTierLevel = TIERLEVEL::NOTIER;
 
 	//// Initialise the cPlayer3D
 	//cPlayer3D = CPlayer3D::GetInstance();
@@ -149,6 +151,7 @@ bool CGunBarrel::Init(void)
 		cout << "Unable to load Image/Scene3D_BarrelTexture.jpg" << endl;
 		return false;
 	}
+
 	vec3Scale = glm::vec3(0.1, 0.1, 0.1);
 	// Store the handler to the CGroundMap
 	cGroundMap = CGroundMap::GetInstance();
