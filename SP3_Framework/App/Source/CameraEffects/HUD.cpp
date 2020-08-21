@@ -7,12 +7,15 @@ using namespace std;
 CHUD::CHUD(void)
     : bActive(true)
 	, cPlayer3D(NULL)
+	
 {
 }
 
-CHUD::CHUD(HUD_Type type) : bActive(true), cPlayer3D(NULL)
+CHUD::CHUD(Weapon_Type etype) 
+	: bActive(true)
+	, cPlayer3D(NULL)
 {
-	this->type = type;
+	prevtype = type = etype;
 }
 
 CHUD::~CHUD(void)
@@ -78,36 +81,40 @@ bool CHUD::Init(void)
 		return false;
 	}
 
-	switch (type)
-	{
-	case H_HOLDING_GUN:
-		vec3Position = glm::vec3(0.5f, -0.5f, 0.0f);
-		vec3Scale.x = 0.5;
-		vec3Scale.y = 0.5;
-		// load and create a texture 
-		iTextureID = LoadTexture("Images/GUI/holding_rifle.tga");
-		if (iTextureID == 0)
-		{
-			cout << "Unable to load ImageS/GUI/holding_rifle.tga" << endl;
-			return false;
-		}
+	//switch (type)
+	//{
+	//case W_PISTOL:
+	//	vec3Position = glm::vec3(0.5f, -0.5f, 0.0f);
+	//	vec3Scale.x = 0.5;
+	//	vec3Scale.y = 0.5;
+	//	// load and create a texture 
+	//	iTextureID = LoadTexture("Images/GUI/holding_rifle.tga");
+	//	if (iTextureID == 0)
+	//	{
+	//		cout << "Unable to load ImageS/GUI/holding_rifle.tga" << endl;
+	//		return false;
+	//	}
 
-		break;
-	case H_SELECTION_GUN:
-		vec3Position = glm::vec3(0.8, -0.8, 0.0f);
-		vec3Scale.x = 0.1;
-		vec3Scale.y = 0.1;
-		// load and create a texture 
-		iTextureID = LoadTexture("Images/GUI/rifle_HUD.tga");
-		if (iTextureID == 0)
-		{
-			cout << "Unable to load ImageS/GUI/rifle_HUD.tga" << endl;
-			return false;
-		}
-		break;
-	default:
-		break;
-	}
+	//	break;
+	//case H_SELECTION_GUN:
+	//	vec3Position = glm::vec3(0.8, -0.8, 0.0f);
+	//	vec3Scale.x = 0.1;
+	//	vec3Scale.y = 0.1;
+	//	// load and create a texture 
+	//	iTextureID = LoadTexture("Images/GUI/rifle_HUD.tga");
+	//	if (iTextureID == 0)
+	//	{
+	//		cout << "Unable to load ImageS/GUI/rifle_HUD.tga" << endl;
+	//		return false;
+	//	}
+	//	break;
+	//default:
+	//	break;
+	//}
+	vec3Position = glm::vec3(0.5f, -0.5f, 0.0f);
+	vec3Scale.x = 0.5;
+	vec3Scale.y = 0.5;
+	type = prevtype = Weapon_Type::W_PISTOL;
 
 	return true;
 }
@@ -139,91 +146,121 @@ bool CHUD::GetStatus(void) const
 
 void CHUD::Update(const double dElapsedTime)
 {
-	
+	//switch (type)
+	//{
+	//case H_HOLDING_GUN:
+	//{
+	//	// prevent updating texture after the 1st update
+	//	static bool isActivated = false;
+	//	// 1 == rifle
+	//	// 2 == pistol
+	//	// set the prev weapon
+	//	static int prevWeapon = 2;
+	//	if (cPlayer3D->GetWeapon() == cPlayer3D->GetInventoryWeapon(0))
+	//	{
+	//		if (prevWeapon != 1)
+	//		{
+	//			isActivated = false;
+	//		}
+	//		if (!isActivated && prevWeapon != 1)
+	//		{
+	//			iTextureID = LoadTexture("Images/GUI/holding_rifle.tga");
+	//			isActivated = true;
+	//			prevWeapon = 1;
+	//		}
+	//	}
+	//	else
+	//	{
+	//		if (prevWeapon != 2)
+	//		{
+	//			isActivated = false;
+	//		}
+	//		if (!isActivated && prevWeapon != 2)
+	//		{
+	//			iTextureID = LoadTexture("Images/GUI/holding_pistol.tga");
+	//			isActivated = true;
+	//			prevWeapon = 2;
+	//		}
+	//	}
+	//	break;
+	//}
+	//	
+	//case H_SELECTION_GUN:
+	//{
+	//	// prevent updating texture after the 1st update
+	//	static bool isActivated = false;
+	//	// 1 == rifle
+	//	// 2 == pistol
+	//	// set the prev weapon
+	//	static int prevWeapon = 2;
+	//	if (cPlayer3D->GetWeapon() == cPlayer3D->GetInventoryWeapon(0))
+	//	{
+	//		if (prevWeapon != 1)
+	//		{
+	//			isActivated = false;
+	//		}
+	//		if (!isActivated && prevWeapon != 1)
+	//		{
+	//			iTextureID = LoadTexture("Images/GUI/rifle_HUD.tga");
+	//			isActivated = true;
+	//			prevWeapon = 1;
+	//		}
+	//	}
+	//	else
+	//	{
+	//		if (prevWeapon != 2)
+	//		{
+	//			isActivated = false;
+	//		}
+	//		if (!isActivated && prevWeapon != 2)
+	//		{
+	//			iTextureID = LoadTexture("Images/GUI/pistol_HUD.tga");
+	//			isActivated = true;
+	//			prevWeapon = 2;
+	//		}
+	//	}
+	//	break;
+	//}
+	//	
+	//default:
+	//	break;
+	//}
+
+	type = cPlayer3D->GetWeapon()->GetWeaponName();
+	if (type == prevtype)
+	{
+		return;
+	}
+	prevtype = type;
 	switch (type)
 	{
-	case H_HOLDING_GUN:
-	{
-		// prevent updating texture after the 1st update
-		static bool isActivated = false;
-		// 1 == rifle
-		// 2 == pistol
-		// set the prev weapon
-		static int prevWeapon = 2;
-
-		if (cPlayer3D->GetWeapon() == cPlayer3D->GetInventoryWeapon(0))
+		case Weapon_Type::W_PISTOL:
 		{
-			if (prevWeapon != 1)
-			{
-				isActivated = false;
-			}
-			if (!isActivated && prevWeapon != 1)
-			{
-				iTextureID = LoadTexture("Images/GUI/holding_rifle.tga");
-				isActivated = true;
-				prevWeapon = 1;
-			}
+			iTextureID = LoadTexture("Images/GUI/Scene3D_Holding_Pistol.tga");
 		}
-		else
+		break;
+		case Weapon_Type::W_SHOTGUN:
 		{
-			if (prevWeapon != 2)
-			{
-				isActivated = false;
-			}
-			if (!isActivated && prevWeapon != 2)
-			{
-				iTextureID = LoadTexture("Images/GUI/holding_pistol.tga");
-				isActivated = true;
-				prevWeapon = 2;
-			}
-
+			iTextureID = LoadTexture("Images/GUI/Scene3D_Holding_Shotgun.tga");
 		}
-
+		break;
+		case Weapon_Type::W_AK47:
+		{
+			iTextureID = LoadTexture("Images/GUI/Scene3D_Holding_AK47.tga");
+		}
+		break;
+		case Weapon_Type::W_M4:
+		{
+			iTextureID = LoadTexture("Images/GUI/Scene3D_Holding_M4.tga");
+		}
+		break;
+		case Weapon_Type::W_SNIPER:
+		{
+			iTextureID = LoadTexture("Images/GUI/Scene3D_Holding_Sniper.tga");
+		}
 		break;
 	}
-		
-	case H_SELECTION_GUN:
-	{
-		// prevent updating texture after the 1st update
-		static bool isActivated = false;
-		// 1 == rifle
-		// 2 == pistol
-		// set the prev weapon
-		static int prevWeapon = 2;
-		if (cPlayer3D->GetWeapon() == cPlayer3D->GetInventoryWeapon(0))
-		{
-			if (prevWeapon != 1)
-			{
-				isActivated = false;
-			}
-			if (!isActivated && prevWeapon != 1)
-			{
-				iTextureID = LoadTexture("Images/GUI/rifle_HUD.tga");
-				isActivated = true;
-				prevWeapon = 1;
-			}
-		}
-		else
-		{
-			if (prevWeapon != 2)
-			{
-				isActivated = false;
-			}
-			if (!isActivated && prevWeapon != 2)
-			{
-				iTextureID = LoadTexture("Images/GUI/pistol_HUD.tga");
-				isActivated = true;
-				prevWeapon = 2;
-			}
 
-		}
-
-		break;
-	}
-		
-	default:
-		break;
-	}
 }
 
 void CHUD::PreRender(void)

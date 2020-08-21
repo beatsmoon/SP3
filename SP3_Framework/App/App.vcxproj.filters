@@ -193,6 +193,12 @@
       <Filter>CameraEffects</Filter>
 >>>>>>> origin/shop-merge
     </ClCompile>
+    <ClCompile Include="Source\Scene3D\WeaponInfo\WeaponAttachments\AttachmentScope.cpp">
+      <Filter>Scene3D\WeaponInfo\WeaponAttachments</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Scene3D\CrossHair\Scope.cpp">
+      <Filter>Scene3D\CrossHair</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Application.h">
@@ -337,6 +343,12 @@
     <ClInclude Include="Source\CameraEffects\Shop.h">
       <Filter>CameraEffects</Filter>
 >>>>>>> origin/shop-merge
+    </ClInclude>
+    <ClInclude Include="Source\Scene3D\WeaponInfo\WeaponAttachments\AttachmentScope.h">
+      <Filter>Scene3D\WeaponInfo\WeaponAttachments</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Scene3D\CrossHair\Scope.h">
+      <Filter>Scene3D\CrossHair</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

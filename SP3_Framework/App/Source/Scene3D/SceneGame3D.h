@@ -113,6 +113,8 @@ public:
 	// Handler to the CCrossHair
 	CCrossHair* cCrossHair;
 
+	CScope* cScope;
+
 	CHUD* cHUD;
 
 	CHUD* cRenderHoldingGun;

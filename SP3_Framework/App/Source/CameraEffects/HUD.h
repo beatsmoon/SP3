@@ -15,11 +15,11 @@
 #include "../App/Source/Scene3D/Player3D.h"
 
 
-enum HUD_Type
-{
-	H_HOLDING_GUN,
-	H_SELECTION_GUN
-};
+//enum HUD_Type
+//{
+//	H_HOLDING_GUN,
+//	H_SELECTION_GUN
+//};
 
 class CHUD : public CEntity3D
 {
@@ -27,7 +27,7 @@ public:
 
 	// Constructor
 	CHUD(void);
-	CHUD(HUD_Type type);
+	CHUD(Weapon_Type etype);
 	// Destructor
 	virtual ~CHUD(void);
 
@@ -64,7 +64,8 @@ protected:
 
 	bool bActive;
 
-	HUD_Type type;
+	Weapon_Type type;
+	Weapon_Type prevtype;
 
 	//float fHeight, fWidth;
 

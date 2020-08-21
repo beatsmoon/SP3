@@ -130,7 +130,7 @@ void CWeapon::Init(void)
 		// Boolean flag to indicate if weapon can fire now
 		bFire = true;
 
-		FiringTypeStatus = FIRINGTYPE::AUTO;
+		FiringTypeStatus = FIRINGTYPE::SINGLE;
 
 		dReloadElapsedTime = 0.0;
 		dReloadTime = 5.0;

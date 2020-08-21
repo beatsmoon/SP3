@@ -342,6 +342,25 @@ void CPlayer3D::ProcessRotate(float fXOffset, float fYOffset, const bool constra
 	//		fYOffset *= 0.7;
 	//	}
 	//}
+	if (scopeMode == true)
+	{
+		if (GetWeapon()->GetScope()->GetTierLevel() == CGunScope::TIERLEVEL::TIER1)
+		{
+			fXOffset *= 0.4;
+			fYOffset *= 0.4;
+		}
+		else if (GetWeapon()->GetScope()->GetTierLevel() == CGunScope::TIERLEVEL::TIER2)
+		{
+			fXOffset *= 0.2;
+			fYOffset *= 0.2;
+		}
+		else if (GetWeapon()->GetScope()->GetTierLevel() == CGunScope::TIERLEVEL::TIER3)
+		{
+			fXOffset *= 0.08;
+			fYOffset *= 0.08;
+		}
+	}
+
 
 	fYaw += fXOffset;
 	fPitch += fYOffset;
@@ -410,11 +429,18 @@ CWeapon* CPlayer3D::GetInventoryWeapon(const int iSlot) const
 
 glm::vec3 CPlayer3D::CalculateBulletDir()
 {
+	//glm::vec3 front;
+	//front.x = cos(glm::radians(fYaw + Math::RandFloatMinMax(-10, 10))) * cos(glm::radians(fPitch));
+	//front.y = sin(glm::radians(fPitch));
+	//front.z = sin(glm::radians(fYaw)) * cos(glm::radians(fPitch));
+	//vec3Front = glm::normalize(front);
+
 	glm::vec3 front;
-	front.x = cos(glm::radians(fYaw + Math::RandFloatMinMax(-10, 10))) * cos(glm::radians(fPitch));
-	front.y = sin(glm::radians(fPitch));
-	front.z = sin(glm::radians(fYaw)) * cos(glm::radians(fPitch));
+	front.x = cos(glm::radians(fYaw + Math::RandFloatMinMax(-2, 2))) * cos(glm::radians(fPitch));
+	front.y = sin(glm::radians(fPitch + Math::RandFloatMinMax(-2, 2)));
+	front.z = sin(glm::radians(fYaw + Math::RandFloatMinMax(-2, 2))) * cos(glm::radians(fPitch));
 	vec3Front = glm::normalize(front);
+
 
 	return vec3Front;
 }
@@ -595,8 +621,8 @@ void CPlayer3D::Update(const double dElapsedTime)
 	}
 	if (fCameraRecoilAngle > 0)
 	{
-		fCameraRecoilAngle -= 0.1;
-		fPitch -= 0.1;
+		fCameraRecoilAngle -= 0.1f;
+		fPitch -= 0.1f;
 	}
 	UpdatePlayerVectors();
 	if (fCameraRecoilAngle < 0)

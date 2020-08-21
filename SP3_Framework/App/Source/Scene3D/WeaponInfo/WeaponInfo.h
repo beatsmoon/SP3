@@ -16,6 +16,9 @@
 
 #include "WeaponAttachments/AttachmentBarrel.h"
 #include "WeaponAttachments/AttachmentExtMag.h"
+//#include "WeaponAttachments/Scope.h"
+#include "WeaponAttachments/AttachmentScope.h"
+
 //#include "../Player3D.h"
 
 class CWeaponInfo
@@ -96,6 +99,9 @@ public:
 	void SetExtMag(CGunExtMag* cEntity3D);
 	CGunExtMag* GetExtMag(void) const;
 
+	void SetScope(CGunScope* cEntity3D);
+	CGunScope* GetScope(void) const;
+
 	void SetRecoilAngle(float fAngle);
 	float GetRecoilAngle(void) const;
 
@@ -131,6 +137,6 @@ protected:
 	FIRINGTYPE FiringTypeStatus;
 
 	CGunBarrel* m_Barrel;
-	CEntity3D* m_Sight;
+	CGunScope* m_Sight;
 	CGunExtMag* m_ExtMag;
 };

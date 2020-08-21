@@ -34,6 +34,7 @@
     <ClCompile Include="Source\Scene2D\Scene2D.cpp" />
     <ClCompile Include="Source\Scene3D\Camera.cpp" />
     <ClCompile Include="Source\Scene3D\CrossHair\CrossHair.cpp" />
+    <ClCompile Include="Source\Scene3D\CrossHair\Scope.cpp" />
     <ClCompile Include="Source\Scene3D\EntityManager.cpp" />
     <ClCompile Include="Source\Scene3D\Entity\Enemy3D.cpp" />
     <ClCompile Include="Source\Scene3D\Entity\RangeIndicator.cpp" />
@@ -53,6 +54,7 @@
     <ClCompile Include="Source\Scene3D\WeaponInfo\Weapon.cpp" />
     <ClCompile Include="Source\Scene3D\WeaponInfo\WeaponAttachments\AttachmentBarrel.cpp" />
     <ClCompile Include="Source\Scene3D\WeaponInfo\WeaponAttachments\AttachmentExtMag.cpp" />
+    <ClCompile Include="Source\Scene3D\WeaponInfo\WeaponAttachments\AttachmentScope.cpp" />
     <ClCompile Include="Source\Scene3D\WeaponInfo\WeaponInfo.cpp" />
     <ClCompile Include="Source\SceneControl\SceneManager.cpp" />
     <ClCompile Include="Source\SoundController\SoundController.cpp" />
@@ -84,6 +86,7 @@
     <ClInclude Include="Source\Scene2D\Scene2D.h" />
     <ClInclude Include="Source\Scene3D\Camera.h" />
     <ClInclude Include="Source\Scene3D\CrossHair\CrossHair.h" />
+    <ClInclude Include="Source\Scene3D\CrossHair\Scope.h" />
     <ClInclude Include="Source\Scene3D\EntityManager.h" />
     <ClInclude Include="Source\Scene3D\Entity\Enemy3D.h" />
     <ClInclude Include="Source\Scene3D\Entity\RangeIndicator.h" />
@@ -103,6 +106,7 @@
     <ClInclude Include="Source\Scene3D\WeaponInfo\Weapon.h" />
     <ClInclude Include="Source\Scene3D\WeaponInfo\WeaponAttachments\AttachmentBarrel.h" />
     <ClInclude Include="Source\Scene3D\WeaponInfo\WeaponAttachments\AttachmentExtMag.h" />
+    <ClInclude Include="Source\Scene3D\WeaponInfo\WeaponAttachments\AttachmentScope.h" />
     <ClInclude Include="Source\Scene3D\WeaponInfo\WeaponInfo.h" />
     <ClInclude Include="Source\SceneControl\SceneManager.h" />
     <ClInclude Include="Source\SoundController\SoundController.h" />

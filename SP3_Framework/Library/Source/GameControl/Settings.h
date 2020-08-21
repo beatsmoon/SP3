@@ -39,8 +39,8 @@ public:
 
 	// Windows Information
 	// Should make these not hard-coded :P
-	unsigned int iWindowWidth = 800;
-	unsigned int iWindowHeight = 600;
+	unsigned int iWindowWidth = 1280;
+	unsigned int iWindowHeight = 760;
 	unsigned int iWindowPosX = 50;
 	unsigned int iWindowPosY = 50;
 	bool bShowMousePointer = false;

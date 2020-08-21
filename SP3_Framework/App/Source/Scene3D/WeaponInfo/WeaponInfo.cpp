@@ -177,6 +177,14 @@ CGunExtMag* CWeaponInfo::GetExtMag(void) const
 {
 	return m_ExtMag;
 }
+void CWeaponInfo::SetScope(CGunScope* cEntity3D)
+{
+	m_Sight = cEntity3D;
+}
+CGunScope* CWeaponInfo::GetScope(void) const
+{
+	return m_Sight;
+}
 /**
  @brief Get the time between shots
  */
@@ -284,7 +292,7 @@ CProjectile* CWeaponInfo::Discharge(glm::vec3 vec3Position, glm::vec3 vec3Front,
 			// It will last for 2.0 seconds and travel at 20 units per frame
 			//vec3Front.x += 10;
 
-			iMagRounds--;
+			//iMagRounds--;
 
 			CProjectile* aProjectile = new CProjectile();
 			aProjectile->SetShader(cShader);
@@ -295,7 +303,7 @@ CProjectile* CWeaponInfo::Discharge(glm::vec3 vec3Position, glm::vec3 vec3Front,
 			aProjectile->SetSource(pSource);
 			aProjectile->SetCollisionDamage(fDamage);
 			// Lock the weapon after this discharge
-			bFire = false;
+			//bFire = false;
 			// Reduce the rounds by 1
 			
 
