@@ -23,6 +23,8 @@
 // Include 
 #include "../App/Source/SoundController/SoundController.h"
 
+
+
 class CEntityManager : public CSingletonTemplate<CEntityManager>
 {
 	friend class CSingletonTemplate<CEntityManager>;
@@ -55,6 +57,16 @@ public:
 	// Render this class instance
 	virtual void Render(void);
 
+	//Wave related functions
+
+	virtual void SetWaveStarted(bool bIsWaveStarted);
+
+	virtual bool GetWaveStarted(void);
+
+	virtual bool CheckWave(void);
+
+	
+
 protected:
 	// Render Settings
 	glm::mat4 model;
@@ -74,4 +86,11 @@ protected:
 	CEntityManager(void);
 	// Destructor
 	virtual ~CEntityManager(void);
+
+	//Wave related members
+
+	bool bIsWaveStarted;
+
+	
+
 };

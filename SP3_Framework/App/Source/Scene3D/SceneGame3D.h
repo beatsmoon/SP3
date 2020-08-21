@@ -61,6 +61,9 @@
 #include "../App/Source/CameraEffects/HUD.h"
 #include "../App/Source/Scene3D/Scene3D.h"
 
+//Include Wave Control
+#include "Wave.h"
+
 class CSettings;
 
 class CSceneGame3D : public CScene3D, public CSingletonTemplate<CSceneGame3D>
@@ -114,12 +117,14 @@ public:
 
 	CHUD* cRenderHoldingGun;
 
+	//Handler to the wave control class
+	CWave* cWave;
+
 protected:
 	// Constructor
 	CSceneGame3D(void);
 	// Destructor
 	virtual ~CSceneGame3D(void);
 	
-public:
 };
 
