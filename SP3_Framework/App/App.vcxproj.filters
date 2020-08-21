@@ -182,6 +182,9 @@
     <ClCompile Include="Source\Scene3D\Wave.cpp">
       <Filter>Scene3D</Filter>
     </ClCompile>
+    <ClCompile Include="Source\Scene3D\Score.cpp">
+      <Filter>Scene3D</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Application.h">
@@ -317,6 +320,9 @@
       <Filter>SceneControl</Filter>
     </ClInclude>
     <ClInclude Include="Source\Scene3D\Wave.h">
+      <Filter>Scene3D</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Scene3D\Score.h">
       <Filter>Scene3D</Filter>
     </ClInclude>
   </ItemGroup>

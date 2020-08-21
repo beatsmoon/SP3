@@ -11,7 +11,17 @@ CWave::CWave()
 CWave::~CWave()
 {
 
-	
+	if (cSimpleShader)
+	{
+		delete cSimpleShader;
+		cSimpleShader = NULL;
+	}
+
+	if (cShader)
+	{
+		delete cShader;
+		cShader = NULL;
+	}
 
 }
 
