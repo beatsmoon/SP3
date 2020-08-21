@@ -3,7 +3,6 @@
 CWave::CWave()
 	: cShader(NULL)
 	, cSimpleShader(NULL)
-	, bWaveActive(false)
 	, iWaveCounter(1)
 {
 }
@@ -24,6 +23,7 @@ void CWave::Init(void)
 	
 	cEntityManager = CEntityManager::GetInstance();
 
+	cScore = CScore::GetInstance();
 
 }
 
@@ -36,9 +36,6 @@ void CWave::SetWave(int waveNumber)
 	CEnemy3D* cEnemy3DType1 = NULL;
 	CEnemy3D* cEnemy3DType2 = NULL;
 	CEnemy3D* cEnemy3DType3 = NULL;
-
-
-
 
 	//Spawn wave 1 enemies
 	//Immediately spawn enemies 
@@ -68,7 +65,6 @@ void CWave::SetWave(int waveNumber)
 		cRangeIndicator->ActivateCollider(cSimpleShader);
 		cEntityManager->Add(cRangeIndicator);
 
-		
 		cEntityManager->SetWaveStarted(true);
 		
 	}
@@ -91,17 +87,4 @@ int  CWave::GetWaveNumber()
 void  CWave::SetWaveNumber(int waveNumber)
 {
 	iWaveCounter = waveNumber;
-}
-
-
-//Set the status for wave
-void CWave::SetWaveStatus(bool waveStatus)
-{
-	bWaveActive = waveStatus;
-}
-
-//Get the status of wave
-bool CWave::GetWaveStatus(void)
-{
-	return bWaveActive;
 }

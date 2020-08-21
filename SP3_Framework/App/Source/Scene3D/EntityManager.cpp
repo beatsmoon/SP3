@@ -36,6 +36,8 @@ CEntityManager::~CEntityManager(void)
 	cCameraEffects = NULL;
 
 	cSoundController = NULL;
+
+	cScore = NULL;
 }
 
 /**
@@ -51,6 +53,8 @@ bool CEntityManager::Init(void)
 	cCameraEffects = CCameraEffects::GetInstance();
 
 	cSoundController = CSoundController::GetInstance();
+
+	cScore = CScore::GetInstance();
 
 	return true;
 }
@@ -279,6 +283,9 @@ void CEntityManager::Update(const double dElapsedTime)
 					else
 					{
 						(*it)->SetToDelete(true);
+						//cScore->AddScore(cScore->GetScoreToAdd());
+						//cout << cScore->GetScore();
+						
 					}
 					cout << "** Collision between NPC and Projectile ***" << endl;
 				}
@@ -297,6 +304,8 @@ void CEntityManager::Update(const double dElapsedTime)
 					else
 					{
 						(*it_other)->SetToDelete(true);
+						//cScore->AddScore(cScore->GetScoreToAdd());
+						//cout << cScore->GetScore() << endl;
 					}
 					cout << "** Collision between Explosive Barrel and Projectile ***" << endl;
 				}
@@ -481,7 +490,6 @@ bool CEntityManager::GetWaveStarted(void)
 //Check if wave is over
 bool CEntityManager::CheckWave(void)
 {
-	
 	if (bIsWaveStarted == true)
 	{
 		std::list<CEntity3D*>::iterator it, end;
@@ -501,9 +509,29 @@ bool CEntityManager::CheckWave(void)
 		{
 			SetWaveStarted(false);
 			return true;
-
 		}
 	}
+}
+
+void CEntityManager::UpdateScore(void)
+{
+	std::list<CEntity3D*>::iterator it, end;
+	std::list<CEntity3D*>::iterator it_other;
+
+	// Update all CEntity3D
+	end = lEntity3D.end();
+	for (it = lEntity3D.begin(); it != end; ++it)
+	{
+		if (((*it)->GetType() == CEntity3D::TYPE::NPC))
+		{
+			if ((*it)->IsToDelete())
+			{
+				cScore->AddScore(cScore->GetScoreToAdd());
+				cout << cScore->GetScore() << endl;
+			}
+		}
+	}
+
 }
 
 

@@ -41,6 +41,7 @@ CSceneGame3D::CSceneGame3D(void)
 	, cSkybox(NULL)
 	, cGroundMap(NULL)
 	, cWave(NULL)
+	, cScore(NULL)
 {
 }
 
@@ -130,7 +131,14 @@ CSceneGame3D::~CSceneGame3D(void)
 		cWave->Destroy();
 		cWave = NULL;
 	}
+
+	if (cScore)
+	{
+		cScore->Destroy();
+		cScore = NULL;
+	}
 }
+
 
 /**
  @brief Init Initialise this instance
@@ -175,6 +183,7 @@ bool CSceneGame3D::Init(void)
 	rifle->Init();
 	rifle->SetShader(cSimpleShader);
 	cPlayer3D->SetWeapon(0, rifle);
+
 	cPlayer3D->ActivateCollider(cSimpleShader);
 	cPlayer3D->SetCurrentWeapon(0);
 
@@ -188,6 +197,9 @@ bool CSceneGame3D::Init(void)
 	//Initialise cWave
 	cWave = CWave::GetInstance();
 	cWave->Init();
+
+	cScore = CScore::GetInstance();
+	cScore->Init();
 
 	//Load the Skybox
 	cSkybox = CSkyBox::GetInstance();
@@ -374,13 +386,12 @@ void CSceneGame3D::Update(const double dElapsedTime)
 		}
 	}
 
-
-	if (CKeyboardController::GetInstance()->IsKeyPressed(GLFW_KEY_O))
+	static double WaveTimer;
+	if (CKeyboardController::GetInstance()->IsKeyPressed(GLFW_KEY_O) && cEntityManager->GetWaveStarted() == false)
 	{
 		cout << cWave->GetWaveNumber() << endl;
-		//cEntityManager->SetWaveStarted(true);
 		cWave->SetWave(cWave->GetWaveNumber());
-		
+		WaveTimer = 0.0f;
 	}
 
 	// update the joystick
@@ -524,16 +535,33 @@ void CSceneGame3D::Update(const double dElapsedTime)
 	cEntityManager->Update(dElapsedTime);
 
 	//Check if wave ended
+	//If ended, update score and next wave
 	if (cEntityManager->CheckWave() == true)
 	{
 		cout << "Wave over" << endl;
-		cWave->SetWaveNumber(cWave->GetWaveNumber() + 1);
-		cout << cWave->GetWaveNumber() << endl;
-	}
+		cout << "Time Taken: " << WaveTimer << endl;
+		//Calculate Score from completing wave
+		cScore->AddScoreFromWave(cWave->GetWaveNumber(), WaveTimer);
 
+		cout << "Total score is: " << cScore->GetScore() << endl;
+
+		//Set the wave number for next wave
+		cWave->SetWaveNumber(cWave->GetWaveNumber() + 1);
+		//Set the score player will get from killing each enemy
+		cScore->SetScoreToAdd(cWave->GetWaveNumber() * 100);
+
+		cout << "Next wave is wave: " << cWave->GetWaveNumber() << endl;
+		cout << "Score per enemy is: " << cScore->GetScoreToAdd() << endl;
+	
+	}
+	
+	//While wave is ongoing
 	else if(cEntityManager->CheckWave() == false)
 	{
-		cout << "Wave in progress" << endl;
+		//Update score while while is ongoing
+		cEntityManager->UpdateScore();
+		//Timer for wave
+		WaveTimer += dElapsedTime;
 	}
 		
 	
@@ -559,6 +587,8 @@ void CSceneGame3D::Update(const double dElapsedTime)
 
 	cRenderHoldingGun->Update(dElapsedTime);
 	cHUD->Update(dElapsedTime);
+
+	cScore->Update();
 	
 }
 

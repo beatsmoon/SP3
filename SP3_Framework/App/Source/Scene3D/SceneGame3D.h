@@ -30,6 +30,7 @@
 
 // FPS Counter
 #include "..\App\Source\TimeControl\FPSCounter.h"
+
 // Include SoundController
 #include "..\SoundController\SoundController.h"
 
@@ -119,6 +120,8 @@ public:
 
 	//Handler to the wave control class
 	CWave* cWave;
+
+	CScore* cScore;
 
 protected:
 	// Constructor

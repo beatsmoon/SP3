@@ -12,9 +12,16 @@
 #include <includes/gtc/matrix_transform.hpp>
 #include <includes/gtc/type_ptr.hpp>
 
+//Include Player Class
 #include "../App/Source/Scene3D/Player3D.h"
 
+//Include Weapon Class
+#include "../App/Source/Scene3D/WeaponInfo/Weapon.h"
+
 #include "Inputs/MouseController.h"
+
+#include "RenderControl/shader.h"
+
 
 //#include "GameControl/Settings.h"
 
@@ -25,7 +32,8 @@ class CShop : public CEntity3D, public CSingletonTemplate<CShop>
 	friend class CSingletonTemplate<CShop>;
 public:
 
-	
+	// Handler to the LineShader Program instance
+	Shader* cSimpleShader;
 
 	// Initialise this class instance
 	bool Init(void);

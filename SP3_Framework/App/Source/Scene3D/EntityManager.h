@@ -20,8 +20,12 @@
 // Inlude cameraEffect
 #include "../CameraEffects/CameraEffects.h"
 
-// Include 
+// Include Sound Controls
 #include "../App/Source/SoundController/SoundController.h"
+
+//Incldue Score
+#include "Score.h"
+
 
 
 
@@ -59,6 +63,8 @@ public:
 	// Render this class instance
 	virtual void Render(void);
 
+
+
 	//Wave related functions
 
 	virtual void SetWaveStarted(bool bIsWaveStarted);
@@ -66,6 +72,9 @@ public:
 	virtual bool GetWaveStarted(void);
 
 	virtual bool CheckWave(void);
+
+	//Score related function
+	virtual void UpdateScore(void);
 
 	
 
@@ -83,6 +92,8 @@ protected:
 	CCameraEffects* cCameraEffects;
 
 	CSoundController* cSoundController;
+
+	CScore* cScore;
 
 	// Default Constructor
 	CEntityManager(void);

@@ -50,6 +50,9 @@ bool CShop::Init(void)
 
 	cSettings = CSettings::GetInstance();
 
+	// Setup the shaders
+	cSimpleShader = new Shader("Shader//SimpleShader.vs", "Shader//SimpleShader.fs");
+
 	transform = glm::mat4(1.0f); // make sure to initialize matrix to identity matrix first
 
 	// set up vertex data (and buffer(s)) and configure vertex attributes
@@ -86,7 +89,7 @@ bool CShop::Init(void)
 	}
 
 	// load and create a texture
-	iTextureID = LoadTexture("Images/GUI/ShopUIv2.tga");
+	iTextureID = LoadTexture("Images/GUI/ShopUIv3.tga");
 	if (iTextureID == 0)
 	{
 		cout << "Unable to load Images/GUI/ShopUI.tga" << endl;
@@ -139,6 +142,15 @@ void CShop::Update(const double dElapsedTime)
 				&& (cMouseController->GetMousePositionY() >= m_windowHeight * 0.125 && cMouseController->GetMousePositionY() <= m_windowHeight * 0.375))
 			{
 				cout << "Top Left Box" << endl;
+
+				//Player buys Sniper
+				/*delete cPlayer3D->GetInventoryWeapon(0);
+
+				CWeapon* Sniper = new CWeapon(Weapon_Type::W_SNIPER);
+				Sniper->Init();
+				Sniper->SetShader(cSimpleShader);
+				cPlayer3D->SetWeapon(0, Sniper);*/
+
 			}
 
 
@@ -147,14 +159,26 @@ void CShop::Update(const double dElapsedTime)
 				&& (cMouseController->GetMousePositionY() >= m_windowHeight * 0.125 && cMouseController->GetMousePositionY() <= m_windowHeight * 0.375))
 			{
 				cout << "Top Right Box" << endl;
+
+
+				//Player buys AK47
+				/*delete cPlayer3D->GetInventoryWeapon(0);
+
+				CWeapon* AK47 = new CWeapon(Weapon_Type::W_AK47);
+				AK47->Init();
+				AK47->SetShader(cSimpleShader);
+				cPlayer3D->SetWeapon(0, AK47);*/
+
 			}
 
 			//Middle Left Box
 			if ((cMouseController->GetMousePositionX() >= m_windowWidth * 0.16875 && cMouseController->GetMousePositionX() <= m_windowWidth * 0.3)
 				&& (cMouseController->GetMousePositionY() >= m_windowHeight * 0.51667 && cMouseController->GetMousePositionY() <= m_windowHeight * 0.66667))
 			{
-				cPlayer3D->GetInventoryWeapon(0)->AddRounds(30);
 				cout << "Ammo Bought" << endl;
+
+				//Player buys Ammo
+				cPlayer3D->GetInventoryWeapon(0)->AddRounds(30);
 			}
 			
 			//Middle Box
@@ -162,6 +186,14 @@ void CShop::Update(const double dElapsedTime)
 				&& (cMouseController->GetMousePositionY() >= m_windowHeight * 0.38333 && cMouseController->GetMousePositionY() <= m_windowHeight * 0.63333))
 			{
 				cout << "Middle Box" << endl;
+
+				//Player buys shotgun
+				/*delete cPlayer3D->GetInventoryWeapon(0);
+
+				CWeapon* Shotgun = new CWeapon(Weapon_Type::W_SHOTGUN);
+				Shotgun->Init();
+				Shotgun->SetShader(cSimpleShader);
+				cPlayer3D->SetWeapon(0, Shotgun);*/
 			}
 
 			//Middle Right Box
@@ -198,9 +230,6 @@ void CShop::Update(const double dElapsedTime)
 			{
 				cout << "Bottom Right Box" << endl;
 			}
-
-
-
 		}
 	}
 }

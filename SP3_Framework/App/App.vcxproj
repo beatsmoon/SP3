@@ -46,6 +46,7 @@
     <ClCompile Include="Source\Scene3D\SceneGame3D.cpp" />
     <ClCompile Include="Source\Scene3D\SceneMenu3D.cpp" />
     <ClCompile Include="Source\Scene3D\SceneShop3D.cpp" />
+    <ClCompile Include="Source\Scene3D\Score.cpp" />
     <ClCompile Include="Source\Scene3D\SkyBox.cpp" />
     <ClCompile Include="Source\Scene3D\Structure3D.cpp" />
     <ClCompile Include="Source\Scene3D\Wave.cpp" />
@@ -96,6 +97,7 @@
     <ClInclude Include="Source\Scene3D\SceneGame3D.h" />
     <ClInclude Include="Source\Scene3D\SceneMenu3D.h" />
     <ClInclude Include="Source\Scene3D\SceneShop3D.h" />
+    <ClInclude Include="Source\Scene3D\Score.h" />
     <ClInclude Include="Source\Scene3D\SkyBox.h" />
     <ClInclude Include="Source\Scene3D\Structure3D.h" />
     <ClInclude Include="Source\Scene3D\Wave.h" />
