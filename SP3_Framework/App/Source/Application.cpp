@@ -261,10 +261,10 @@ void Application::Run(void)
 	cSceneManager->AddScene(cSceneShop3D);
 
 	// Initialise the cSceneManager to initialise all the scenes added in
-	/*if (cSceneManager->Init() == false)
-		return;*/
+	if (cSceneManager->Init() == false)
+		return;
 
-	if (cSceneMenu3D->Init() == false)
+	/*if (cSceneMenu3D->Init() == false)
 	{
 		std::cout << "Failed to load second scene" << std::endl;
 		return;
@@ -278,7 +278,7 @@ void Application::Run(void)
 	{
 		std::cout << "Failed to load cScene3D" << std::endl;
 		return;
-	}
+	}*/
 	
 	// Enable the starting scene
 	// TODO: Change to Scenes::MENU once development is done

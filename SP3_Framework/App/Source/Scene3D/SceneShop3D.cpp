@@ -70,31 +70,17 @@ void CSceneShop3D::Update(const double dElapsedTime)
 
 	if (CKeyboardController::GetInstance()->IsKeyPressed(GLFW_KEY_P))
 	{
-		static double InputDelay = 5.f;
-		if (InputDelay < 5.f)
+		if (cShop->GetStatus() == false)
 		{
-			InputDelay += 1.f;
-
+			cShop->ActivateShop();
 		}
 
 		else
 		{
-			InputDelay = 0.f;
-			if (cShop->GetStatus() == false)
-			{
-				cShop->ActivateShop();
+			cShop->DeactivateShop();
 				
-				/*cSettings->bDisableMousePointer = false;
-				cSettings->bShowMousePointer = true;
-				!cMouseController->GetKeepMouseCentered();*/
-			}
-
-			else
-			{
-				cShop->DeactivateShop();
-				
-			}
 		}
+		
 	}
 
 	

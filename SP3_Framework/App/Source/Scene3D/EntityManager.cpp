@@ -159,16 +159,32 @@ bool CEntityManager::CollisionCheck(CEntity3D* cEntity3D)
 				// Quit this loop since a collision has been found
 				break;
 			}
+			case CEntity3D::TYPE::BARRICADE:
 			case CEntity3D::TYPE::STRUCTURE:
 			{
 				cEntity3D->RollbackPosition();
 				// Rollback the NPC's position
-				(*it)->RollbackPosition();
 				cout << "** Collision between Player and structure ***" << endl;
 				bResult = true;
 				
 				// Quit this loop since a collision has been found
 				break;
+			}
+			case CEntity3D::TYPE::EXPLOSIVE_BARREL:
+			{
+				// Collider enabled, barrel not destroyed
+				if ((*it)->GetCollisionState())
+				{
+					cEntity3D->RollbackPosition();
+					cout << "** Collision between Player and Active Explosive Barrel***" << endl;
+					bResult = true;
+				}
+				else
+				{
+					static_cast<CPlayer3D*>(cEntity3D)->SetCurrHealth(static_cast<CPlayer3D*>(cEntity3D)->GetCurrHealth() - 1);
+					cout << "** Collision between Player and Destroyed Explosive Barrel***" << endl;
+					bResult = true;
+				}
 			}
 			//case CEntity3D::TYPE::PISTOL_AMMO:
 			//{
@@ -215,8 +231,16 @@ void CEntityManager::Update(const double dElapsedTime)
 		{
 			(*it)->AddDespawnTime(dElapsedTime);
 			std::cout << (*it)->GetDespawnTime() << std::endl;
-			if ((*it)->GetDespawnTime() > 5.0)
-				(*it)->SetToDelete(true);
+			switch ((*it)->GetType())
+			{
+			case CEntity3D::TYPE::BARRICADE:
+			case CEntity3D::TYPE::EXPLOSIVE_BARREL:
+			{
+				if ((*it)->GetDespawnTime() > EXPLOSIVE_BARREL_DESPAWN_TIME)
+					(*it)->SetToDelete(true);
+				break;
+			}
+			}
 		}
 	}
 
@@ -224,6 +248,10 @@ void CEntityManager::Update(const double dElapsedTime)
 	end = lEntity3D.end();
 	for (it = lEntity3D.begin(); it != end; ++it)
 	{
+		// If collision is disabled on this entity, just continue to the next one
+		if ((*it)->GetCollisionState() == false)
+			continue;
+
 		for (it_other = it; it_other != end; ++it_other)
 		{
 			// If the 2 entities to check are the same, then skip this iteration
@@ -231,8 +259,6 @@ void CEntityManager::Update(const double dElapsedTime)
 			{
 				continue;
 			}
-			else if ((*it_other)->GetCollisionState() == false)
-				continue;
 		
 			// Check for collisions between the 2 entities
 			if ((*it)->CheckForCollision(*it_other) == true)
@@ -273,6 +299,37 @@ void CEntityManager::Update(const double dElapsedTime)
 					}
 					cout << "** Collision between Explosive Barrel and Projectile ***" << endl;
 				}
+
+				else if (((*it)->GetType() == CEntity3D::TYPE::NPC) &&
+					((*it_other)->GetType() == CEntity3D::TYPE::STRUCTURE))
+				{
+					(*it)->RollbackPosition();
+					//(*it_other)->SetToDelete(true);
+					cout << "** Collision between NPC and Structure ***" << endl;
+				}
+				else if (((*it)->GetType() == CEntity3D::TYPE::STRUCTURE) &&
+					((*it_other)->GetType() == CEntity3D::TYPE::NPC))
+				{
+					(*it_other)->RollbackPosition();
+					//(*it)->SetToDelete(true);
+					cout << "** Collision between Structure and NPC ***" << endl;
+				}
+
+				else if (((*it)->GetType() == CEntity3D::TYPE::NPC) &&
+					((*it_other)->GetType() == CEntity3D::TYPE::BARRICADE))
+				{
+					(*it)->RollbackPosition();
+					//(*it_other)->SetToDelete(true);
+					cout << "** Collision between NPC and Barricade ***" << endl;
+				}
+				else if (((*it)->GetType() == CEntity3D::TYPE::BARRICADE) &&
+					((*it_other)->GetType() == CEntity3D::TYPE::NPC))
+				{
+					(*it_other)->RollbackPosition();
+					//(*it)->SetToDelete(true);
+					cout << "** Collision between Barricade and NPC ***" << endl;
+				}
+
 				else if (((*it)->GetType() == CEntity3D::TYPE::PROJECTILE) &&
 					((*it_other)->GetType() == CEntity3D::TYPE::EXPLOSIVE_BARREL))
 				{
@@ -290,8 +347,13 @@ void CEntityManager::Update(const double dElapsedTime)
 						cExplosiveBarrel->SetCollisionState(false);
 						cExplosiveBarrel->SetColliderScale(cExplosiveBarrel->GetColliderScale() * 2.f);
 						cExplosiveBarrel->SetDespawnQueue(true);
+						if (cPlayer3D->CheckForCollision(cExplosiveBarrel))
+						{
+							std::cout << "Player hit by Explosive Barrel explosion" << std::endl;
+							cPlayer3D->SetCurrHealth(cPlayer3D->GetCurrHealth() - 30);
+						}
 					}
-					cout << "** Collision between NPC and Explosive Barrel ***" << endl;
+					cout << "** Collision between Projectile and Explosive Barrel ***" << endl;
 				}
 				else if (((*it)->GetType() == CEntity3D::TYPE::EXPLOSIVE_BARREL) &&
 					((*it_other)->GetType() == CEntity3D::TYPE::PROJECTILE))
@@ -306,13 +368,56 @@ void CEntityManager::Update(const double dElapsedTime)
 						cExplosiveBarrel->SetHealth(cExplosiveBarrel->GetHealth() - 10);
 						cSoundController->PlaySoundByID(5);
 					}
-					else if(cExplosiveBarrel->GetDespawnQueue() == false)
+					else if (cExplosiveBarrel->GetDespawnQueue() == false)
 					{
 						cExplosiveBarrel->SetCollisionState(false);
 						cExplosiveBarrel->SetColliderScale(cExplosiveBarrel->GetColliderScale() * 2.f);
 						cExplosiveBarrel->SetDespawnQueue(true);
+						if (cPlayer3D->CheckForCollision(cExplosiveBarrel))
+						{
+							std::cout << "Player hit by Explosive Barrel explosion" << std::endl;
+							cPlayer3D->SetCurrHealth(cPlayer3D->GetCurrHealth() - 30);
+						}
 					}
-					cout << "** Collision between NPC and Projectile ***" << endl;
+					cout << "** Collision between Explosive Barrel and Projectile ***" << endl;
+				}
+
+				else if (((*it)->GetType() == CEntity3D::TYPE::PROJECTILE) &&
+					((*it_other)->GetType() == CEntity3D::TYPE::BARRICADE))
+				{
+					//(*it_other)->RollbackPosition();
+					(*it)->SetToDelete(true);
+
+					CStructure3D* cBarricade = dynamic_cast<CStructure3D*>(*it_other);
+					if (cBarricade->GetHealth() > 0)
+					{
+						cBarricade->SetHealth(cBarricade->GetHealth() - 10);
+						cSoundController->PlaySoundByID(5);
+					}
+					else if (cBarricade->GetDespawnQueue() == false)
+					{
+						cBarricade->SetCollisionState(false);
+						cBarricade->SetDespawnQueue(true);
+					}
+					cout << "** Collision between Projectile and Barricade ***" << endl;
+				}
+				else if (((*it)->GetType() == CEntity3D::TYPE::BARRICADE) &&
+					((*it_other)->GetType() == CEntity3D::TYPE::PROJECTILE))
+				{
+					(*it_other)->SetToDelete(true);
+
+					CStructure3D* cBarricade = static_cast<CStructure3D*>(*it);
+					if (cBarricade->GetHealth() > 0)
+					{
+						cBarricade->SetHealth(cBarricade->GetHealth() - 10);
+						cSoundController->PlaySoundByID(5);
+					}
+					else if (cBarricade->GetDespawnQueue() == false)
+					{
+						cBarricade->SetCollisionState(false);
+						cBarricade->SetDespawnQueue(true);
+					}
+					cout << "** Collision between Barricade and Projectile ***" << endl;
 				}
 			}
 		}

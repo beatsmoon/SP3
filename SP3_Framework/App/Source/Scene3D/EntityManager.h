@@ -27,6 +27,8 @@ class CEntityManager : public CSingletonTemplate<CEntityManager>
 {
 	friend class CSingletonTemplate<CEntityManager>;
 
+	// Constants for checking despawn time for entites
+	const double EXPLOSIVE_BARREL_DESPAWN_TIME = 10.0;
 public:
 	// Initialise this class instance
 	bool Init(void);

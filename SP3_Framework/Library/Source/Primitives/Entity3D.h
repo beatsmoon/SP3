@@ -29,6 +29,7 @@ public:
 		GUNBARREL,
 		GUNEXTMAG,
 		EXPLOSIVE_BARREL,
+		BARRICADE,
 		STRUCTURE,	// Buildings etc
 		OTHERS,		// Default value: Other entities such as ground and skybox
 		NUM_TYPES
