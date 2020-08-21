@@ -46,6 +46,8 @@
 // Include the CrossHair
 #include "CrossHair/CrossHair.h"
 
+#include "CrossHair/Scope.h"
+
 // Include SkyBox
 #include "SkyBox.h"
 // Include GroundMap

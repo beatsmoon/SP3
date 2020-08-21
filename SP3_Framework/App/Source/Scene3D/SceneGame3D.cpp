@@ -141,18 +141,47 @@ bool CSceneGame3D::Init(void)
 	cPlayer3D->AttachCamera();
 	cPlayer3D->ActivateCollider(cSimpleShader);
 
+	//Creating Attachment
+	CGunScope* cGunScope = new CGunScope();
+	cGunScope->SetShader(cShader);
+	cGunScope->Init();
+	cGunScope->SetTierLevel(CGunScope::TIERLEVEL::TIER1);
+
 	// add weapon to player
 	CWeapon* cPistol = new CWeapon(Weapon_Type::W_PISTOL);
 	cPistol->Init();
 	cPistol->SetShader(cSimpleShader);
 	cPlayer3D->SetWeapon(1, cPistol);
+	cPlayer3D->SetCurrentWeapon(1);
+	cPlayer3D->GetWeapon()->SetScope(cGunScope);
 
-	CWeapon* rifle = new CWeapon(Weapon_Type::W_M4);
+	//Creating Attachment
+	CGunBarrel* cGunBarrel = new CGunBarrel();
+	cGunBarrel->SetShader(cShader);
+	cGunBarrel->Init();
+	cGunBarrel->SetTierLevel(CGunBarrel::TIERLEVEL::TIER3);
+
+	CGunExtMag* cGunExtMag = new CGunExtMag();
+	cGunExtMag->SetShader(cShader);
+	cGunExtMag->Init();
+	cGunExtMag->SetTierLevel(CGunExtMag::TIERLEVEL::TIER3);
+
+	cGunScope = new CGunScope();
+	cGunScope->SetShader(cShader);
+	cGunScope->Init();
+	cGunScope->SetTierLevel(CGunScope::TIERLEVEL::TIER3);
+
+	CWeapon* rifle = new CWeapon(Weapon_Type::W_SHOTGUN);
 	rifle->Init();
 	rifle->SetShader(cSimpleShader);
-	cPlayer3D->SetWeapon(0, rifle);
 
+	cPlayer3D->SetWeapon(0, rifle);
 	cPlayer3D->SetCurrentWeapon(0);
+	cPlayer3D->GetWeapon()->SetBarrel(cGunBarrel);
+	cPlayer3D->GetWeapon()->SetExtMag(cGunExtMag);
+	cPlayer3D->GetWeapon()->SetScope(cGunScope);
+
+
 
 	// attach camera
 	cPlayer3D->AttachCamera(cCamera);
@@ -196,16 +225,21 @@ bool CSceneGame3D::Init(void)
 	cTotalBulletsBar->Init();
 
 	// Initialise cCrossHair
-	cCrossHair = CCrossHair::GetInstance();
-	cCrossHair->SetShader(cGUIShader);
-	cCrossHair->Init();
+	//cCrossHair = CCrossHair::GetInstance();
+	//cCrossHair->SetShader(cGUIShader);
+	//cCrossHair->Init();
+
+	// Initialise cScope
+	cScope = CScope::GetInstance();
+	cScope->SetShader(cGUIShader);
+	cScope->Init();
 
 	// Initialise HUD
-	cHUD = new CHUD(HUD_Type::H_SELECTION_GUN);
+	cHUD = new CHUD(Weapon_Type::W_PISTOL);
 	cHUD->SetShader(cGUIShader);
 	cHUD->Init();
 
-	cRenderHoldingGun = new CHUD(HUD_Type::H_HOLDING_GUN);
+	cRenderHoldingGun = new CHUD(Weapon_Type::W_PISTOL);
 	cRenderHoldingGun->SetShader(cGUIShader);
 	cRenderHoldingGun->Init();
 
@@ -293,8 +327,9 @@ void CSceneGame3D::Update(const double dElapsedTime)
 			cPlayer3D->SetCurrentWeapon(1);
 		}
 	}
-	if (CKeyboardController::GetInstance()->IsKeyPressed(GLFW_KEY_R))
-	{
+	if (CKeyboardController::GetInstance()->IsKeyPressed(GLFW_KEY_R) 
+		&& cPlayer3D->GetWeapon()->GetMagRound() < cPlayer3D->GetWeapon()->GetMaxMagRound())
+	{	
 		static double InputDelay = 10.f;
 		if (InputDelay < 10.f)
 		{
@@ -307,6 +342,8 @@ void CSceneGame3D::Update(const double dElapsedTime)
 			if (cPlayer3D->GetWeapon() != NULL)
 			{
 				cPlayer3D->GetWeapon()->Reload();
+				//cPlayer3D->GetWeapon()->SetCanFire(false);
+				
 			}
 			else
 			{
@@ -314,6 +351,10 @@ void CSceneGame3D::Update(const double dElapsedTime)
 			}
 		}
 		
+		if (cPlayer3D->GetWeapon()->GetWeaponName() == Weapon_Type::W_PISTOL)
+		{
+			cPlayer3D->GetWeapon()->SetTotalRound(cPlayer3D->GetWeapon()->GetMaxTotalRound());
+		}
 	}
 	if (CKeyboardController::GetInstance()->IsKeyPressed(GLFW_KEY_B))
 	{
@@ -413,17 +454,31 @@ void CSceneGame3D::Update(const double dElapsedTime)
 									(float)cMouseController->GetMouseDeltaY());
 		cCamera->ProcessMouseScroll(	(float)cMouseController->GetMouseScrollStatus(
 											CMouseController::SCROLL_TYPE::SCROLL_TYPE_YOFFSET));
+		if (cPlayer3D->GetWeapon()->GetScope() != NULL)
+		{
+			if (CMouseController::GetInstance()->IsButtonReleased(CMouseController::BUTTON_TYPE::RMB))
+			{
+				cPlayer3D->SetScopeMode(false);
+				cCamera->fZoom = 45.0f;
+			}
+			else if (CMouseController::GetInstance()->IsButtonPressed(CMouseController::BUTTON_TYPE::RMB))
+			{
 
-		if (CMouseController::GetInstance()->IsButtonReleased(CMouseController::BUTTON_TYPE::RMB))
-		{
-			cPlayer3D->SetScopeMode(false);
-			
-		}
-		else if (CMouseController::GetInstance()->IsButtonPressed(CMouseController::BUTTON_TYPE::RMB))
-		{
-		
-			cPlayer3D->SetScopeMode(true);
-			
+				cPlayer3D->SetScopeMode(true);
+
+				if (cPlayer3D->GetWeapon()->GetScope()->GetTierLevel() == CGunScope::TIERLEVEL::TIER1)
+				{
+					cCamera->fZoom = 35.0f;
+				}
+				if (cPlayer3D->GetWeapon()->GetScope()->GetTierLevel() == CGunScope::TIERLEVEL::TIER2)
+				{
+					cCamera->fZoom = 15.0f;
+				}
+				if (cPlayer3D->GetWeapon()->GetScope()->GetTierLevel() == CGunScope::TIERLEVEL::TIER3)
+				{
+					cCamera->fZoom = 5.0f;
+				}
+			}
 		}
 	}
 	else
@@ -448,28 +503,61 @@ void CSceneGame3D::Update(const double dElapsedTime)
 
 
 
-	if (cPlayer3D->GetShootingMode())
+
+	if (cMouseController->IsButtonDown(CMouseController::BUTTON_TYPE::LMB) && cPlayer3D->GetWeapon()->GetMagRound() > 0
+		&& cPlayer3D->GetWeapon()->GetFiringType() == CWeaponInfo::FIRINGTYPE::AUTO && cPlayer3D->GetWeapon()->GetCanFire()) 
 	{
-		if (cMouseController->IsButtonDown(CMouseController::BUTTON_TYPE::LMB))
+		int BulletPerShot = 1;
+		if (cPlayer3D->GetWeapon()->GetWeaponName() == Weapon_Type::W_SHOTGUN)
+		{
+			BulletPerShot = 8;
+		}
+		for (int i = 0; i < BulletPerShot; ++i)
 		{
 			CProjectile* cProjectile = cPlayer3D->DischargeWeapon();
 			if (cProjectile)
 			{
 				cEntityManager->Add(cProjectile);
+				cPlayer3D->TriggerRecoil();
+			}
+			if (i == BulletPerShot - 1)
+			{
+				cPlayer3D->GetWeapon()->SetMagRound((cPlayer3D->GetWeapon()->GetMagRound()) - 1);
+				cPlayer3D->GetWeapon()->SetCanFire(false);
 			}
 		}
 	}
-	else
+	else if (cMouseController->IsButtonReleased(CMouseController::BUTTON_TYPE::LMB) && cPlayer3D->GetWeapon()->GetMagRound() > 0
+		&& cPlayer3D->GetWeapon()->GetFiringType() == CWeaponInfo::FIRINGTYPE::SINGLE)
 	{
-		if (cMouseController->IsButtonReleased(CMouseController::BUTTON_TYPE::LMB))
+		//CProjectile* cProjectile = cPlayer3D->DischargeWeapon();
+		//if (cProjectile)
+		//{
+		//	cEntityManager->Add(cProjectile);
+		//}
+		int BulletPerShot = 1;
+		if (cPlayer3D->GetWeapon()->GetWeaponName() == Weapon_Type::W_SHOTGUN)
+		{
+			BulletPerShot = 8;
+		}
+		for (int i = 0; i < BulletPerShot; ++i)
 		{
 			CProjectile* cProjectile = cPlayer3D->DischargeWeapon();
 			if (cProjectile)
 			{
 				cEntityManager->Add(cProjectile);
+				cPlayer3D->TriggerRecoil();
+			}
+			if (i == BulletPerShot - 1)
+			{
+				cPlayer3D->GetWeapon()->SetMagRound((cPlayer3D->GetWeapon()->GetMagRound()) - 1);
+				cPlayer3D->GetWeapon()->SetCanFire(false);
 			}
 		}
 	}
+	
+	
+
 
 	// Post Update Camera
 	cMouseController->PostUpdate();
@@ -499,6 +587,15 @@ void CSceneGame3D::Update(const double dElapsedTime)
 
 	cRenderHoldingGun->Update(dElapsedTime);
 	cHUD->Update(dElapsedTime);
+
+	if (cPlayer3D->GetWeapon()->GetScope() != NULL && cPlayer3D->GetScopeMode() == true)
+	{
+		cScope->UpdateTierListOfScope(cPlayer3D->GetWeapon()->GetScope()->GetTierLevel());
+		//cScope->UpdateTierListOfScope(cPlayer3D->GetWeapon()->GetScope()->GetTierLevel());
+		cScope->Update(dElapsedTime);
+	}
+
+	//cPlayer3D->GetWeapon()->GetScope()->Update(dElapsedTime);
 	
 }
 
@@ -641,13 +738,13 @@ void CSceneGame3D::Render(void)
 		cHealthBar->Render();
 		cHealthBar->PostRender();
 
-		cBulletsPerMagBar->PreRender();
-		cBulletsPerMagBar->Render();
-		cBulletsPerMagBar->PostRender();
+		//cBulletsPerMagBar->PreRender();
+		//cBulletsPerMagBar->Render();
+		//cBulletsPerMagBar->PostRender();
 
-		cTotalBulletsBar->PreRender();
-		cTotalBulletsBar->Render();
-		cTotalBulletsBar->PostRender();
+		//cTotalBulletsBar->PreRender();
+		//cTotalBulletsBar->Render();
+		//cTotalBulletsBar->PostRender();
 
 		cRenderHoldingGun->PreRender();
 		cRenderHoldingGun->Render();
@@ -659,10 +756,16 @@ void CSceneGame3D::Render(void)
 	}
 	
 
-	cCrossHair->PreRender();
-	cCrossHair->Render();
-	cCrossHair->PostRender();
+	//cCrossHair->PreRender();
+	//cCrossHair->Render();
+	//cCrossHair->PostRender();
 
+	if (cPlayer3D->GetWeapon()->GetScope() != NULL && cPlayer3D->GetScopeMode() == true)
+	{
+		cScope->PreRender();
+		cScope->Render();
+		cScope->PostRender();
+	}
 	// Call the cTextRenderer's PreRender()
 	cTextRenderer->PreRender();
 
@@ -670,7 +773,7 @@ void CSceneGame3D::Render(void)
 	textShader->use();
 	//cTextRenderer->Render("DM2231 GDEV 2D", 10.0f, 10.0f, 0.5f, glm::vec3(1.0f, 1.0f, 0.0f));
 	// Render FPS info
-	//	cTextRenderer->Render(cFPSCounter->GetFrameRateString(), 10.0f, 580.0f, 0.5f, glm::vec3(1.0f, 1.0f, 0.0f));
+	cTextRenderer->Render(cFPSCounter->GetFrameRateString(), 10.0f, 50.0f, 0.5f, glm::vec3(1.0f, 1.0f, 0.0f));
 	// Render Camera Position
 	//cTextRenderer->Render(glm::to_string(cPlayer3D->GetPosition()), 10.0f, 30.0f, 0.5f, glm::vec3(1.0f, 1.0f, 0.0f));
 	
@@ -681,6 +784,19 @@ void CSceneGame3D::Render(void)
 	   
 	// Render Camera Position
 	cTextRenderer->Render(glm::to_string(cCamera->vec3Position), 10.0f, 10.0f, 0.5f, glm::vec3(1.0f, 1.0f, 0.0f));
+
+	//render ammo
+	if (cPlayer3D->GetWeapon() != NULL)
+	{
+		cTextRenderer->Render(to_string(cPlayer3D->GetWeapon()->GetMagRound()), 10, 60.0f, 1.5f, glm::vec3(1.0f, 1.0f, 1.0f));
+		cTextRenderer->Render("/", 60, 60.0f, 1.5f, glm::vec3(1.0f, 1.0f, 1.0f));
+		cTextRenderer->Render(to_string(cPlayer3D->GetWeapon()->GetTotalRound()), 100, 60.0f, 1.5f, glm::vec3(1.0f, 1.0f, 1.0f));
+		if (cPlayer3D->GetWeapon()->GetIsReloadStatus())
+		{
+			cTextRenderer->Render("Reloading :", 10, 150.0f, 0.5f, glm::vec3(1.0f, 0.0f, 0.0f));
+			cTextRenderer->Render(to_string(cPlayer3D->GetWeapon()->GetReloadTime() - cPlayer3D->GetWeapon()->GetReloadElapsed()), 10, 110.0f, 1.f, glm::vec3(1.0f, 1.0f, 1.0f));
+		}
+	}
 
 	// Call the cTextRenderer's PostRender()
 	cTextRenderer->PostRender();
