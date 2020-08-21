@@ -175,7 +175,7 @@ bool CSceneGame3D::Init(void)
 	rifle->Init();
 	rifle->SetShader(cSimpleShader);
 	cPlayer3D->SetWeapon(0, rifle);
-
+	cPlayer3D->ActivateCollider(cSimpleShader);
 	cPlayer3D->SetCurrentWeapon(0);
 
 	// attach camera
@@ -276,8 +276,13 @@ bool CSceneGame3D::Init(void)
 	cExplosiveBarrel->ActivateCollider(cSimpleShader);
 	cEntityManager->Add(cExplosiveBarrel);
 
-	
-	
+	/*CStructure3D* cBarricade = new CStructure3D(glm::vec3(10.f, 0.5f, 10.f), CEntity3D::TYPE::BARRICADE);
+	cBarricade->SetShader(cShader);
+	cBarricade->Init();
+	cBarricade->ActivateCollider(cSimpleShader);
+	cEntityManager->Add(cBarricade);*/
+
+
 	return true;
 }
 
@@ -451,8 +456,8 @@ void CSceneGame3D::Update(const double dElapsedTime)
 		// Get Mouse updates
 		cPlayer3D->ProcessRotate(	(float)cMouseController->GetMouseDeltaX(),
 									(float)cMouseController->GetMouseDeltaY());
-		cCamera->ProcessMouseScroll(	(float)cMouseController->GetMouseScrollStatus(
-											CMouseController::SCROLL_TYPE::SCROLL_TYPE_YOFFSET));
+		/*cCamera->ProcessMouseScroll(	(float)cMouseController->GetMouseScrollStatus(
+											CMouseController::SCROLL_TYPE::SCROLL_TYPE_YOFFSET));*/
 
 		if (CMouseController::GetInstance()->IsButtonReleased(CMouseController::BUTTON_TYPE::RMB))
 		{

@@ -68,6 +68,7 @@ void CSceneShop3D::Update(const double dElapsedTime)
 {
 	cShop->Update(dElapsedTime);
 
+
 	//if (CKeyboardController::GetInstance()->IsKeyPressed(GLFW_KEY_P))
 	//{
 	//	if (cShop->GetStatus() == false)
@@ -86,7 +87,6 @@ void CSceneShop3D::Update(const double dElapsedTime)
 	//	}
 	//}
 
-	
 }
 
 /**
