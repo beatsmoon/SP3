@@ -16,6 +16,7 @@
     <ClCompile Include="Source\CameraEffects\HUD.cpp" />
     <ClCompile Include="Source\CameraEffects\ProgressBar.cpp" />
     <ClCompile Include="Source\CameraEffects\Shop.cpp" />
+    <ClCompile Include="Source\CameraEffects\WeaponHUD.cpp" />
     <ClCompile Include="Source\CSVReader\CSVReader.cpp" />
     <ClCompile Include="Source\CSVWriter\CSVWriter.cpp" />
     <ClCompile Include="Source\main.cpp" />
@@ -68,6 +69,7 @@
     <ClInclude Include="Source\CameraEffects\HUD.h" />
     <ClInclude Include="Source\CameraEffects\ProgressBar.h" />
     <ClInclude Include="Source\CameraEffects\Shop.h" />
+    <ClInclude Include="Source\CameraEffects\WeaponHUD.h" />
     <ClInclude Include="Source\CSVReader\CSVReader.h" />
     <ClInclude Include="Source\CSVWriter\CSVWriter.h" />
     <ClInclude Include="Source\Meshes\Material.h" />

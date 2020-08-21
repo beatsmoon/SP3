@@ -60,6 +60,7 @@
 
 // Include HUD
 #include "../App/Source/CameraEffects/HUD.h"
+#include "../App/Source/CameraEffects/WeaponHUD.h"
 #include "../App/Source/Scene3D/Scene3D.h"
 
 //Include Wave Control
@@ -117,6 +118,8 @@ public:
 	CScope* cScope;
 
 	CHUD* cHUD;
+
+	CWEAPONHUD* cWEAPONHUD;
 
 	CHUD* cRenderHoldingGun;
 
