@@ -1,3 +1,8 @@
 .vs/
 Debug/
 Release/
+*.filters
+*.filters
+SP3_Framework/App/App.vcxproj.filters
+*.filters
+*.filters
