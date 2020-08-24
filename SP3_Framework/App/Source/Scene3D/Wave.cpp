@@ -4,6 +4,7 @@ CWave::CWave()
 	: cShader(NULL)
 	, cSimpleShader(NULL)
 	, iWaveCounter(1)
+	, bWriteScore(false)
 {
 }
 
@@ -25,6 +26,19 @@ void CWave::Init(void)
 
 	cScore = CScore::GetInstance();
 
+}
+
+void CWave::UpdateHighScore()
+{
+	if (iWaveCounter > 10)
+	{
+		ofstream highscore;
+		highscore.open("highscore.txt", ios::app);
+		string sInString = to_string(cScore->GetScore());
+		highscore << sInString << endl;
+		highscore.close();
+	}
+	
 }
 
 
@@ -52,14 +66,14 @@ void CWave::SetWave(int waveNumber)
 		}
 
 		//Initialise type of enemy
-		cEnemy3DType1 = new CEnemy3D(glm::vec3(Math::RandFloatMinMax(-10.0f, 10.0f), 0.5f, Math::RandFloatMinMax(-10.0f, 10.0f)), E_ENEMY1);
+		cEnemy3DType1 = new CEnemy3D(glm::vec3(Math::RandFloatMinMax(-10.0f, 10.0f), 0.5f, Math::RandFloatMinMax(-10.0f, 10.0f)), k);
 		cEnemy3DType1->SetShader(cShader);
 		cEnemy3DType1->Init();
 		cEnemy3DType1->ActivateCollider(cSimpleShader);
 		//Spawn the enemies in world		
 		cEntityManager->Add(cEnemy3DType1);
 
-		CRangeIndicator* cRangeIndicator = new CRangeIndicator(cEnemy3DType1->GetPosition(), 1, cEnemy3DType1);
+		CRangeIndicator* cRangeIndicator = new CRangeIndicator(cEnemy3DType1->GetPosition(), k, cEnemy3DType1);
 		cRangeIndicator->SetShader(cShader);
 		cRangeIndicator->Init();
 		cRangeIndicator->ActivateCollider(cSimpleShader);
@@ -87,4 +101,9 @@ int  CWave::GetWaveNumber()
 void  CWave::SetWaveNumber(int waveNumber)
 {
 	iWaveCounter = waveNumber;
+}
+
+void CWave::SetWriteStatus(bool bWriteScore)
+{
+	this->bWriteScore = bWriteScore;
 }

@@ -72,8 +72,6 @@ bool CGunBarrel::Init(void)
 
 	// Set the type
 	SetType(CEntity3D::TYPE::GUNBARREL);
-	
-	eTierLevel = TIERLEVEL::NOTIER;
 
 	//// Initialise the cPlayer3D
 	//cPlayer3D = CPlayer3D::GetInstance();
@@ -307,3 +305,34 @@ CGunBarrel::TIERLEVEL CGunBarrel::GetTierLevel(void) const
 {
 	return eTierLevel;
 }
+
+//CGunBarrel::TIERLEVEL CGunBarrel::SetTier(void)
+//{
+//	//switch (eTierLevel)
+//	//{
+//
+//	//	case NULL:
+//	//	{
+//	//		eTierLevel = TIERLEVEL::TIER1;
+//	//	}
+//	//	break;
+//
+//	//	case TIERLEVEL::TIER1:
+//	//	{
+//	//		eTierLevel = TIERLEVEL::TIER2;
+//	//	}
+//	//	break;
+//
+//	//	case TIERLEVEL::TIER2:
+//	//	{
+//	//		eTierLevel = TIERLEVEL::TIER3;
+//	//	}
+//	//	break;
+//
+//	//	case TIERLEVEL::TIER3:
+//	//	{
+//	//		//do nothing
+//	//	}
+//	//	break;
+//	//
+//}
