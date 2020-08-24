@@ -25,6 +25,9 @@
 #include "Inputs/MouseController.h"
 
 #include <iostream>
+
+#include "../Library/Source/System/ConfigFile.h"
+
 using namespace std;
 
 /**
@@ -264,25 +267,9 @@ void Application::Run(void)
 	if (cSceneManager->Init() == false)
 		return;
 
-	/*if (cSceneMenu3D->Init() == false)
-	{
-		std::cout << "Failed to load second scene" << std::endl;
-		return;
-	}
-	if (cSceneShop3D->Init() == false)
-	{
-		std::cout << "Failed to load scene" << std::endl;
-		return;
-	}
-	if (cSceneGame3D->Init() == false)
-	{
-		std::cout << "Failed to load cScene3D" << std::endl;
-		return;
-	}*/
-	
 	// Enable the starting scene
 	// TODO: Change to Scenes::MENU once development is done
-	cSceneManager->EnableScene(SCENES::GAME);
+	cSceneManager->EnableScene(SCENES::MENU);
 	//cSceneManager->EnableScene(1);
 
 	// Get a reference to the list of scenes used
@@ -290,7 +277,6 @@ void Application::Run(void)
 
 	// Render loop
 	while (!glfwWindowShouldClose(cSettings->pWindow)
-		&& (!CKeyboardController::GetInstance()->IsKeyReleased(GLFW_KEY_ESCAPE))
 		&& cSceneManager->CheckForApplicationEnd() == false)
 	{
 		// TODO: Add conditions for how scenes should be changed. E.g. Press A to change to second scene
@@ -334,6 +320,15 @@ void Application::Run(void)
 				isShopOpened = false;
 			}
 		}
+
+		if (CKeyboardController::GetInstance()->IsKeyPressed(GLFW_KEY_ESCAPE))
+		{
+			cSceneManager->DisableScene(SCENES::GAME);
+			cSceneManager->EnableScene(SCENES::MENU);
+			CSceneMenu3D* cSceneMenu3D = CSceneMenu3D::GetInstance();
+			cSceneMenu3D->RecalculateButtonPosition();
+		}
+
 		for (size_t i = 0; i < vActiveScenes.size(); ++i)
 		{
 			if (vActiveScenes.at(i)->GetSceneStatus())

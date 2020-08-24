@@ -58,11 +58,14 @@ bool CScene3D::Init(void)
 	cGUIShader = new Shader("Shader//GUIShader.vs", "Shader//GUIShader.fs");
 	// set up the shader
 	cGUISimpleShader = new Shader("Shader//GUISimpleShader.vs", "Shader//GUISimpleShader.fs");
-
+	
+	bSceneChangeEnabled = true;
+	bSceneChangeDelay = false;
+	dSceneChangeDelay = 0.0;
 
 	// Configure the camera
 	cCamera = CCamera::GetInstance();
-	cCamera->vec3Position = glm::vec3(0.0f, 0.5f, 3.0f);
+	//cCamera->vec3Position = glm::vec3(0.0f, 0.5f, 3.0f);
 
 	// Store the keyboard controller singleton instance here
 	cKeyboardController = CKeyboardController::GetInstance();
@@ -235,4 +238,23 @@ void CScene3D::DisableScene()
 bool CScene3D::GetSceneStatus() const
 {
 	return bSceneEnabled;
+}
+
+bool CScene3D::UpdateSceneDelay(const double dElapsedTime)
+{
+	// Update scene delay time
+	dSceneChangeDelay += dElapsedTime;
+	
+	// Scene change animations, events can all be updated here
+
+	// Check if the delay is more than a constant value
+	if (dSceneChangeDelay > MAX_DELAY_TIME)
+	{
+		bSceneChangeDelay = false;
+		bSceneChangeEnabled = true;
+		dSceneChangeDelay = 0.0;
+		return true;
+	}
+
+	return false;
 }

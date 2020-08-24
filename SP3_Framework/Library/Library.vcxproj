@@ -18,6 +18,7 @@
     <ClCompile Include="Source\Primitives\Collider.cpp" />
     <ClCompile Include="Source\Primitives\Entity3D.cpp" />
     <ClCompile Include="Source\RenderControl\TextRenderer.cpp" />
+    <ClCompile Include="Source\System\ConfigFile.cpp" />
     <ClCompile Include="Source\System\ImageLoader.cpp" />
     <ClCompile Include="Source\System\LoadOBJ.cpp" />
     <ClCompile Include="Source\System\Vector3.cpp" />
@@ -33,6 +34,7 @@
     <ClInclude Include="Source\Primitives\Entity3D.h" />
     <ClInclude Include="Source\RenderControl\shader.h" />
     <ClInclude Include="Source\RenderControl\TextRenderer.h" />
+    <ClInclude Include="Source\System\ConfigFile.h" />
     <ClInclude Include="Source\System\filesystem.h" />
     <ClInclude Include="Source\System\ImageLoader.h" />
     <ClInclude Include="Source\System\LoadOBJ.h" />

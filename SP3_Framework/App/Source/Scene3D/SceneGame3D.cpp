@@ -175,10 +175,6 @@ bool CSceneGame3D::Init(void)
 
 	// Initialise the cPlayer3D
 	cPlayer3D = CPlayer3D::GetInstance();
-	cPlayer3D->SetShader(cShader);
-	cPlayer3D->Init();
-	cPlayer3D->AttachCamera();
-	cPlayer3D->ActivateCollider(cSimpleShader);
 
 	//Creating Attachment
 	CGunScope* cGunScope = new CGunScope();
@@ -228,7 +224,7 @@ bool CSceneGame3D::Init(void)
 
 	// Intialise the CentityManager
 	cEntityManager = CEntityManager::GetInstance();
-	cEntityManager->Init();
+	//cEntityManager->Init();
 
 	//Initialise cWave
 	cWave = CWave::GetInstance();
@@ -238,9 +234,8 @@ bool CSceneGame3D::Init(void)
 	cScore->Init();
 
 	//Load the Skybox
+	// No need to initialise cSkybox as it is already initialised in SceneMenu3D
 	cSkybox = CSkyBox::GetInstance();
-	cSkybox->SetShader(skyBoxShader);
-	cSkybox->Init();
 
 	// Load the ground
 	cGroundMap = CGroundMap::GetInstance();

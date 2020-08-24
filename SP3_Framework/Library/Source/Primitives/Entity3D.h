@@ -31,6 +31,10 @@ public:
 		EXPLOSIVE_BARREL,
 		BARRICADE,
 		STRUCTURE,	// Buildings etc
+		BUTTON_START, //  Do not delete this enum, needed for button
+		PLAY_BUTTON,
+		HIGHSCORE_BUTTON,
+		QUIT_BUTTON,
 		OTHERS,		// Default value: Other entities such as ground and skybox
 		NUM_TYPES
 	};

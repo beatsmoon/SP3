@@ -70,7 +70,21 @@ public:
 	void SetHealth(const int iStructureHealth);
 	int GetHealth();
 
+	void RotateToPlayer();
+
 protected:
+	glm::vec3 vec3Up;
+	glm::vec3 vec3Right;
+	glm::vec3 vec3WorldUp;
+
+	// Euler Angles
+	float fYaw;
+	float fPitch;
+
+	bool bRotateEnabled;
+
+	CPlayer3D* cPlayer3D;
+
 	// The handle to the CGroundMap class instance
 	CGroundMap* cGroundMap;
 	
