@@ -140,7 +140,7 @@ bool CEnemy3D::Init(void)
 	{
 	case E_ENEMY1:
 	{
-		health = 30;
+		health = 70;
 		speed = Math::RandFloatMinMax(0.8f, 1.3f);
 
 		vec3Scale = glm::vec3(1, 1, 1);
@@ -157,7 +157,7 @@ bool CEnemy3D::Init(void)
 	}
 	case E_ENEMY2:
 	{
-		health = 40;
+		health = 100;
 		speed = Math::RandFloatMinMax(1.0f, 1.2f);
 
 		vec3Scale = glm::vec3(1, 1, 1);
@@ -174,7 +174,7 @@ bool CEnemy3D::Init(void)
 	}
 	case E_ENEMY3:
 	{
-		health = 45;
+		health = 140;
 		speed = Math::RandFloatMinMax(0.1f, 1.5f);
 
 		vec3Scale = glm::vec3(1, 1, 1);

@@ -51,7 +51,7 @@ void CWeapon::Init(void)
 
 		type = Weapon_Type::W_PISTOL;
 		fRecoilDeltaAngle = 0.5f;
-		fDamage = 15;
+		fDamage = 25;
 		fSpeedOfBullet = 30.0f;
 
 		break;
@@ -76,7 +76,7 @@ void CWeapon::Init(void)
 		FiringTypeStatus = FIRINGTYPE::AUTO;
 
 		dReloadElapsedTime = 0.0;
-		dReloadTime = 5.0;
+		dReloadTime = 2.8;
 		bIsReloading = false;
 
 		type = Weapon_Type::W_M4;
@@ -91,9 +91,9 @@ void CWeapon::Init(void)
 		// The maximum number of ammunition for this magazine for this weapon
 		iMaxMagRounds = 20;
 		// The current total number of rounds currently carried by this player
-		iTotalRounds = 40;
+		iTotalRounds = 60;
 		// The max total number of rounds currently carried by this player
-		iMaxTotalRounds = 80;
+		iMaxTotalRounds = 120;
 
 		// The time between shots
 		dTimeBetweenShots = 0.111;
@@ -105,12 +105,12 @@ void CWeapon::Init(void)
 		FiringTypeStatus = FIRINGTYPE::AUTO;
 
 		dReloadElapsedTime = 0.0;
-		dReloadTime = 5.0;
+		dReloadTime = 2.8;
 		bIsReloading = false;
 
 		type = Weapon_Type::W_AK47;
 		fRecoilDeltaAngle = 2.0f;
-		fDamage = 15;
+		fDamage = 35;
 
 		break;
 	case W_SHOTGUN:
@@ -139,22 +139,22 @@ void CWeapon::Init(void)
 
 		type = Weapon_Type::W_SHOTGUN;
 		fRecoilDeltaAngle = 2.0f;
-		fDamage = 15;
+		fDamage = 18;
 
 		break;
 	case W_SNIPER:
 
 		// The number of ammunition in a magazine for this weapon
-		iMagRounds = 3;
+		iMagRounds = 6;
 		// The maximum number of ammunition for this magazine for this weapon
-		iMaxMagRounds = 3;
+		iMaxMagRounds = 6;
 		// The current total number of rounds currently carried by this player
-		iTotalRounds = 40;
+		iTotalRounds = 42;
 		// The max total number of rounds currently carried by this player
-		iMaxTotalRounds = 40;
+		iMaxTotalRounds = 42;
 
 		// The time between shots
-		dTimeBetweenShots = 5.555;
+		dTimeBetweenShots = 2.555;
 		// The elapsed time (between shots)
 		dElapsedTime = 0.0;
 		// Boolean flag to indicate if weapon can fire now
@@ -163,12 +163,12 @@ void CWeapon::Init(void)
 		FiringTypeStatus = FIRINGTYPE::AUTO;
 
 		dReloadElapsedTime = 0.0;
-		dReloadTime = 7.0;
+		dReloadTime = 3.75;
 		bIsReloading = false;
 
 		type = Weapon_Type::W_SNIPER;
 		fRecoilDeltaAngle = 8.5f;
-		fDamage = 50;
+		fDamage = 145;
 
 		break;
 	case NUM_WEAPON:

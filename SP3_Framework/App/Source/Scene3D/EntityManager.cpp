@@ -262,7 +262,7 @@ void CEntityManager::Update(const double dElapsedTime)
 					CEnemy3D* enemy = dynamic_cast<CEnemy3D*>(*it);
 					if (enemy->GetHealth() > 0)
 					{
-						enemy->SetHealth(enemy->GetHealth() - 1);
+						enemy->SetHealth(enemy->GetHealth() - cPlayer3D->GetWeapon()->GetDamageOutput());
 						cSoundController->PlaySoundByID(5);
 					}
 					else
@@ -283,7 +283,7 @@ void CEntityManager::Update(const double dElapsedTime)
 					CEnemy3D* enemy = dynamic_cast<CEnemy3D*>(*it_other);
 					if (enemy->GetHealth() > 0)
 					{
-						enemy->SetHealth(enemy->GetHealth() - 1);
+						enemy->SetHealth(enemy->GetHealth() - cPlayer3D->GetWeapon()->GetDamageOutput());
 						cSoundController->PlaySoundByID(5);
 					}
 					else
@@ -430,6 +430,7 @@ void CEntityManager::Update(const double dElapsedTime)
 							std::cout << "Player hit by Explosive Barrel explosion" << std::endl;
 							cPlayer3D->SetCurrHealth(cPlayer3D->GetCurrHealth() - 30);
 						}
+
 					}
 					cout << "** Collision between Projectile and Explosive Barrel ***" << endl;
 				}
@@ -448,6 +449,8 @@ void CEntityManager::Update(const double dElapsedTime)
 					}
 					else if (cExplosiveBarrel->GetDespawnQueue() == false)
 					{
+						
+
 						cExplosiveBarrel->SetCollisionState(false);
 						cExplosiveBarrel->SetColliderScale(cExplosiveBarrel->GetColliderScale() * 2.f);
 						cExplosiveBarrel->SetDespawnQueue(true);
@@ -456,9 +459,11 @@ void CEntityManager::Update(const double dElapsedTime)
 							std::cout << "Player hit by Explosive Barrel explosion" << std::endl;
 							cPlayer3D->SetCurrHealth(cPlayer3D->GetCurrHealth() - 30);
 						}
+
 					}
 					cout << "** Collision between Explosive Barrel and Projectile ***" << endl;
 				}
+
 
 				else if (((*it)->GetType() == CEntity3D::TYPE::PROJECTILE) &&
 					((*it_other)->GetType() == CEntity3D::TYPE::BARRICADE))

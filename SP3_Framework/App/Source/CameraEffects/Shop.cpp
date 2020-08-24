@@ -89,7 +89,7 @@ bool CShop::Init(void)
 	}
 
 	// load and create a texture
-	iTextureID = LoadTexture("Images/GUI/ShopUIv3.tga");
+	iTextureID = LoadTexture("Images/GUI/ShopUIv4.tga");
 	if (iTextureID == 0)
 	{
 		cout << "Unable to load Images/GUI/ShopUI.tga" << endl;
@@ -130,10 +130,12 @@ void CShop::Update(const double dElapsedTime)
 	int m_windowWidth = cSettings->iWindowWidth;
 	int m_windowHeight = cSettings->iWindowHeight;
 
+	static float bouncetime = 0.0f;
+
 	//Logic for buying in Shop UI
 	if (bShopActive)
 	{
-		if (cMouseController->IsButtonPressed(CMouseController::BUTTON_TYPE::LMB))
+		if (cMouseController->IsButtonPressed(CMouseController::BUTTON_TYPE::LMB) && bouncetime < GetTickCount64())
 		{
 			cout << "Clicked in shop" << endl;
 			cout << "m_windowwidth: " << m_windowWidth << ", m_windowHeight: " << m_windowHeight << endl;
@@ -144,12 +146,12 @@ void CShop::Update(const double dElapsedTime)
 				cout << "Top Left Box" << endl;
 
 				//Player buys Sniper
-				/*delete cPlayer3D->GetInventoryWeapon(0);
+				delete cPlayer3D->GetInventoryWeapon(0);
 
 				CWeapon* Sniper = new CWeapon(Weapon_Type::W_SNIPER);
 				Sniper->Init();
 				Sniper->SetShader(cSimpleShader);
-				cPlayer3D->SetWeapon(0, Sniper);*/
+				cPlayer3D->SetWeapon(0, Sniper);
 
 			}
 
@@ -162,74 +164,93 @@ void CShop::Update(const double dElapsedTime)
 
 
 				//Player buys AK47
-				/*delete cPlayer3D->GetInventoryWeapon(0);
+				delete cPlayer3D->GetInventoryWeapon(0);
 
 				CWeapon* AK47 = new CWeapon(Weapon_Type::W_AK47);
 				AK47->Init();
 				AK47->SetShader(cSimpleShader);
-				cPlayer3D->SetWeapon(0, AK47);*/
+				cPlayer3D->SetWeapon(0, AK47);
 
 			}
 
-			//Middle Left Box
-			if ((cMouseController->GetMousePositionX() >= m_windowWidth * 0.16875 && cMouseController->GetMousePositionX() <= m_windowWidth * 0.3)
-				&& (cMouseController->GetMousePositionY() >= m_windowHeight * 0.51667 && cMouseController->GetMousePositionY() <= m_windowHeight * 0.66667))
-			{
-				cout << "Ammo Bought" << endl;
-
-				//Player buys Ammo
-				cPlayer3D->GetInventoryWeapon(0)->AddRounds(30);
-			}
-			
-			//Middle Box
+			//Top Middle Box
 			if ((cMouseController->GetMousePositionX() >= m_windowWidth * 0.41875 && cMouseController->GetMousePositionX() <= m_windowWidth * 0.58125)
-				&& (cMouseController->GetMousePositionY() >= m_windowHeight * 0.38333 && cMouseController->GetMousePositionY() <= m_windowHeight * 0.63333))
+				&& (cMouseController->GetMousePositionY() >= m_windowHeight * 0.125 && cMouseController->GetMousePositionY() <= m_windowHeight * 0.375))
 			{
 				cout << "Middle Box" << endl;
 
 				//Player buys shotgun
-				/*delete cPlayer3D->GetInventoryWeapon(0);
+				delete cPlayer3D->GetInventoryWeapon(0);
 
 				CWeapon* Shotgun = new CWeapon(Weapon_Type::W_SHOTGUN);
 				Shotgun->Init();
 				Shotgun->SetShader(cSimpleShader);
-				cPlayer3D->SetWeapon(0, Shotgun);*/
+				cPlayer3D->SetWeapon(0, Shotgun);
+			}
+
+
+			//Middle Left Box
+			if ((cMouseController->GetMousePositionX() >= m_windowWidth * 0.08984 && cMouseController->GetMousePositionX() <= m_windowWidth * 0.22265)
+				&& (cMouseController->GetMousePositionY() >= m_windowHeight * 0.51315 && cMouseController->GetMousePositionY() <= m_windowHeight * 0.67105))
+			{
+				cout << "Middle Left Box" << endl;
+				CGunExtMag* cExtendedMag = new CGunExtMag();
+				cExtendedMag->Init();
+				cExtendedMag->SetTierLevel(CGunExtMag::TIERLEVEL::TIER1);
+				cPlayer3D->GetInventoryWeapon(0)->SetExtMag(cExtendedMag);
+				cPlayer3D->GetInventoryWeapon(0)->SetMaxMagRound(cPlayer3D->GetInventoryWeapon(0)->GetMaxMagRound() + cPlayer3D->GetInventoryWeapon(0)->GetExtMag()->GetAdditionMag());
+				cout << static_cast<int>(cExtendedMag->GetTierLevel());
+
+				
+			}
+
+			//Middle Box
+			if ((cMouseController->GetMousePositionX() >= m_windowWidth * 0.31641 && cMouseController->GetMousePositionX() <= m_windowWidth * 0.44921)
+				&& (cMouseController->GetMousePositionY() >= m_windowHeight * 0.51315 && cMouseController->GetMousePositionY() <= m_windowHeight * 0.67105))
+			{
+				cout << "Middle  Box" << endl;
+
+				CGunScope* cScope = new CGunScope();
+				cScope->Init();
+				cScope->SetTierLevel(CGunScope::TIERLEVEL::TIER1);
+
+				cPlayer3D->GetInventoryWeapon(0)->SetScope(cScope);
+
 			}
 
 			//Middle Right Box
-			if ((cMouseController->GetMousePositionX() >= m_windowWidth * 0.7 && cMouseController->GetMousePositionX() <= m_windowWidth * 0.83125)
-				&& (cMouseController->GetMousePositionY() >= m_windowHeight * 0.51667 && cMouseController->GetMousePositionY() <= m_windowHeight * 0.66667))
+			if ((cMouseController->GetMousePositionX() >= m_windowWidth * 0.54297 && cMouseController->GetMousePositionX() <= m_windowWidth * 0.67578)
+				&& (cMouseController->GetMousePositionY() >= m_windowHeight * 0.51315 && cMouseController->GetMousePositionY() <= m_windowHeight * 0.67105))
 			{
 				cout << "Middle Right Box" << endl;
+
+				//Player buys barrel attachment;
+				CGunBarrel* cGunBarrel = new CGunBarrel();
+				cGunBarrel->Init();
+
+				//cGunBarrel->SetTierLevel(static_cast<CGunBarrel::TIERLEVEL>(cPlayer3D->GetInventoryWeapon(0)->GetBarrel()->GetTierLevel()+ 1));
+				//cGunBarrel->SetTierLevel(cPlayer3D->GetInventoryWeapon(0)->GetBarrel()->SetTier());
+
+
+				cout << static_cast<int>(cGunBarrel->GetTierLevel()) << "Recoil Reduction is:" << cGunBarrel->GetRecoilReduction();
+
+				cPlayer3D->GetInventoryWeapon(0)->SetBarrel(cGunBarrel);
 			}
+
+
+			
 
 			//Bottom Left Box
-			if ((cMouseController->GetMousePositionX() >= m_windowWidth * 0.09375 && cMouseController->GetMousePositionX() <= m_windowWidth * 0.225)
-				&& (cMouseController->GetMousePositionY() >= m_windowHeight * 0.775 && cMouseController->GetMousePositionY() <= m_windowHeight * 0.91667))
+			if ((cMouseController->GetMousePositionX() >= m_windowWidth * 0.076562 && cMouseController->GetMousePositionX() <= m_windowWidth * 0.1625)
+				&& (cMouseController->GetMousePositionY() >= m_windowHeight * 0.76973 && cMouseController->GetMousePositionY() <= m_windowHeight * 0.92105))
 			{
-				cout << "Bottom Left Box" << endl;
+				cout << "Ammo Bought" << endl;
+				//Player buys Ammo
+				cPlayer3D->GetInventoryWeapon(0)->AddRounds(30);
 			}
 
-			//Bottom Middle Left Box
-			if ((cMouseController->GetMousePositionX() >= m_windowWidth * 0.31875 && cMouseController->GetMousePositionX() <= m_windowWidth * 0.45)
-				&& (cMouseController->GetMousePositionY() >= m_windowHeight * 0.775 && cMouseController->GetMousePositionY() <= m_windowHeight * 0.91667))
-			{
-				cout << "Bottom Middle Left Box" << endl;
-			}
+			bouncetime = GetTickCount64() + 500;
 
-			//Bottom Middle Right Box
-			if ((cMouseController->GetMousePositionX() >= m_windowWidth * 0.54375 && cMouseController->GetMousePositionX() <= m_windowWidth * 0.675)
-				&& (cMouseController->GetMousePositionY() >= m_windowHeight * 0.775 && cMouseController->GetMousePositionY() <= m_windowHeight * 0.91667))
-			{
-				cout << "Bottom Middle Right Box" << endl;
-			}
-
-			//Bottom Right Box
-			if ((cMouseController->GetMousePositionX() >= m_windowWidth * 0.775 && cMouseController->GetMousePositionX() <= m_windowWidth * 0.90625)
-				&& (cMouseController->GetMousePositionY() >= m_windowHeight * 0.775 && cMouseController->GetMousePositionY() <= m_windowHeight * 0.91667))
-			{
-				cout << "Bottom Right Box" << endl;
-			}
 		}
 	}
 }

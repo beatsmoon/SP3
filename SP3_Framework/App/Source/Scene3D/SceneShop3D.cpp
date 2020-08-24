@@ -110,6 +110,15 @@ void CSceneShop3D::Render(void)
 	cShop->PreRender();
 	cShop->Render();
 	cShop->PostRender();
+		
+
+	cTextRenderer->PreRender();
+	cTextRenderer->Render(to_string(cMouseController->GetMousePositionY()), 10.0f, 50.0f, 0.5f, glm::vec3(1.0f, 1.0f, 1.0f));
+
+	
+	cTextRenderer->Render(to_string(cMouseController->GetMousePositionX()), 10.0f, 70.0f, 0.5f, glm::vec3(1.0f, 1.0f, 1.0f));
+
+	cTextRenderer->PostRender();
 }
 
 /**

@@ -636,6 +636,9 @@ void CSceneGame3D::Update(const double dElapsedTime)
 
 		//Set the wave number for next wave
 		cWave->SetWaveNumber(cWave->GetWaveNumber() + 1);
+
+		cWave->UpdateHighScore();
+
 		//Set the score player will get from killing each enemy
 		cScore->SetScoreToAdd(cWave->GetWaveNumber() * 100);
 
@@ -684,6 +687,8 @@ void CSceneGame3D::Update(const double dElapsedTime)
 		//cScope->UpdateTierListOfScope(cPlayer3D->GetWeapon()->GetScope()->GetTierLevel());
 		cScope->Update(dElapsedTime);
 	}
+
+	
 
 	cScore->Update();
 }

@@ -10,6 +10,8 @@
 
 #include "Entity/RangeIndicator.h"
 
+#include <fstream>
+
 #include <vector>
 
 
@@ -30,6 +32,8 @@ public:
 
 	virtual void Init(void);
 	
+
+	virtual void UpdateHighScore();
 	//Wave Control Functions
 
 	//Set the number and stats of enemies in each wave
@@ -44,6 +48,8 @@ public:
 	//Set the current wave number
 	virtual void SetWaveNumber(int waveNumber);
 
+	virtual void SetWriteStatus(bool bWriteScore);
+
 protected:
 	
 	CEntityManager* cEntityManager;
@@ -52,4 +58,6 @@ protected:
 
 	//Wave Control members
 	int iWaveCounter;
+
+	bool bWriteScore;
 };

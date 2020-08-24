@@ -149,6 +149,7 @@ bool CGunBarrel::Init(void)
 		cout << "Unable to load Image/Scene3D_BarrelTexture.jpg" << endl;
 		return false;
 	}
+
 	vec3Scale = glm::vec3(0.1, 0.1, 0.1);
 	// Store the handler to the CGroundMap
 	cGroundMap = CGroundMap::GetInstance();
@@ -304,3 +305,34 @@ CGunBarrel::TIERLEVEL CGunBarrel::GetTierLevel(void) const
 {
 	return eTierLevel;
 }
+
+//CGunBarrel::TIERLEVEL CGunBarrel::SetTier(void)
+//{
+//	//switch (eTierLevel)
+//	//{
+//
+//	//	case NULL:
+//	//	{
+//	//		eTierLevel = TIERLEVEL::TIER1;
+//	//	}
+//	//	break;
+//
+//	//	case TIERLEVEL::TIER1:
+//	//	{
+//	//		eTierLevel = TIERLEVEL::TIER2;
+//	//	}
+//	//	break;
+//
+//	//	case TIERLEVEL::TIER2:
+//	//	{
+//	//		eTierLevel = TIERLEVEL::TIER3;
+//	//	}
+//	//	break;
+//
+//	//	case TIERLEVEL::TIER3:
+//	//	{
+//	//		//do nothing
+//	//	}
+//	//	break;
+//	//
+//}

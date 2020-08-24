@@ -18,13 +18,16 @@
 //Include Weapon Class
 #include "../App/Source/Scene3D/WeaponInfo/Weapon.h"
 
+//Include Mouse Controls
 #include "Inputs/MouseController.h"
 
+//Include shaders for weapons 
 #include "RenderControl/shader.h"
 
-
-//#include "GameControl/Settings.h"
-
+//Include Attachment Classes
+#include "../App/Source/Scene3D/WeaponInfo/WeaponAttachments/AttachmentBarrel.h"
+#include "../App/Source/Scene3D/WeaponInfo/WeaponAttachments/AttachmentExtMag.h"
+#include "../App/Source/Scene3D/WeaponInfo/WeaponAttachments/AttachmentScope.h"
 
 
 class CShop : public CEntity3D, public CSingletonTemplate<CShop>
