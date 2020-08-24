@@ -291,19 +291,19 @@ bool CSceneGame3D::Init(void)
 
 	for (int i = 0; i < 3; i++)
 	{
-		/*int k = Math::RandIntMinMax(0, 2);
+		int k = Math::RandIntMinMax(0, 2);
 
-		CEnemy3D* cEnemy3D = new CEnemy3D(glm::vec3(Math::RandFloatMinMax(-10.0f, 10.0f), 0.5f, Math::RandFloatMinMax(-10.0f, 10.0f)), k);
+		CEnemy3D* cEnemy3D = new CEnemy3D(glm::vec3(Math::RandFloatMinMax(-10.0f, 10.0f), 0.5f, Math::RandFloatMinMax(-10.0f, 10.0f)), 2);
 		cEnemy3D->SetShader(cShader);
 		cEnemy3D->Init();
 		cEnemy3D->ActivateCollider(cSimpleShader);
 		cEntityManager->Add(cEnemy3D);
 
-		CRangeIndicator* cRangeIndicator = new CRangeIndicator(cEnemy3D->GetPosition(), k, cEnemy3D);
+		CRangeIndicator* cRangeIndicator = new CRangeIndicator(cEnemy3D->GetPosition(), 2, cEnemy3D);
 		cRangeIndicator->SetShader(cShader);
 		cRangeIndicator->Init();
 		cRangeIndicator->ActivateCollider(cSimpleShader);
-		cEntityManager->Add(cRangeIndicator);*/
+		cEntityManager->Add(cRangeIndicator);
 
 	/*	CStructure3D* rifleAmmo = new CStructure3D(glm::vec3(Math::RandFloatMinMax(-10.0f, 10.0f), 0.5f, Math::RandFloatMinMax(-10.0f, 10.0f))
 			, CEntity3D::TYPE::RIFLE_AMMO);
