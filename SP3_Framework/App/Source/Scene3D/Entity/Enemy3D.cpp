@@ -117,7 +117,7 @@ bool CEnemy3D::Init(void)
 	CEntity3D::Init();
 
 	// Set the type
-	SetType(CEntity3D::TYPE::NPC);
+	SetType(CEntity3D::TYPE::ZOMBIE);
 
 	// Initialise the cPlayer3D
 	cPlayer3D = CPlayer3D::GetInstance();
@@ -362,8 +362,8 @@ void CEnemy3D::Update(const double dElapsedTime)
 		iCurrentNumMovement = 0;
 	}
 
-	
-	
+
+
 
 	glm::vec3 EnemyFacingPlayerVec;
 	EnemyFacingPlayerVec = glm::normalize(cPlayer3D->GetPosition() - vec3Position);

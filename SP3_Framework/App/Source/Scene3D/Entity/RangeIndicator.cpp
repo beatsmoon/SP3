@@ -37,7 +37,7 @@ bool CRangeIndicator::Init(void)
 	CEntity3D::Init();
 
 	// Set the type
-	SetType(CEntity3D::TYPE::NPC_ATTACK_RANGE);
+	SetType(CEntity3D::TYPE::ATTACK_RANGE);
 
 	vec3Position = currEnemy->GetPosition();
 

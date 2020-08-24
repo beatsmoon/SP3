@@ -132,7 +132,9 @@ bool CEntityManager::CollisionCheck(CEntity3D* cEntity3D)
 		{
 			switch ((*it)->GetType())
 			{
-			case CEntity3D::TYPE::NPC:
+			case CEntity3D::TYPE::ZOMBIE:
+			case CEntity3D::TYPE::ATTACK_RANGE:
+			case CEntity3D::TYPE::BOSS:
 			{
 				// Rollback the cEntity3D's position
 				static double damageDelay = 15.0f;
@@ -162,6 +164,8 @@ bool CEntityManager::CollisionCheck(CEntity3D* cEntity3D)
 				cout << "** Collision between Player and Projectile ***" << endl;
 				bResult = true;
 				cSoundController->PlaySoundByID(2);
+				cCameraEffects->Activate_BloodScreen();
+				cPlayer3D->SetCurrHealth(cPlayer3D->GetCurrHealth() - 10);
 				// Quit this loop since a collision has been found
 				break;
 			}
@@ -249,7 +253,7 @@ void CEntityManager::Update(const double dElapsedTime)
 			// Check for collisions between the 2 entities
 			if ((*it)->CheckForCollision(*it_other) == true)
 			{
-				if (((*it)->GetType() == CEntity3D::TYPE::NPC) &&
+				if (((*it)->GetType() == CEntity3D::TYPE::ZOMBIE) &&
 					((*it_other)->GetType() == CEntity3D::TYPE::PROJECTILE))
 				{
 					(*it)->RollbackPosition();
@@ -268,10 +272,10 @@ void CEntityManager::Update(const double dElapsedTime)
 						//cout << cScore->GetScore();
 						
 					}
-					cout << "** Collision between NPC and Projectile ***" << endl;
+					cout << "** Collision between zombie and Projectile ***" << endl;
 				}
 				else if (((*it)->GetType() == CEntity3D::TYPE::PROJECTILE) &&
-					((*it_other)->GetType() == CEntity3D::TYPE::NPC))
+					((*it_other)->GetType() == CEntity3D::TYPE::ZOMBIE))
 				{
 					(*it_other)->RollbackPosition();
 					(*it)->SetToDelete(true);
@@ -288,37 +292,120 @@ void CEntityManager::Update(const double dElapsedTime)
 						//cScore->AddScore(cScore->GetScoreToAdd());
 						//cout << cScore->GetScore() << endl;
 					}
-					cout << "** Collision between Explosive Barrel and Projectile ***" << endl;
+					cout << "** Collision between zombie and Projectile ***" << endl;
 				}
+				if (((*it)->GetType() == CEntity3D::TYPE::BOSS) &&
+					((*it_other)->GetType() == CEntity3D::TYPE::PROJECTILE))
+				{
+					(*it)->RollbackPosition();
+					(*it_other)->SetToDelete(true);
 
-				else if (((*it)->GetType() == CEntity3D::TYPE::NPC) &&
+					CBoss3D* boss = dynamic_cast<CBoss3D*>(*it);
+					if (boss->GetBossType() == T_BOSS3)
+					{
+						if (boss->GetHealth() > 0)
+						{
+							boss->SetHealth(boss->GetHealth() - 1);
+							cSoundController->PlaySoundByID(5);
+						}
+						else
+						{
+							if (boss->GetSplit() > 0)
+							{
+								boss->SplitIntoSmallerBoss();
+							}
+							else
+							{
+								(*it)->SetToDelete(true);
+							}
+						}
+					}
+					else
+					{
+						if (boss->GetHealth() > 0)
+						{
+							boss->SetHealth(boss->GetHealth() - 1);
+							cSoundController->PlaySoundByID(5);
+						}
+						else
+						{
+							(*it)->SetToDelete(true);
+							//cScore->AddScore(cScore->GetScoreToAdd());
+							//cout << cScore->GetScore();
+						}
+					}
+					cout << "** Collision between boss and Projectile ***" << endl;
+				}
+				else if (((*it)->GetType() == CEntity3D::TYPE::PROJECTILE) &&
+					((*it_other)->GetType() == CEntity3D::TYPE::BOSS))
+				{
+					(*it_other)->RollbackPosition();
+					(*it)->SetToDelete(true);
+
+					CBoss3D* boss = dynamic_cast<CBoss3D*>(*it_other);
+					if (boss->GetBossType() == T_BOSS3)
+					{
+						if (boss->GetHealth() > 0)
+						{
+							boss->SetHealth(boss->GetHealth() - 1);
+							cSoundController->PlaySoundByID(5);
+						}
+						else
+						{
+							if (boss->GetSplit() > 0)
+							{
+								boss->SplitIntoSmallerBoss();
+							}
+							else
+							{
+								(*it)->SetToDelete(true);
+							}
+						}
+					}
+					else
+					{
+						if (boss->GetHealth() > 0)
+						{
+							boss->SetHealth(boss->GetHealth() - 1);
+							cSoundController->PlaySoundByID(5);
+						}
+						else
+						{
+							(*it_other)->SetToDelete(true);
+							//cScore->AddScore(cScore->GetScoreToAdd());
+							//cout << cScore->GetScore();
+						}
+					}
+					cout << "** Collision between boss and Projectile ***" << endl;
+				}
+				else if (((*it)->GetType() == CEntity3D::TYPE::ZOMBIE) &&
 					((*it_other)->GetType() == CEntity3D::TYPE::STRUCTURE))
 				{
 					(*it)->RollbackPosition();
 					//(*it_other)->SetToDelete(true);
-					cout << "** Collision between NPC and Structure ***" << endl;
+					cout << "** Collision between zombie and Structure ***" << endl;
 				}
 				else if (((*it)->GetType() == CEntity3D::TYPE::STRUCTURE) &&
-					((*it_other)->GetType() == CEntity3D::TYPE::NPC))
+					((*it_other)->GetType() == CEntity3D::TYPE::ZOMBIE))
 				{
 					(*it_other)->RollbackPosition();
 					//(*it)->SetToDelete(true);
-					cout << "** Collision between Structure and NPC ***" << endl;
+					cout << "** Collision between Structure and zombie ***" << endl;
 				}
 
-				else if (((*it)->GetType() == CEntity3D::TYPE::NPC) &&
+				else if (((*it)->GetType() == CEntity3D::TYPE::ZOMBIE) &&
 					((*it_other)->GetType() == CEntity3D::TYPE::BARRICADE))
 				{
 					(*it)->RollbackPosition();
 					//(*it_other)->SetToDelete(true);
-					cout << "** Collision between NPC and Barricade ***" << endl;
+					cout << "** Collision between zombie and Barricade ***" << endl;
 				}
 				else if (((*it)->GetType() == CEntity3D::TYPE::BARRICADE) &&
-					((*it_other)->GetType() == CEntity3D::TYPE::NPC))
+					((*it_other)->GetType() == CEntity3D::TYPE::ZOMBIE))
 				{
 					(*it_other)->RollbackPosition();
 					//(*it)->SetToDelete(true);
-					cout << "** Collision between Barricade and NPC ***" << endl;
+					cout << "** Collision between Barricade and zombie ***" << endl;
 				}
 
 				else if (((*it)->GetType() == CEntity3D::TYPE::PROJECTILE) &&
@@ -480,7 +567,7 @@ bool CEntityManager::CheckWave(void)
 
 		for (it = lEntity3D.begin(); it != end; ++it)
 		{
-			if ((*it)->GetType() != CEntity3D::TYPE::NPC)
+			if ((*it)->GetType() != CEntity3D::TYPE::ZOMBIE)
 			{
 				++EntityCounter;
 			}
@@ -503,7 +590,7 @@ void CEntityManager::UpdateScore(void)
 	end = lEntity3D.end();
 	for (it = lEntity3D.begin(); it != end; ++it)
 	{
-		if (((*it)->GetType() == CEntity3D::TYPE::NPC))
+		if (((*it)->GetType() == CEntity3D::TYPE::ZOMBIE))
 		{
 			if ((*it)->IsToDelete())
 			{
