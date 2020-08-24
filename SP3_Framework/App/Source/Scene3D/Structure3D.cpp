@@ -163,23 +163,39 @@ bool CStructure3D::Init(void)
 	{
 	case EXPLOSIVE_BARREL:
 		iTextureID = LoadTexture("Images/TrainingBot.tga");
+		if (iTextureID == 0)
+		{
+			cout << "Unable to load texture for structure " << endl;
+			return false;
+		}
 		break;
 	case PLAY_BUTTON:
 		iTextureID = LoadTexture("Images/playbutton.tga");
+		if (iTextureID == 0)
+		{
+			cout << "Unable to load texture for structure " << endl;
+			return false;
+		}
 		break;
 	case HIGHSCORE_BUTTON:
 		iTextureID = LoadTexture("Images/highscorebutton.tga");
+		if (iTextureID == 0)
+		{
+			cout << "Unable to load texture for structure " << endl;
+			return false;
+		}
 		break;
 	case QUIT_BUTTON:
 		iTextureID = LoadTexture("Images/quitbutton.tga");
+		if (iTextureID == 0)
+		{
+			cout << "Unable to load texture for structure " << endl;
+			return false;
+		}
 		break;
 	}
 
-	if (iTextureID == 0)
-	{
-		cout << "Unable to load texture for structure " << endl;
-		return false;
-	}
+	
 
 	return true;
 }
@@ -266,7 +282,7 @@ void CStructure3D::Render(void)
 	// create transformations
 	model = glm::mat4(1.0f); // make sure to initialize matrix to identity matrix first
 	//model = glm::rotate(model, (float)glfwGetTime()/10.0f, glm::vec3(0.0f, 0.0f, 1.0f));
-	model = glm::translate(model, glm::vec3(vec3Position.x, vec3Position.y - 0.5f, vec3Position.z));
+	model = glm::translate(model, glm::vec3(vec3Position.x, vec3Position.y, vec3Position.z));
 	if (bRotateEnabled)
 	{
 		RotateToPlayer();
@@ -303,10 +319,10 @@ void CStructure3D::Render(void)
 	{
 		model = glm::mat4(1.0f);
 		model = glm::translate(model, vec3Position);
-
 		if (bRotateEnabled)
+		{
 			model = glm::rotate(model, glm::radians(-fYaw + 90.f), glm::vec3(0.f, 1.f, 0.f));
-
+		}
 		model = glm::scale(model, vec3ColliderScale);
 
 		cCollider->model = model;
