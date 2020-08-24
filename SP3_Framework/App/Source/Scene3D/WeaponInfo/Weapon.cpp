@@ -177,3 +177,20 @@ void CWeapon::Init(void)
 		break;
 	}
 }
+float CWeapon::CalculateGravityMultiplier()
+{
+	//higher value more pull down force on the bullet
+	switch (type)
+	{
+	case W_PISTOL:
+		return 1.0;
+	case W_SHOTGUN:
+		return 1.5;
+	case W_AK47:
+		return 0.8;
+	case W_SNIPER:
+		return 1.0;
+
+	}
+	return 0;
+}

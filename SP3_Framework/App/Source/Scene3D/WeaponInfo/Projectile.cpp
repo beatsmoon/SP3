@@ -133,7 +133,7 @@ bool CProjectile::Init(	glm::vec3 vec3Position,
 	// initialise CPhysics3D
 	cPhysics3D.Init();
 	// set the status to fall by default
-	cPhysics3D.SetStatus(CPhysics3D::STATUS::FALL);
+	cPhysics3D.SetStatus(CPhysics3D::STATUS::BULLETFALLING);
 
 	return true;
 }
@@ -306,46 +306,27 @@ void CProjectile::Update(const double dElapsedTime)
 }
 void CProjectile::UpdateBulletDrop(const double dElapsedTime)
 {
-	//if (cPhysics3D.GetStatus() == CPhysics3D::STATUS::JUMP)
-	//{
-	//	// update elapse time to physics engine
-	//	cPhysics3D.AddElapsedTime((float)dElapsedTime);
+	if (cPhysics3D.GetStatus() == CPhysics3D::STATUS::BULLETFALLING)
+	{
+		// update elapse time to physics engine
+		cPhysics3D.AddElapsedTime((float)dElapsedTime);
 
-	//	// call the physics engine update method to calculate the final velocity and displacement
-	//	cPhysics3D.Update();
+		cPhysics3D.SetGravityMultiplier(fGravityMultiplier);
+		// call the physics engine update method to calculate the final velocity and displacement
+		cPhysics3D.Update();
 
-	//	// get the displacement from cphysics engine and update the player position
-	//	vec3Position += cPhysics3D.GetDisplacement();
+		// get the displacement from cphysics engine and update the player position
+		vec3Position += cPhysics3D.GetDisplacement();
 
-	//	// if the player is still jumping and the initial velocity reached zero or below zero
-	//	// then it has reached the peak of its jump
-	//	if ((cPhysics3D.GetStatus() == CPhysics3D::STATUS::JUMP) && (cPhysics3D.GetInitialVelocity().y <= 0.0f))
-	//	{
-	//		cPhysics3D.SetStatus(CPhysics3D::STATUS::FALL);
-	//		cPhysics3D.SetElapsedTime(0.0f);
-	//	}
+		// constrain the player's position to the groundmap
+		glm::vec3 vec3CheckPosition = cGroundMap->GetExactPosition(vec3Position);
 
-	//}
-	//else if (cPhysics3D.GetStatus() == CPhysics3D::STATUS::FALL)
-	//{
-	//	// update elapse time to physics engine
-	//	cPhysics3D.AddElapsedTime((float)dElapsedTime);
-
-	//	// call the physics engine update method to calculate the final velocity and displacement
-	//	cPhysics3D.Update();
-
-	//	// get the displacement from cphysics engine and update the player position
-	//	vec3Position += cPhysics3D.GetDisplacement();
-
-	//	// constrain the player's position to the groundmap
-	//	glm::vec3 vec3CheckPosition = cGroundMap->GetExactPosition(vec3Position);
-
-	//	if (vec3CheckPosition.y > vec3Position.y)
-	//	{
-	//		vec3Position = vec3CheckPosition;
-	//		cPhysics3D.SetStatus(CPhysics3D::STATUS::IDLE);
-	//	}
-	//}
+		//if (vec3CheckPosition.y > vec3Position.y)
+		//{
+		//	vec3Position = vec3CheckPosition;
+		//	cPhysics3D.SetStatus(CPhysics3D::STATUS::IDLE);
+		//}
+	}
 
 }
 /**

@@ -197,7 +197,7 @@ bool CSceneGame3D::Init(void)
 	CGunBarrel* cGunBarrel = new CGunBarrel();
 	cGunBarrel->SetShader(cShader);
 	cGunBarrel->Init();
-	cGunBarrel->SetTierLevel(CGunBarrel::TIERLEVEL::TIER3);
+	cGunBarrel->SetTierLevel(CGunBarrel::TIERLEVEL::TIER1);
 
 	CGunExtMag* cGunExtMag = new CGunExtMag();
 	cGunExtMag->SetShader(cShader);
@@ -209,7 +209,7 @@ bool CSceneGame3D::Init(void)
 	cGunScope->Init();
 	cGunScope->SetTierLevel(CGunScope::TIERLEVEL::TIER3);
 
-	CWeapon* rifle = new CWeapon(Weapon_Type::W_AK47);
+	CWeapon* rifle = new CWeapon(Weapon_Type::W_SHOTGUN);
 	rifle->Init();
 	rifle->SetShader(cSimpleShader);
 	cPlayer3D->SetWeapon(0, rifle);
@@ -571,6 +571,9 @@ void CSceneGame3D::Update(const double dElapsedTime)
 			CProjectile* cProjectile = cPlayer3D->DischargeWeapon();
 			if (cProjectile)
 			{
+
+				cProjectile->SetGravityMultiplier(cPlayer3D->GetWeapon()->CalculateGravityMultiplier());
+				
 				cEntityManager->Add(cProjectile);
 				cPlayer3D->TriggerRecoil();
 			}
@@ -599,6 +602,7 @@ void CSceneGame3D::Update(const double dElapsedTime)
 			CProjectile* cProjectile = cPlayer3D->DischargeWeapon();
 			if (cProjectile)
 			{
+				cProjectile->SetGravityMultiplier(cPlayer3D->GetWeapon()->CalculateGravityMultiplier());
 				cEntityManager->Add(cProjectile);
 				cPlayer3D->TriggerRecoil();
 			}

@@ -19,6 +19,7 @@ CPhysics3D::CPhysics3D(void)
 	, fTotalElapsedTime(0.0f)
 	, fElapsedTime(0.0f)
 	, sCurrentStatus(STATUS::IDLE)
+	, fGravityMultiplier(1)
 {
 }
 
@@ -41,6 +42,7 @@ bool CPhysics3D::Init(void)
 	v3Displacement = glm::vec3(0.0f);
 	fTotalElapsedTime = 0.0f;
 	fElapsedTime = 0.0f;
+	fGravityMultiplier = 1.0f;
 	return true;
 }
 
@@ -94,7 +96,10 @@ void CPhysics3D::SetStatus(const STATUS sStatus)
 		sCurrentStatus = sStatus;
 	}
 }
-
+void CPhysics3D::SetGravityMultiplier(float fMulti) 
+{
+	fGravityMultiplier = fMulti;
+}
 // Get methods
 // Get Initial velocity
 glm::vec3 CPhysics3D::GetInitialVelocity(void) const
@@ -131,7 +136,10 @@ CPhysics3D::STATUS CPhysics3D::GetStatus(void) const
 {
 	return sCurrentStatus;
 }
-
+float CPhysics3D::GetGravityMultiplier(void) const
+{
+	return fGravityMultiplier;
+}
 // Update
 void CPhysics3D::Update(void)
 {
@@ -146,14 +154,25 @@ void CPhysics3D::Update(void)
 							0.5f * (v3Acceleration + v3Gravity) * fElapsedTime * fElapsedTime;
 		// Update v3InitialVelocity
 		v3InitialVelocity = v3FinalVelocity;
-
+		
 	}
 	else if (sCurrentStatus == FALL)
 	{
+
 		// Calculate the final velocity
 		v3FinalVelocity = v3InitialVelocity + v3Gravity * fElapsedTime;
 		// Calculate the displacement
 		v3Displacement = v3FinalVelocity * fElapsedTime - 0.5f * v3Gravity * fElapsedTime * fElapsedTime;
+		// Update v3InitialVelocity
+		v3InitialVelocity = v3FinalVelocity;
+	}
+	else if (sCurrentStatus == BULLETFALLING)
+	{
+
+		// Calculate the final velocity
+		v3FinalVelocity = v3InitialVelocity + (v3Gravity * fGravityMultiplier) * fElapsedTime;
+		// Calculate the displacement
+		v3Displacement = v3FinalVelocity * fElapsedTime - 0.5f * (v3Gravity * fGravityMultiplier) * fElapsedTime * fElapsedTime;
 		// Update v3InitialVelocity
 		v3InitialVelocity = v3FinalVelocity;
 	}

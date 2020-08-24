@@ -71,6 +71,7 @@ public:
 	
 	virtual void ResetDefaultHealthStatus(float fhealth);
 	virtual void SetCollisionDamage(float fdamage);
+	virtual void SetGravityMultiplier(float fmultiplier);
 
 	// Get Methods
 	virtual const GLuint GetTextureID(void) const;
@@ -85,6 +86,7 @@ public:
 	virtual const float GetMovementSpeed(void) const;
 	
 	virtual const float GetCollisionDamage(void) const;
+	virtual const float GetGravityMultiplier(void) const;
 	// These methods are for marking this CEntity3D for deletion
 	virtual void SetToDelete(const bool bToDelete);
 	virtual const bool IsToDelete(void) const;
@@ -182,6 +184,7 @@ protected:
 	TYPE eWeaponType;
 	float fHealth;
 	float fCollisionDamage;
+	float fGravityMultiplier;
 	// glm::vec3 variables use during for checking of collision
 	glm::vec3 tempVec3A_BottomLeft;
 	glm::vec3 tempVec3A_TopRight;
