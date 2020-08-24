@@ -51,6 +51,8 @@
     <ClCompile Include="Source\SoundController\SoundInfo.cpp" />
     <ClCompile Include="Source\TimeControl\FPSCounter.cpp" />
     <ClCompile Include="Source\CameraEffects\WeaponHUD.cpp" />
+    <ClCompile Include="Source\Scene3D\Score.cpp" />
+    <ClCompile Include="Source\Scene3D\Entity\CBoss3D.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Application.h" />
@@ -104,5 +106,7 @@
     <ClInclude Include="Source\SoundController\SoundInfo.h" />
     <ClInclude Include="Source\TimeControl\FPSCounter.h" />
     <ClInclude Include="Source\CameraEffects\WeaponHUD.h" />
+    <ClInclude Include="Source\Scene3D\Score.h" />
+    <ClInclude Include="Source\Scene3D\Entity\CBoss3D.h" />
   </ItemGroup>
 </Project>

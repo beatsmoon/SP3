@@ -558,20 +558,6 @@ void CSceneGame3D::Update(const double dElapsedTime)
 											CMouseController::SCROLL_TYPE::SCROLL_TYPE_YOFFSET));
 	}
 
-	/*if (cPlayer3D->GetScopeMode() == true)
-	{
-		cCamera->fZoom = 45.f - cPlayer3D->GetWeapon()->GetScopeZoom();
-		cCrossHair->SetStatus(true);
-	}
-	else
-	{
-		cCrossHair->SetStatus(false);
-		cCamera->fZoom = 45.f;
-	}*/
-
-
-
-
 	if (cMouseController->IsButtonDown(CMouseController::BUTTON_TYPE::LMB) && cPlayer3D->GetWeapon()->GetMagRound() > 0
 		&& cPlayer3D->GetWeapon()->GetFiringType() == CWeaponInfo::FIRINGTYPE::AUTO && cPlayer3D->GetWeapon()->GetCanFire()) 
 	{

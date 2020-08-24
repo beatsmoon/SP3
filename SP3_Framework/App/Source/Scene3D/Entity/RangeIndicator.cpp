@@ -138,16 +138,15 @@ void CRangeIndicator::SetProjection(glm::mat4 projection)
 
 void CRangeIndicator::Update(const double dElapsedTime)
 {
-	if (currEnemy->GetHealth() <= 0)
+	if (currEnemy->GetHealth() > 0)
+	{
+		vec3Position = currEnemy->GetPosition();
+	}
+	else
 	{
 		SetToDelete(true);
 		return;
 	}
-	else
-	{
-		vec3Position = currEnemy->GetPosition();
-	}
-
 	
 }
 
