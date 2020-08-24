@@ -341,13 +341,6 @@ void CSceneMenu3D::RecalculateButtonPosition()
 		CStructure3D* cButton = vStructures.at(i);
 		//cButton->SetPosition(cPlayer3D->GetPosition() + cPlayer3D->GetFront());
 		cButton->SetPosition(glm::vec3(cPlayer3D->GetPosition().x, fYButtonOffset + fRelativeScale, cPlayer3D->GetPosition().z) + cPlayer3D->GetFront() * 2.f);
-		glm::mat4 rotationMat(1); // Create identity matrix
-		float dot = glm::dot(cPlayer3D->GetPosition(), cButton->GetPosition());
-		rotationMat = glm::rotate(rotationMat, dot / (glm::length(cPlayer3D->GetPosition() * glm::length(cButton->GetPosition()))), -cPlayer3D->vec3Up);
-		cButton->SetFront(rotationMat * glm::vec4(cButton->GetFront(), 1.0));
-		
-		//cButton->SetRotation(atan2(cPlayer3D->GetFront().z, cPlayer3D->GetFront().x), glm::vec3(0.f, 1.f, 0.f));
-		//glm::lookAt(cPlayer3D->GetPosition(), cPlayer3D->GetPosition() + cPlayer3D->GetFront(), cPlayer3D->vec3Up);
 		fYButtonOffset -= fRelativeScale;
 	}
 }

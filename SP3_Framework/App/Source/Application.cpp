@@ -277,7 +277,6 @@ void Application::Run(void)
 
 	// Render loop
 	while (!glfwWindowShouldClose(cSettings->pWindow)
-		&& (!CKeyboardController::GetInstance()->IsKeyReleased(GLFW_KEY_ESCAPE))
 		&& cSceneManager->CheckForApplicationEnd() == false)
 	{
 		// TODO: Add conditions for how scenes should be changed. E.g. Press A to change to second scene
@@ -322,13 +321,14 @@ void Application::Run(void)
 			}
 		}
 
-		if (CKeyboardController::GetInstance()->IsKeyPressed(GLFW_KEY_G))
+		if (CKeyboardController::GetInstance()->IsKeyPressed(GLFW_KEY_ESCAPE))
 		{
 			cSceneManager->DisableScene(SCENES::GAME);
 			cSceneManager->EnableScene(SCENES::MENU);
 			CSceneMenu3D* cSceneMenu3D = CSceneMenu3D::GetInstance();
 			cSceneMenu3D->RecalculateButtonPosition();
 		}
+
 		for (size_t i = 0; i < vActiveScenes.size(); ++i)
 		{
 			if (vActiveScenes.at(i)->GetSceneStatus())

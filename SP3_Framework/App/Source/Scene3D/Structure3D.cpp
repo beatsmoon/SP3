@@ -18,6 +18,9 @@ using namespace std;
 CStructure3D::CStructure3D(void)
 	: cGroundMap(NULL)
 	, iStructureHealth(100)
+	, cPlayer3D(NULL)
+	, fYaw(-90.0f)
+	, fPitch(0.0f)
 {
 	// Set the default position to the origin
 	vec3Position = glm::vec3(0.0f, 0.0f, 0.0f);
@@ -33,6 +36,10 @@ CStructure3D::CStructure3D(void)
 CStructure3D::CStructure3D(const glm::vec3 vec3Position, CEntity3D::TYPE type, const glm::vec3 vec3Front, const float fYaw, const float fPitch)
 	: cGroundMap(NULL)
 	, iStructureHealth(100)
+	, cPlayer3D(NULL)
+	, fYaw(-90.0f)
+	, fPitch(0.0f)
+	, bRotateEnabled(false)
 {
 	// Set the default position to the origin
 	this->vec3Position = vec3Position;
@@ -76,6 +83,11 @@ bool CStructure3D::Init(void)
 	std::vector<glm::vec2> uvs;
 	std::vector<glm::vec3> normals;
 
+	fYaw = -90.0f;
+	fPitch = 0.0f;
+
+	cPlayer3D = CPlayer3D::GetInstance();
+
 	// switch type of structure
 	switch (eType)
 	{
@@ -107,6 +119,8 @@ bool CStructure3D::Init(void)
 		{
 			return NULL;
 		}
+
+		bRotateEnabled = true;
 		break;
 	}
 	default:
@@ -306,6 +320,12 @@ void CStructure3D::Render(void)
 	model = glm::mat4(1.0f); // make sure to initialize matrix to identity matrix first
 	//model = glm::rotate(model, (float)glfwGetTime()/10.0f, glm::vec3(0.0f, 0.0f, 1.0f));
 	model = glm::translate(model, glm::vec3(vec3Position.x, vec3Position.y, vec3Position.z));
+	if (bRotateEnabled)
+	{
+		RotateToPlayer();
+		model = glm::rotate(model, glm::radians(-fYaw + 90.f), glm::vec3(0.f, 1.f, 0.f));
+	}
+	//model = glm::rotate(model, glm::radians(-fPitch + 90.f), vec3Right);
 	model = glm::scale(model, vec3Scale);
 
 	// note: currently we set the projection matrix each frame, but since the projection 
@@ -336,6 +356,10 @@ void CStructure3D::Render(void)
 	{
 		model = glm::mat4(1.0f);
 		model = glm::translate(model, vec3Position);
+		
+		if(bRotateEnabled)
+			model = glm::rotate(model, glm::radians(-fYaw + 90.f), glm::vec3(0.f, 1.f, 0.f));
+
 		model = glm::scale(model, vec3ColliderScale);
 
 		cCollider->model = model;
@@ -361,4 +385,35 @@ void CStructure3D::SetHealth(const int iStructureHealth)
 int CStructure3D::GetHealth()
 {
 	return iStructureHealth;
+}
+
+void CStructure3D::RotateToPlayer()
+{
+	//if (bRotateEnabled)
+	
+	// Calculate the new vec3Front vector
+	glm::vec3 front;
+	front.x = cos(glm::radians(fYaw)) * cos(glm::radians(fPitch));
+	front.y = sin(glm::radians(fPitch));
+	front.z = sin(glm::radians(fYaw)) * cos(glm::radians(fPitch));
+	front = glm::normalize(front);
+
+	// Check if we are too far from the player
+	if (cPlayer3D)
+	{
+		// Update the direction of the enemy
+		front = glm::normalize(glm::vec3(cPlayer3D->GetPosition() - vec3Position));
+
+		// Update the yaw and pitch
+		fYaw = glm::degrees(glm::atan(front.z, front.x));
+		fPitch = glm::degrees(glm::asin(front.y));
+	}
+
+	vec3Front = front;
+	// Also re-calculate the Right and Up vector
+	// Normalize the vectors, because their length gets closer to 0 the more 
+	// you look up or down which results in slower movement.
+	vec3Right = glm::normalize(glm::cross(vec3Front, vec3WorldUp));
+	vec3Up = glm::normalize(glm::cross(vec3Right, vec3Front));
+	
 }
