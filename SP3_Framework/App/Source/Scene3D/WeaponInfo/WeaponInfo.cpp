@@ -302,6 +302,8 @@ CProjectile* CWeaponInfo::Discharge(glm::vec3 vec3Position, glm::vec3 vec3Front,
 			aProjectile->ActivateCollider(cShader);
 			aProjectile->SetStatus(true);
 			aProjectile->SetSource(pSource);
+			
+			
 			aProjectile->SetCollisionDamage(fDamage);
 			// Lock the weapon after this discharge
 			//bFire = false;

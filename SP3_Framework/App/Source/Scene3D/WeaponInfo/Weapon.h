@@ -30,5 +30,7 @@ public:
 	virtual ~CWeapon();
 
 	void Init(void);
+
+	float CalculateGravityMultiplier();
 };
 

@@ -17,6 +17,7 @@ public:
 		IDLE = 0,
 		JUMP,
 		FALL,
+		BULLETFALLING,
 		NUM_STATUS
 	};
 
@@ -37,6 +38,7 @@ public:
 	void SetTotalElapsedTime(const float fTotalElapsedTime);	// Set Total Elapsed Time
 	void SetElapsedTime(const float fElapsedTime);				// Set Elapsed Time
 	void SetStatus(const STATUS sStatus);						// Set Status
+	void SetGravityMultiplier(float fMulti);
 
 	// Get methods
 	glm::vec3 GetInitialVelocity(void) const;	// Get Initial velocity
@@ -45,6 +47,7 @@ public:
 	glm::vec3 GetDisplacement(void) const;		// Get Displacement
 	float GetTotalElapsedTime(void) const;		// Get Total Elapsed Time
 	STATUS GetStatus(void) const;				// Get Status
+	float GetGravityMultiplier(void) const;
 
 	// Update
 	void Update(void);
@@ -67,8 +70,10 @@ protected:
 	float fTotalElapsedTime;		// Total elapsed time since the motion was started
 	float fElapsedTime;				// Elapsed time between the previous and current update
 
-	const glm::vec3 v3Gravity = glm::vec3( 0.0f, -10.0f, 0.0f);		// Gravity constant
+	const glm::vec3 v3Gravity = glm::vec3( 0.0f, -0.5f, 0.0f);		// Gravity constant
 
 	STATUS sCurrentStatus;
+
+	float fGravityMultiplier;
 };
 

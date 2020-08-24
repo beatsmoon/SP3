@@ -398,6 +398,14 @@ void CEntity3D::SetCollisionDamage(float fdamage)
 {
 	fCollisionDamage = fdamage;
 }
+const float CEntity3D::GetGravityMultiplier(void) const
+{
+	return fGravityMultiplier;
+}
+void CEntity3D::SetGravityMultiplier(float fmultiplier)
+{
+	fGravityMultiplier = fmultiplier;
+}
 
 void CEntity3D::ResetDefaultHealthStatus(float fhealth)
 {
