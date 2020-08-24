@@ -4,9 +4,7 @@
  Date: Apr 2020
  */
 #include "CBoss3D.h"
-
-#include "../../Meshes/MeshBuilder.h"
-#include "../../Meshes/Mtx44.h"
+#include "../EntityManager.h"
 
 #include <iostream>
 using namespace std;
@@ -117,7 +115,7 @@ bool CBoss3D::Init(void)
 	CEntity3D::Init();
 
 	// Set the type
-	SetType(CEntity3D::TYPE::NPC);
+	SetType(CEntity3D::TYPE::BOSS);
 
 	// Initialise the cPlayer3D
 	cPlayer3D = CPlayer3D::GetInstance();
@@ -129,8 +127,9 @@ bool CBoss3D::Init(void)
 
 	// Movement Control
 	iCurrentNumMovement = 0;
-	iMaxNumMovement = 100;
-	angleOfSight = 0.f;
+	iMaxNumMovement = 20;
+	status = S_IDLE;
+
 
 	std::vector<glm::vec3> vertices;
 	std::vector<glm::vec2> uvs;
@@ -138,10 +137,12 @@ bool CBoss3D::Init(void)
 
 	switch (type)
 	{
-	case E_BOSS1:
+	case T_BOSS1:
 	{
-		health = 7;
+		health = 1000;
 		speed = Math::RandFloatMinMax(0.8f, 1.3f);
+		rangeOfSight = 6.f;
+		splitting = 0;
 
 		vec3Scale = glm::vec3(1, 1, 1);
 		vec3ColliderScale = glm::vec3(0.45, 1.6, 0.45);
@@ -155,27 +156,31 @@ bool CBoss3D::Init(void)
 
 		break;
 	}
-	case E_BOSS2:
+	case T_BOSS2:
+	{
+		health = 1000;
+		speed = Math::RandFloatMinMax(1.0f, 1.2f);
+		rangeOfSight = 6.f;
+		splitting = 0;
+
+		vec3Scale = glm::vec3(1, 1, 1);
+		vec3ColliderScale = glm::vec3(0.45, 1.6, 0.45);
+
+		std::string file_path = "OBJ/creeper.obj";
+		bool success = LoadOBJ(file_path.c_str(), vertices, uvs, normals);
+		if (!success)
+		{
+			return NULL;
+		}
+
+		break;
+	}
+	case T_BOSS3:
 	{
 		health = 10;
-		speed = Math::RandFloatMinMax(1.0f, 1.2f);
-
-		vec3Scale = glm::vec3(1, 1, 1);
-		vec3ColliderScale = glm::vec3(0.45, 1.6, 0.45);
-
-		std::string file_path = "OBJ/creeper.obj";
-		bool success = LoadOBJ(file_path.c_str(), vertices, uvs, normals);
-		if (!success)
-		{
-			return NULL;
-		}
-
-		break;
-	}
-	case E_BOSS3:
-	{
-		health = 14;
 		speed = Math::RandFloatMinMax(0.1f, 1.5f);
+		rangeOfSight = 6.f;
+		splitting = 3;
 
 		vec3Scale = glm::vec3(1, 1, 1);
 		vec3ColliderScale = glm::vec3(0.45, 1.6, 0.45);
@@ -278,16 +283,16 @@ bool CBoss3D::IsCameraAttached(void)
  @param direction A const Player_Movement variable which contains the movement direction of the camera
  @param deltaTime A const float variable which contains the delta time for the realtime loop
  */
-void CBoss3D::ProcessMovement(const Enemy_Movement direction, const float deltaTime)
+void CBoss3D::ProcessMovement(const Boss_Movement direction, const float deltaTime)
 {
 	float velocity = fMovementSpeed * deltaTime * speed;
-	if (direction == FORWARD)
+	if (direction == M_FORWARD)
 		vec3Position += vec3Front * velocity;
-	if (direction == BACKWARD)
+	if (direction == M_BACKWARD)
 		vec3Position -= vec3Front * velocity;
-	if (direction == LEFT)
+	if (direction == M_LEFT)
 		vec3Position -= vec3Right * velocity;
-	if (direction == RIGHT)
+	if (direction == M_RIGHT)
 		vec3Position += vec3Right * velocity;
 
 	// If the camera is attached to this player, then update the camera
@@ -323,6 +328,8 @@ void CBoss3D::Update(const double dElapsedTime)
 	// Store the enemy's current position, if rollback is needed.
 	StorePositionForRollback();
 
+	// play roaming sound when the boss is alive
+	// sound delay to replay when the countdown is ended
 	static double soundDelay = 1500.f;
 	if (soundDelay < 1500.f)
 	{
@@ -336,36 +343,87 @@ void CBoss3D::Update(const double dElapsedTime)
 		cout << "yes" << endl;
 	}
 
-	// moving forward
-	if (iCurrentNumMovement < iMaxNumMovement)
+	// boss movement
+
+	// update Boss AI status
+	float fDistanceToPlayer = glm::length(cPlayer3D->GetPosition() - vec3Position);
+	if (fDistanceToPlayer > rangeOfSight) // player is out of range
 	{
-		// Process the movement
-		ProcessMovement(FORWARD, (float)dElapsedTime);
-
-		// Update the counter
-		iCurrentNumMovement++;
+		status = S_IDLE;
 	}
-	// rotating to face player
-	else if (angleOfSight > 40.0f)
+	else // player is inside range
 	{
-		// roate more if player is not in sight of the enemy
-		ProcessRotate(rand() % 90 - 45.0f);
-		// Reset the counter to 0
-		iCurrentNumMovement = 0;
+		status = S_ATTACKING;
 	}
-	else // roate abit with player is already in sight of the enemy
+	
+	switch (status)
 	{
-		// Randomly choose a new direction up to +30 or -30 degrees to the current direction 
-		ProcessRotate(rand() % 60 - 30.f);
+	case CBoss3D::S_IDLE: // boss idle state
+		{
+			if (iCurrentNumMovement < iMaxNumMovement)
+			{
+				// moving forward
+				ProcessMovement(M_FORWARD, (float)dElapsedTime);
 
-		// Reset the counter to 0
-		iCurrentNumMovement = 0;
+				// Update the counter
+				iCurrentNumMovement++;
+			}
+			else // rotate randomly
+			{
+				// Randomly choose a new direction up to +30 or -30 degrees to the current direction 
+				ProcessRotate(Math::RandFloatMinMax(-30.0f, 30.0f));
+
+				// Reset the counter to 0
+				iCurrentNumMovement = 0;
+			}
+			break;
+		}
+	case CBoss3D::S_ATTACKING: // boss attacking state
+		{
+			// player is inside range (update vector to face and chase the player)
+			UpdateEnemyVectors();
+
+			// Reset the counter to 0
+			iCurrentNumMovement = 0;
+
+			// actions of the boss
+			switch (type)
+			{
+			case T_BOSS1:
+			case T_BOSS3:
+			{
+				// do nothing just to follow the player
+
+				// moving forward
+				ProcessMovement(M_FORWARD, (float)dElapsedTime);
+
+				break;
+			}
+			case T_BOSS2:
+			{
+				// shoot projectiles at the player
+				static float dCountdown = 0.0f;				
+				dCountdown += dElapsedTime;
+				if (dCountdown > Math::RandFloatMinMax(0.80f, 1.90f))
+				{
+					CEntity3D* currEntity = dynamic_cast<CEntity3D*>(this);
+
+					CProjectile* aProjectile = new CProjectile();
+					aProjectile->SetShader(cShader);
+					aProjectile->Init(vec3Position + vec3Front * 0.75f, vec3Front, 2.0f, 30.0f);
+					aProjectile->ActivateCollider(cShader);
+					aProjectile->SetStatus(true);
+					aProjectile->SetSource(currEntity);
+					aProjectile->SetCollisionDamage(5);
+
+					CEntityManager::GetInstance()->Add(aProjectile);
+					dCountdown = 0.0f;
+				}
+			}
+			}
+			break;
+		}
 	}
-
-	glm::vec3 EnemyFacingPlayerVec;
-	EnemyFacingPlayerVec = glm::normalize(cPlayer3D->GetPosition() - vec3Position);
-	angleOfSight = ((EnemyFacingPlayerVec.x * vec3Front.x) + (EnemyFacingPlayerVec.y * vec3Front.y) + (EnemyFacingPlayerVec.z * vec3Front.z));
-
 }
 
 /**
@@ -417,11 +475,33 @@ void CBoss3D::Render(void)
 	glActiveTexture(GL_TEXTURE0);
 	glBindTexture(GL_TEXTURE_2D, iTextureID);
 
-	// create transformations
-	model = glm::mat4(1.0f); // make sure to initialize matrix to identity matrix first
-	model = glm::translate(model, glm::vec3(vec3Position.x, vec3Position.y - 0.5f, vec3Position.z));
-	model = glm::rotate(model, glm::radians(-fYaw + 90.f), glm::vec3(0.0f, 1.0f, 0.0f));
-	model = glm::scale(model, vec3Scale);
+	switch (type)
+	{
+	case T_BOSS1:
+		{
+			// create transformations
+			model = glm::mat4(1.0f); // make sure to initialize matrix to identity matrix first
+			model = glm::translate(model, glm::vec3(vec3Position.x, vec3Position.y - 0.5f, vec3Position.z));
+			model = glm::rotate(model, glm::radians(-fYaw + 90.f), glm::vec3(0.0f, 1.0f, 0.0f));
+			model = glm::scale(model, vec3Scale);
+		}
+	case T_BOSS2:
+		{
+			// create transformations
+			model = glm::mat4(1.0f); // make sure to initialize matrix to identity matrix first
+			model = glm::translate(model, glm::vec3(vec3Position.x, vec3Position.y - 0.5f, vec3Position.z));
+			model = glm::rotate(model, glm::radians(-fYaw + 90.f), glm::vec3(0.0f, 1.0f, 0.0f));
+			model = glm::scale(model, vec3Scale);
+		}
+	case T_BOSS3:
+		{
+			// create transformations
+			model = glm::mat4(1.0f); // make sure to initialize matrix to identity matrix first
+			model = glm::translate(model, glm::vec3(vec3Position.x, vec3Position.y - 0.5f, vec3Position.z));
+			model = glm::rotate(model, glm::radians(-fYaw + 90.f), glm::vec3(0.0f, 1.0f, 0.0f));
+			model = glm::scale(model, vec3Scale);
+		}
+	}
 
 	// note: currently we set the projection matrix each frame, but since the projection 
 	// matrix rarely changes it's often best practice to set it outside the main loop only once.
@@ -478,6 +558,34 @@ int CBoss3D::GetHealth()
 	return health;
 }
 
+void CBoss3D::SetSplit(int split)
+{
+	this->splitting = split;
+}
+
+int CBoss3D::GetSplit()
+{
+	return splitting;
+}
+
+void CBoss3D::SplitIntoSmallerBoss()
+{
+	splitting--;
+	health = 10;
+
+	CBoss3D* cboss = new CBoss3D(vec3Position, T_BOSS3);
+	cboss->SetShader(cShader);
+	cboss->Init();
+	cboss->ActivateCollider(cShader);
+	cboss->SetSplit(splitting);
+	CEntityManager::GetInstance()->Add(cboss);
+}
+
+int CBoss3D::GetBossType()
+{
+	return type;
+}
+
 /**
  @brief Calculates the front vector from the Camera's (updated) Euler Angles
  */
@@ -494,9 +602,9 @@ void CBoss3D::UpdateEnemyVectors(void)
 	if (cPlayer3D)
 	{
 		float fDistanceToPlayer = glm::length(cPlayer3D->GetPosition() - vec3Position);
-		if (fDistanceToPlayer < 6.0f && angleOfSight < 40.0f)
+		if (fDistanceToPlayer < rangeOfSight) // player is inside the view range of the boss
 		{
-			// Update the direction of the enemy
+			// Update the direction of the enemy (turning to face the player)
 			front = glm::normalize(glm::vec3(cPlayer3D->GetPosition() - vec3Position));
 
 			// Update the yaw and pitch

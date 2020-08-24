@@ -28,9 +28,9 @@
 
 enum Boss_Type
 {
-	E_BOSS1 = 0, // range boss
-	E_BOSS2 = 1, // spliting boss
-	E_BOSS3 = 2, // shooting boss
+	T_BOSS1 = 0, // range boss
+	T_BOSS2, // spliting boss
+	T_BOSS3, // shooting boss
 };
 
 // An abstract camera class that processes input and calculates the corresponding Euler Angles, Vectors and Matrices for use in OpenGL
@@ -38,12 +38,20 @@ class CBoss3D : public CEntity3D
 {
 public:
 	// Defines several possible options for camera movement. Used as abstraction to stay away from window-system specific input methods
-	enum Enemy_Movement {
-		FORWARD = 0,
-		BACKWARD,
-		LEFT,
-		RIGHT,
+	enum Boss_Movement 
+	{
+		M_FORWARD = 0,
+		M_BACKWARD,
+		M_LEFT,
+		M_RIGHT,
 		NUM_MOVEMENTS
+	};
+
+	enum Boss_Status
+	{
+		S_IDLE,
+		S_ATTACKING,
+		NUM_STATUS
 	};
 
 	// Default Constructor
@@ -76,7 +84,7 @@ public:
 
 	// Processes input received from any keyboard-like input system as Enemy movements. 
 	// Accepts input parameter in the form of Enemy defined ENUM (to abstract it from windowing systems)
-	void ProcessMovement(const Enemy_Movement direction, const float fDeltaTime);
+	void ProcessMovement(const Boss_Movement direction, const float fDeltaTime);
 
 	// Processes input received from a mouse input system as Enemy rotation. 
 	// Expects the offset value in both the x and y direction.
@@ -99,6 +107,13 @@ public:
 	void SetHealth(int health);
 	int GetHealth();
 
+	void SetSplit(int split);
+	int GetSplit();
+
+	void SplitIntoSmallerBoss();
+
+	int GetBossType();
+
 protected:
 	// Enemy Attributes
 	glm::vec3 vec3Up;
@@ -113,12 +128,14 @@ protected:
 	// Movement Control
 	int iCurrentNumMovement;
 	int iMaxNumMovement;
-	float angleOfSight;
+	float rangeOfSight;
 
 	// enemy stats
 	int type;
 	int health;
 	float speed;
+	int splitting; // for slime boss (T_BOSS3)
+	Boss_Status status;
 
 	// The handle to the CCamera class instance
 	CCamera* cCamera;

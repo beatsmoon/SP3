@@ -19,6 +19,7 @@ using namespace std;
 
 // Include CEnemy3D
 #include "Entity/Enemy3D.h"
+#include "Entity/CBoss3D.h"
 #include "Entity/RangeIndicator.h"
 
 // Include MyMath.h
@@ -326,11 +327,18 @@ bool CSceneGame3D::Init(void)
 
 	}
 
-	CStructure3D* cExplosiveBarrel = new CStructure3D(glm::vec3(0.f, 0.5f, 0.f), CEntity3D::TYPE::EXPLOSIVE_BARREL);
+	/*CStructure3D* cExplosiveBarrel = new CStructure3D(glm::vec3(0.f, 0.5f, 0.f), CEntity3D::TYPE::EXPLOSIVE_BARREL);
 	cExplosiveBarrel->SetShader(cShader);
 	cExplosiveBarrel->Init();
 	cExplosiveBarrel->ActivateCollider(cSimpleShader);
-	cEntityManager->Add(cExplosiveBarrel);
+	cEntityManager->Add(cExplosiveBarrel);*/
+
+
+	/*CBoss3D* cEnemy3D = new CBoss3D(glm::vec3(Math::RandFloatMinMax(-10.0f, 10.0f), 0.5f, Math::RandFloatMinMax(-10.0f, 10.0f)), 2);
+	cEnemy3D->SetShader(cShader);
+	cEnemy3D->Init();
+	cEnemy3D->ActivateCollider(cSimpleShader);
+	cEntityManager->Add(cEnemy3D);*/
 
 	/*CStructure3D* cBarricade = new CStructure3D(glm::vec3(10.f, 0.5f, 10.f), CEntity3D::TYPE::BARRICADE);
 	cBarricade->SetShader(cShader);
