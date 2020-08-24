@@ -11,6 +11,7 @@ CProjectile::CProjectile(void)
 	, dLifetime(0.0f)
 	, fSpeed(2.0f)
 	, pSource(NULL)
+	, cGroundMap(NULL)
 {
 }
 
@@ -21,6 +22,12 @@ CProjectile::~CProjectile(void)
 {
 	// We set it to NULL only since it was declared somewhere else
 	pSource = NULL;
+
+	if (cGroundMap)
+	{
+		cGroundMap = NULL;
+	}
+
 }
 
 /** 
@@ -120,6 +127,13 @@ bool CProjectile::Init(	glm::vec3 vec3Position,
 	// texture coord attribute
 	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)(3 * sizeof(float)));
 	glEnableVertexAttribArray(1);
+
+	cGroundMap = CGroundMap::GetInstance();
+
+	// initialise CPhysics3D
+	cPhysics3D.Init();
+	// set the status to fall by default
+	cPhysics3D.SetStatus(CPhysics3D::STATUS::FALL);
 
 	return true;
 }
@@ -287,8 +301,53 @@ void CProjectile::Update(const double dElapsedTime)
 
 	// Update Position
 	vec3Position = vec3Position + vec3Front * (float)dElapsedTime * fSpeed;
+	UpdateBulletDrop(dElapsedTime);
+	//vec3Position.y -= v3Gravity.y;
 }
+void CProjectile::UpdateBulletDrop(const double dElapsedTime)
+{
+	//if (cPhysics3D.GetStatus() == CPhysics3D::STATUS::JUMP)
+	//{
+	//	// update elapse time to physics engine
+	//	cPhysics3D.AddElapsedTime((float)dElapsedTime);
 
+	//	// call the physics engine update method to calculate the final velocity and displacement
+	//	cPhysics3D.Update();
+
+	//	// get the displacement from cphysics engine and update the player position
+	//	vec3Position += cPhysics3D.GetDisplacement();
+
+	//	// if the player is still jumping and the initial velocity reached zero or below zero
+	//	// then it has reached the peak of its jump
+	//	if ((cPhysics3D.GetStatus() == CPhysics3D::STATUS::JUMP) && (cPhysics3D.GetInitialVelocity().y <= 0.0f))
+	//	{
+	//		cPhysics3D.SetStatus(CPhysics3D::STATUS::FALL);
+	//		cPhysics3D.SetElapsedTime(0.0f);
+	//	}
+
+	//}
+	//else if (cPhysics3D.GetStatus() == CPhysics3D::STATUS::FALL)
+	//{
+	//	// update elapse time to physics engine
+	//	cPhysics3D.AddElapsedTime((float)dElapsedTime);
+
+	//	// call the physics engine update method to calculate the final velocity and displacement
+	//	cPhysics3D.Update();
+
+	//	// get the displacement from cphysics engine and update the player position
+	//	vec3Position += cPhysics3D.GetDisplacement();
+
+	//	// constrain the player's position to the groundmap
+	//	glm::vec3 vec3CheckPosition = cGroundMap->GetExactPosition(vec3Position);
+
+	//	if (vec3CheckPosition.y > vec3Position.y)
+	//	{
+	//		vec3Position = vec3CheckPosition;
+	//		cPhysics3D.SetStatus(CPhysics3D::STATUS::IDLE);
+	//	}
+	//}
+
+}
 /**
 @brief PreRender Set up the OpenGL display environment before rendering
 */

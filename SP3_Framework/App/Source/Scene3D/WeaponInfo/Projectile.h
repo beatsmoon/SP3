@@ -7,7 +7,8 @@
 #include <includes/glm.hpp>
 #include <includes/gtc/matrix_transform.hpp>
 #include <includes/gtc/type_ptr.hpp>
-
+#include "../Physics3D.h"
+#include "../GroundMap.h"
 class CProjectile : public CEntity3D
 {
 public:
@@ -62,6 +63,8 @@ public:
 	// PostRender
 	virtual void PostRender(void);
 
+	void UpdateBulletDrop(const double dElapsedTime);
+
 protected:
 	// Boolean flag to indicate if this projectile is active. If not active, then do not compute/update
 	bool bStatus;
@@ -71,5 +74,7 @@ protected:
 	float fSpeed;
 	// The source which fired this projectile
 	CEntity3D* pSource;
+	CGroundMap* cGroundMap;
+	CPhysics3D cPhysics3D;
 };
 

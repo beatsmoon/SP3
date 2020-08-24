@@ -111,8 +111,8 @@ bool CWEAPONHUD::Init(void)
 	//default:
 	//	break;
 	//}
-	vec3Position = glm::vec3(0.7f, 0.3f, 0.0f);
-	vec3Scale.x = 0.3;
+	vec3Position = glm::vec3(0.7f, 0.35f, 0.0f);
+	vec3Scale.x = 0.2;
 	vec3Scale.y = 0.3;
 	type = prevtype = Weapon_Type::W_PISTOL;
 
