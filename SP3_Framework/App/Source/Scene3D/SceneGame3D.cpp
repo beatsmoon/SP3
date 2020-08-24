@@ -209,7 +209,7 @@ bool CSceneGame3D::Init(void)
 	cGunScope->Init();
 	cGunScope->SetTierLevel(CGunScope::TIERLEVEL::TIER3);
 
-	CWeapon* rifle = new CWeapon(Weapon_Type::W_SHOTGUN);
+	CWeapon* rifle = new CWeapon(Weapon_Type::W_AK47);
 	rifle->Init();
 	rifle->SetShader(cSimpleShader);
 	cPlayer3D->SetWeapon(0, rifle);
@@ -619,7 +619,7 @@ void CSceneGame3D::Update(const double dElapsedTime)
 
 	// Update cEntityManager
 	cEntityManager->Update(dElapsedTime);
-
+	
 	//Check if wave ended
 	//If ended, update score and next wave
 	if (cEntityManager->CheckWave() == true)
