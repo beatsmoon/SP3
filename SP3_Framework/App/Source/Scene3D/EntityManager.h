@@ -71,6 +71,10 @@ public:
 
 	virtual bool GetWaveStarted(void);
 
+	virtual void SetBossStatus(bool bIsBossAlive);
+
+	virtual bool GetBossStatus(void);
+
 	virtual bool CheckWave(void);
 
 	//Score related function
@@ -102,7 +106,8 @@ protected:
 
 	//Wave related members
 
-	bool bIsWaveStarted;
+	bool bIsWaveStarted, bIsBossAlive;
+	
 
 	
 

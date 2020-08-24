@@ -2,6 +2,8 @@
 
 #include "Entity/Enemy3D.h"
 
+#include "Entity/CBoss3D.h"
+
 #include "EntityManager.h"
 
 #include "RenderControl/shader.h"
@@ -37,10 +39,9 @@ public:
 	//Wave Control Functions
 
 	//Set the number and stats of enemies in each wave
-	virtual void SetWave(int waveNumber);
+	virtual void StartWave(int waveNumber);
 
-	//Start a new wave
-	virtual void StartWave(void);
+	virtual void SpawnBoss(void);
 
 	//Get the current wave number
 	virtual int GetWaveNumber(void);
@@ -60,4 +61,6 @@ protected:
 	int iWaveCounter;
 
 	bool bWriteScore;
+
+
 };

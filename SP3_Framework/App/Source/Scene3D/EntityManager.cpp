@@ -15,6 +15,7 @@ CEntityManager::CEntityManager(void)
 	, view(glm::mat4(1.0f))
 	, projection(glm::mat4(1.0f))
 	, bIsWaveStarted(false)
+	, bIsBossAlive(false)
 {
 }
 
@@ -316,7 +317,9 @@ void CEntityManager::Update(const double dElapsedTime)
 							}
 							else
 							{
+								cout << "Boss died" << endl;
 								(*it)->SetToDelete(true);
+								bIsBossAlive = false;
 							}
 						}
 					}
@@ -329,7 +332,9 @@ void CEntityManager::Update(const double dElapsedTime)
 						}
 						else
 						{
+							cout << "Boss died" << endl;
 							(*it)->SetToDelete(true);
+							bIsBossAlive = false;
 							//cScore->AddScore(cScore->GetScoreToAdd());
 							//cout << cScore->GetScore();
 						}
@@ -570,7 +575,17 @@ bool CEntityManager::GetWaveStarted(void)
 	return bIsWaveStarted;
 }
 
-//Check if wave is over
+void CEntityManager::SetBossStatus(bool bIsBossAlive)
+{
+	this->bIsBossAlive = bIsBossAlive;
+}
+
+bool CEntityManager::GetBossStatus(void)
+{
+	return bIsBossAlive;
+}
+
+//Check if main wave is over
 bool CEntityManager::CheckWave(void)
 {
 	if (bIsWaveStarted == true)
