@@ -63,17 +63,23 @@ bool CSceneMenu3D::Init(void)
 	//cCamera->vec3Position = glm::vec3(0.0f, 0.5f, 3.0f);
 
 	cPlayer3D = CPlayer3D::GetInstance();
+	cPlayer3D->SetShader(cShader);
+	cPlayer3D->Init();
+	cPlayer3D->AttachCamera();
+	cPlayer3D->ActivateCollider(cSimpleShader);
+
 
 	cEntityManager = CEntityManager::GetInstance();
 	cEntityManager->Init();
 
 	CStructure3D* cButton = NULL;
 	float fYButtonOffset = cPlayer3D->GetPosition().y;
-	float fRelativeScale = 0.5f;
+	float fRelativeScale = 1.5f / M_END;
 
 	for (unsigned int i = 0; i < M_END; ++i)
 	{
-		cButton = new CStructure3D(glm::vec3(cPlayer3D->GetPosition().x, fYButtonOffset + fRelativeScale, cPlayer3D->GetPosition().z - 2.f), static_cast<CEntity3D::TYPE>(i + static_cast<int>(CEntity3D::TYPE::BUTTON_START) + 1), glm::vec3(0.f, 0.f, 1.f));
+		cButton = new CStructure3D(glm::vec3(cPlayer3D->GetPosition().x, fYButtonOffset + fRelativeScale, cPlayer3D->GetPosition().z), static_cast<CEntity3D::TYPE>(i + static_cast<int>(CEntity3D::TYPE::BUTTON_START) + 1), glm::vec3(0.f, 0.f, 1.f));
+		cButton->SetPosition(cButton->GetPosition() + cPlayer3D->GetFront() * 2.f);
 		cButton->SetShader(cShader);
 		cButton->Init();
 		cButton->ActivateCollider(cSimpleShader);
@@ -108,13 +114,16 @@ void CSceneMenu3D::Update(const double dElapsedTime)
 		cCamera->ProcessMouseScroll((float)cMouseController->GetMouseScrollStatus(
 			CMouseController::SCROLL_TYPE::SCROLL_TYPE_YOFFSET));
 	}
-
-	if (cMouseController->IsButtonDown(CMouseController::BUTTON_TYPE::LMB))
+	if (cPlayer3D->GetShootingMode())
 	{
-		CProjectile* cProjectile = cPlayer3D->DischargeWeapon();
-		if (cProjectile)
+		if (cMouseController->IsButtonDown(CMouseController::BUTTON_TYPE::LMB))
 		{
-			cEntityManager->Add(cProjectile);
+			cPistol->SetCanFire(true);
+			CProjectile* cProjectile = cPlayer3D->DischargeWeapon();
+			if (cProjectile)
+			{
+				cEntityManager->Add(cProjectile);
+			}
 		}
 	}
 
@@ -146,26 +155,40 @@ void CSceneMenu3D::Update(const double dElapsedTime)
 	// Update cEntityManager
 	cEntityManager->Update(dElapsedTime);
 
-	for (size_t i = 0; i < vStructures.size(); ++i)
+	// Delay for exiting not active. Update collisions with buttons
+	if (!bSceneChangeDelay)
 	{
-		if (cEntityManager->CollisionCheck(vStructures.at(i)))
+		for (size_t i = 0; i < vStructures.size(); ++i)
 		{
-			switch (i)
+			if (cEntityManager->CollisionCheck(vStructures.at(i)))
 			{
-			case MENU_CHOICES::M_PLAY:
-				CSceneManager::GetInstance()->EnableScene(SCENES::GAME);
-				CSceneManager::GetInstance()->DisableScene(SCENES::MENU);
-				break;
-			case MENU_CHOICES::M_HIGHSCORE:
-				// TODO: Render highscore screen
-				break;
-			case MENU_CHOICES::M_QUIT:
-				// TODO: Quit game with smooth transition
-				CSceneManager::GetInstance()->SetApplicationToEnd();
-				break;
+				e_MenuChoice = static_cast<MENU_CHOICES>(i);
+				bSceneChangeDelay = true;
 			}
 		}
 	}
+	// Delay already active, check if delay is done
+	else
+	{
+		// Update delay
+		if (UpdateSceneDelay(dElapsedTime))
+		{
+			// If delay is done, switch to whatever screen needed
+			switch (e_MenuChoice)
+			{
+			case M_PLAY:
+				CSceneManager::GetInstance()->EnableScene(SCENES::GAME);
+				CSceneManager::GetInstance()->DisableScene(SCENES::MENU);
+				break;
+			case M_HIGHSCORE:
+				break;
+			case M_QUIT:
+				CSceneManager::GetInstance()->SetApplicationToEnd();
+				break;
+			}
+		}	
+	}
+
 }
 
 /**
@@ -306,6 +329,27 @@ void CSceneMenu3D::Render(void)
  */
 void CSceneMenu3D::PostRender(void)
 {
+}
+
+void CSceneMenu3D::RecalculateButtonPosition()
+{
+	float fYButtonOffset = cPlayer3D->GetPosition().y;
+	float fRelativeScale = 1.5f / M_END;
+
+	for (unsigned int i = 0; i < M_END; ++i)
+	{
+		CStructure3D* cButton = vStructures.at(i);
+		//cButton->SetPosition(cPlayer3D->GetPosition() + cPlayer3D->GetFront());
+		cButton->SetPosition(glm::vec3(cPlayer3D->GetPosition().x, fYButtonOffset + fRelativeScale, cPlayer3D->GetPosition().z) + cPlayer3D->GetFront() * 2.f);
+		glm::mat4 rotationMat(1); // Create identity matrix
+		float dot = glm::dot(cPlayer3D->GetPosition(), cButton->GetPosition());
+		rotationMat = glm::rotate(rotationMat, dot / (glm::length(cPlayer3D->GetPosition() * glm::length(cButton->GetPosition()))), -cPlayer3D->vec3Up);
+		cButton->SetFront(rotationMat * glm::vec4(cButton->GetFront(), 1.0));
+		
+		//cButton->SetRotation(atan2(cPlayer3D->GetFront().z, cPlayer3D->GetFront().x), glm::vec3(0.f, 1.f, 0.f));
+		//glm::lookAt(cPlayer3D->GetPosition(), cPlayer3D->GetPosition() + cPlayer3D->GetFront(), cPlayer3D->vec3Up);
+		fYButtonOffset -= fRelativeScale;
+	}
 }
 
 

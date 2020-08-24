@@ -57,6 +57,9 @@
     <ClCompile Include="Source\System\Vector3.cpp">
       <Filter>System</Filter>
     </ClCompile>
+    <ClCompile Include="Source\System\ConfigFile.cpp">
+      <Filter>System</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\TimeControl\StopWatch.h">
@@ -103,6 +106,9 @@
     </ClInclude>
     <ClInclude Include="Source\Primitives\Entity3D.h">
       <Filter>primitives</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\System\ConfigFile.h">
+      <Filter>System</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

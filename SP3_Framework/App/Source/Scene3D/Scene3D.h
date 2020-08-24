@@ -133,6 +133,12 @@ protected:
 
 	bool bSceneEnabled;
 
+	bool bSceneChangeEnabled;
+	bool bSceneChangeDelay;
+	double dSceneChangeDelay;
+
+	const double MAX_DELAY_TIME = 3.0;
+
 public:
 	// Constructor
 	CScene3D(void);
@@ -143,5 +149,7 @@ public:
 	void DisableScene();
 
 	bool GetSceneStatus() const;
+
+	bool UpdateSceneDelay(const double dElapsedTime);
 };
 

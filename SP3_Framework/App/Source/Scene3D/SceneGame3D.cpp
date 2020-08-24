@@ -136,10 +136,6 @@ bool CSceneGame3D::Init(void)
 
 	// Initialise the cPlayer3D
 	cPlayer3D = CPlayer3D::GetInstance();
-	cPlayer3D->SetShader(cShader);
-	cPlayer3D->Init();
-	cPlayer3D->AttachCamera();
-	cPlayer3D->ActivateCollider(cSimpleShader);
 
 	// add weapon to player
 	CWeapon* cPistol = new CWeapon(Weapon_Type::W_PISTOL);

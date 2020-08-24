@@ -25,6 +25,9 @@
 #include "Inputs/MouseController.h"
 
 #include <iostream>
+
+#include "../Library/Source/System/ConfigFile.h"
+
 using namespace std;
 
 /**
@@ -317,6 +320,14 @@ void Application::Run(void)
 
 				isShopOpened = false;
 			}
+		}
+
+		if (CKeyboardController::GetInstance()->IsKeyPressed(GLFW_KEY_G))
+		{
+			cSceneManager->DisableScene(SCENES::GAME);
+			cSceneManager->EnableScene(SCENES::MENU);
+			CSceneMenu3D* cSceneMenu3D = CSceneMenu3D::GetInstance();
+			cSceneMenu3D->RecalculateButtonPosition();
 		}
 		for (size_t i = 0; i < vActiveScenes.size(); ++i)
 		{

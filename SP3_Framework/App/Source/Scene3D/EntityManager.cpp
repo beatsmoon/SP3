@@ -314,6 +314,16 @@ void CEntityManager::Update(const double dElapsedTime)
 					}
 					cout << "** Collision between NPC and Projectile ***" << endl;
 				}
+				else if (((*it)->GetType() == CEntity3D::TYPE::PROJECTILE) &&
+					((*it_other)->GetType() == CEntity3D::TYPE::PLAY_BUTTON) ||
+					((*it_other)->GetType() == CEntity3D::TYPE::HIGHSCORE_BUTTON) || 
+					((*it_other)->GetType() == CEntity3D::TYPE::QUIT_BUTTON))
+				{
+					//(*it_other)->RollbackPosition();
+					(*it)->SetToDelete(true);
+					(*it_other)->SetRotation(45.f, glm::vec3(1.f, 0.f, 0.f));
+					cout << "** Collision between Projectile and Menu button***" << endl;
+				}
 			}
 		}
 	}

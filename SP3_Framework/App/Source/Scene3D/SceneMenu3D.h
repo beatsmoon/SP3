@@ -93,6 +93,8 @@ public:
 	// PostRender
 	void PostRender(void);
 
+	void RecalculateButtonPosition();
+
 protected:
 	// Constructor
 	CSceneMenu3D(void);
@@ -106,6 +108,8 @@ protected:
 	CEntityManager* cEntityManager;
 
 	CSkyBox* cSkybox;
+
+	MENU_CHOICES e_MenuChoice = M_END;
 public:
 };
 
