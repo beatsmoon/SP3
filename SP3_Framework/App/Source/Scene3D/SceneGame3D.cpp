@@ -453,19 +453,19 @@ void CSceneGame3D::Update(const double dElapsedTime)
 	cJoystickController->Update(cJoystickController->GetJoystickID());
 
 	// Player's movement
-	if (CKeyboardController::GetInstance()->IsKeyPressed(GLFW_KEY_W))
+	if (CKeyboardController::GetInstance()->IsKeyPressed(cSettings->keys[CSettings::FORWARD].key_value))
 	{
 		cPlayer3D->ProcessMovement(CPlayer3D::FORWARD, (float)dElapsedTime);
 	}
-	if (CKeyboardController::GetInstance()->IsKeyPressed(GLFW_KEY_S))
+	if (CKeyboardController::GetInstance()->IsKeyPressed(cSettings->keys[CSettings::BACKWARD].key_value))
 	{
 		cPlayer3D->ProcessMovement(CPlayer3D::BACKWARD, (float)dElapsedTime);
 	}
-	if (CKeyboardController::GetInstance()->IsKeyPressed(GLFW_KEY_A))
+	if (CKeyboardController::GetInstance()->IsKeyPressed(cSettings->keys[CSettings::LEFT].key_value))
 	{
 		cPlayer3D->ProcessMovement(CPlayer3D::LEFT, (float)dElapsedTime);
 	}
-	if (CKeyboardController::GetInstance()->IsKeyPressed(GLFW_KEY_D))
+	if (CKeyboardController::GetInstance()->IsKeyPressed(cSettings->keys[CSettings::RIGHT].key_value))
 	{
 		cPlayer3D->ProcessMovement(CPlayer3D::RIGHT, (float)dElapsedTime);
 	}

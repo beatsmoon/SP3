@@ -19,6 +19,8 @@ VariableName = VariableValue (e.g speed = 1.0)
 Information on how to parse the information to and from the .cfg file is in the .h and .cpp files.
 ( Namely functions ParseToFile() and ParseFromFile() )
 
+// Disclaimer: Depending on the use of this class for your application, your config file  WILL look different
+
 Example of config file:
 
 // Config file

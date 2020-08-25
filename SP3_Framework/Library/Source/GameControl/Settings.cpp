@@ -15,6 +15,11 @@ CSettings::CSettings(void)
 	, MICRO_STEP_XAXIS(0.015625f)
 	, MICRO_STEP_YAXIS(0.0208325f)
 {
+	cConfigFile = new ConfigFile("Source//config//config.cfg");
+	// Set all keys information
+	SetKeyInformation();
+	// Load all keys
+	LoadKeyInformation();
 }
 
 
@@ -55,6 +60,27 @@ void CSettings::SetMousePointer(bool bDisableMousePointer, bool bShowMousePointe
 {
 	this->bDisableMousePointer = bDisableMousePointer;
 	this->bShowMousePointer = bShowMousePointer;
+}
+
+void CSettings::SetKeyInformation()
+{
+	totalKeys = std::stoi(cConfigFile->ParseFromFile("Constants", "totalKeys"));
+
+	// Set all key names
+	for (unsigned int i = 0; i < totalKeys; ++i)
+	{
+		keys[i].key_name = cConfigFile->ParseFromFile("Keys", "key" + std::to_string(i));
+		std::cout << keys[i].key_name << std::endl;
+	}
+}
+
+void CSettings::LoadKeyInformation()
+{
+	// Load all keybind information
+	for (size_t i = 0; i < NUM_KEYS; ++i)
+	{
+		cConfigFile->ParseFromFile("Main Settings", keys[i].key_value, keys[i].key_name);
+	}
 }
 
 // Update the specifications of the map

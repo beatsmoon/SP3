@@ -9,6 +9,7 @@
 #include "../DesignPatterns/SingletonTemplate.h"
 
 #include <Windows.h>
+#include "../Library/Source/System/ConfigFile.h"
 
 // Include GLEW
 #ifndef GLEW_STATIC
@@ -28,6 +29,21 @@ public:
 		y = 1,
 		z = 2,
 		NUM_AXIS
+	};
+
+	struct Key
+	{
+		std::string key_name;
+		int key_value;
+	};
+
+	enum KEY_TYPE
+	{
+		FORWARD,
+		BACKWARD,
+		LEFT,
+		RIGHT,
+		NUM_KEYS,
 	};
 
 	// File information
@@ -50,7 +66,8 @@ public:
 	const unsigned int frameTime = 1000 / FPS; // time for each frame
 
 	// Input control
-	//const bool bActivateMouseInput
+	Key keys[NUM_KEYS];
+	int totalKeys;
 
 	// 2D Settings
 	// The variables which stores the specifications of the map
@@ -75,11 +92,19 @@ public:
 	//Sets mouse pointer to be visible on screen
 	void SetMousePointer(bool bDisableMousePointer, bool bShowMousePointer);
 
+	// Set all key names
+	void SetKeyInformation();
+
+	// Load all key values from text file
+	void LoadKeyInformation();
+
 protected:
 	// Constructor
 	CSettings(void);
 
 	// Destructor
 	virtual ~CSettings(void);
+
+	ConfigFile* cConfigFile;
 };
 
