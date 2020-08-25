@@ -15,6 +15,7 @@ CEntityManager::CEntityManager(void)
 	, view(glm::mat4(1.0f))
 	, projection(glm::mat4(1.0f))
 	, bIsWaveStarted(false)
+	, bIsBossAlive(false)
 {
 }
 
@@ -294,7 +295,8 @@ void CEntityManager::Update(const double dElapsedTime)
 					}
 					cout << "** Collision between zombie and Projectile ***" << endl;
 				}
-				if (((*it)->GetType() == CEntity3D::TYPE::BOSS) &&
+
+				else if (((*it)->GetType() == CEntity3D::TYPE::BOSS) &&
 					((*it_other)->GetType() == CEntity3D::TYPE::PROJECTILE))
 				{
 					(*it)->RollbackPosition();
@@ -316,7 +318,9 @@ void CEntityManager::Update(const double dElapsedTime)
 							}
 							else
 							{
+								cout << "Boss died" << endl;
 								(*it)->SetToDelete(true);
+
 							}
 						}
 					}
@@ -329,9 +333,9 @@ void CEntityManager::Update(const double dElapsedTime)
 						}
 						else
 						{
+							cout << "Boss died" << endl;
 							(*it)->SetToDelete(true);
-							//cScore->AddScore(cScore->GetScoreToAdd());
-							//cout << cScore->GetScore();
+					
 						}
 					}
 					cout << "** Collision between boss and Projectile ***" << endl;
@@ -350,6 +354,7 @@ void CEntityManager::Update(const double dElapsedTime)
 							boss->SetHealth(boss->GetHealth() - 1);
 							cSoundController->PlaySoundByID(5);
 						}
+
 						else
 						{
 							if (boss->GetSplit() > 0)
@@ -358,6 +363,7 @@ void CEntityManager::Update(const double dElapsedTime)
 							}
 							else
 							{
+								cout << "Boss died 2" << endl;
 								(*it)->SetToDelete(true);
 							}
 						}
@@ -371,9 +377,8 @@ void CEntityManager::Update(const double dElapsedTime)
 						}
 						else
 						{
+							cout << "Boss died" << endl;
 							(*it_other)->SetToDelete(true);
-							//cScore->AddScore(cScore->GetScoreToAdd());
-							//cout << cScore->GetScore();
 						}
 					}
 					cout << "** Collision between boss and Projectile ***" << endl;
@@ -570,10 +575,48 @@ bool CEntityManager::GetWaveStarted(void)
 	return bIsWaveStarted;
 }
 
-//Check if wave is over
+void CEntityManager::SetBossStatus(bool bIsBossAlive)
+{
+	this->bIsBossAlive = bIsBossAlive;
+}
+
+bool CEntityManager::GetBossStatus(void)
+{
+	return bIsBossAlive;
+}
+
+//Check if main wave is over
 bool CEntityManager::CheckWave(void)
 {
 	if (bIsWaveStarted == true)
+	{
+		if (bIsBossAlive == false)
+		{
+			std::list<CEntity3D*>::iterator it, end;
+			end = lEntity3D.end();
+			int EntityCounter = 0;
+
+
+			for (it = lEntity3D.begin(); it != end; ++it)
+			{
+				if ((*it)->GetType() != CEntity3D::TYPE::ZOMBIE)
+				{
+					++EntityCounter;
+				}
+			}
+
+			if (EntityCounter == lEntity3D.size())
+			{
+				return true;
+			}
+		}
+	}
+}
+
+bool CEntityManager::CheckBoss(void)
+{
+	
+	if (bIsBossAlive == true)
 	{
 		std::list<CEntity3D*>::iterator it, end;
 		end = lEntity3D.end();
@@ -582,7 +625,7 @@ bool CEntityManager::CheckWave(void)
 
 		for (it = lEntity3D.begin(); it != end; ++it)
 		{
-			if ((*it)->GetType() != CEntity3D::TYPE::ZOMBIE)
+			if ((*it)->GetType() != CEntity3D::TYPE::BOSS)
 			{
 				++EntityCounter;
 			}
@@ -591,16 +634,18 @@ bool CEntityManager::CheckWave(void)
 		if (EntityCounter == lEntity3D.size())
 		{
 			SetWaveStarted(false);
+			bIsBossAlive = false;
 			return true;
 		}
 	}
+
 }
 
 void CEntityManager::UpdateScore(void)
 {
 	std::list<CEntity3D*>::iterator it, end;
 	std::list<CEntity3D*>::iterator it_other;
-
+	
 	// Update all CEntity3D
 	end = lEntity3D.end();
 	for (it = lEntity3D.begin(); it != end; ++it)

@@ -5,6 +5,7 @@ CWave::CWave()
 	, cSimpleShader(NULL)
 	, iWaveCounter(1)
 	, bWriteScore(false)
+
 {
 }
 
@@ -28,23 +29,11 @@ void CWave::Init(void)
 
 }
 
-void CWave::UpdateHighScore()
-{
-	if (iWaveCounter > 10)
-	{
-		ofstream highscore;
-		highscore.open("highscore.txt", ios::app);
-		string sInString = to_string(cScore->GetScore());
-		highscore << sInString << endl;
-		highscore.close();
-	}
-	
-}
 
 
 
 //Set the number and stats of enemies in each wave
-void CWave::SetWave(int waveNumber)
+void CWave::StartWave(int waveNumber)
 {
 	//Zombie Zombie Type 1
 	CEnemy3D* cEnemy3DType1 = NULL;
@@ -82,14 +71,27 @@ void CWave::SetWave(int waveNumber)
 		cEntityManager->SetWaveStarted(true);
 		
 	}
+
 }
 
-
-//Start a new wave
-void  CWave::StartWave()
+void CWave::SpawnBoss(void)
 {
+	int rand;
 
+	if (iWaveCounter < 11)
+	{
+		rand = Math::RandIntMinMax(1, 1);
+	}
+
+	CBoss3D* cBoss3D = new CBoss3D(glm::vec3(Math::RandFloatMinMax(-10.0f, 10.0f), 0.5f, Math::RandFloatMinMax(-10.0f, 10.0f)), rand);
+	cBoss3D->SetShader(cShader);
+	cBoss3D->Init();
+	cBoss3D->ActivateCollider(cSimpleShader);
+	cEntityManager->Add(cBoss3D);
+
+	cEntityManager->SetBossStatus(true);
 }
+
 
 //Get the current wave number
 int  CWave::GetWaveNumber()

@@ -1,5 +1,11 @@
 #include "Score.h"
 
+#include <string>
+
+#include <iostream>
+
+using namespace std;
+
 CScore::CScore()
 	:iScore(0)
 	,fMultiplier(1.f)
@@ -16,16 +22,88 @@ CScore::~CScore()
 
 bool CScore::Init(void)
 {
-	
-
-
 	return true;
 }
 
-
-void CScore::Update(void)
+void CScore::BubbleSort(int* list, int length)
 {
+	for (int iter = 1; iter < length; iter++)
+	{
+		for (int index = 0; index < length - iter; index++)
+		{
+			if (list[index] < list[index + 1])
+			{
+				Swap(list, index, index + 1);
+			}
+		}
+	}
+}
 
+void CScore::Swap(int* list, int location1, int location2)
+{
+	int temp = list[location1];
+
+	list[location1] = list[location2];
+	list[location2] = temp;
+}
+
+void CScore::UpdateHighScores(void)
+{
+	//Open high score text file in write mode
+	ofstream fHighScoreOld;
+	fHighScoreOld.open("highscore.txt", ios::app);
+
+	//Add in current score to high score list
+	string sInString = to_string(iScore);
+	fHighScoreOld << sInString << endl;
+	
+	fHighScoreOld.close();
+
+	
+}
+
+void CScore::PrintHighScores(void)
+{
+	//Initialise array to sort into
+	const int SCORES_SIZE = 10;
+	int scores[SCORES_SIZE], count = 0;
+
+	//Open high score text file in read mode
+	ifstream fHighScoreRead;
+	fHighScoreRead.open("highscore.txt");
+
+	//Insert high scores into the array
+	while (count < SCORES_SIZE && fHighScoreRead >> scores[count])
+	{
+		++count;
+	}
+	fHighScoreRead.close();
+
+	//Sort high score list into the array
+	BubbleSort(scores, SCORES_SIZE);
+
+	for (int i = 0; i < SCORES_SIZE; ++i)
+	{
+		if (scores[i] > 0)
+		{
+			cout << scores[i] << endl;
+		}
+		
+	}
+	
+
+	////Reset array index counter
+	//count = 0;
+
+	////Open high score text file in write mode and delete current contents in high score list
+	//ofstream fHighScoreNew;
+	//fHighScoreNew.open("highscore.txt", ios::trunc);
+	//while (count < SCORES_SIZE && fHighScoreNew << to_string(scores[count]) << endl && scores[count] > 0)
+	//{
+	//	++count;
+	//}
+
+	//fHighScoreNew.close();
 }
 
 void CScore::SetScore(int iScore)

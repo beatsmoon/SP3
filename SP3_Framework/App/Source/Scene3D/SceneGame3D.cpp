@@ -444,13 +444,7 @@ void CSceneGame3D::Update(const double dElapsedTime)
 		}
 	}
 
-	static double WaveTimer;
-	if (CKeyboardController::GetInstance()->IsKeyPressed(GLFW_KEY_O) && cEntityManager->GetWaveStarted() == false)
-	{
-		cout << cWave->GetWaveNumber() << endl;
-		cWave->SetWave(cWave->GetWaveNumber());
-		WaveTimer = 0.0f;
-	}
+
 
 	// update the joystick
 	cJoystickController->Update(cJoystickController->GetJoystickID());
@@ -620,50 +614,78 @@ void CSceneGame3D::Update(const double dElapsedTime)
 		}
 	}
 	
-	
-
-
 	// Post Update Camera
 	cMouseController->PostUpdate();
-
-
 	// Update cEntityManager
 	cEntityManager->Update(dElapsedTime);
 	
 	//Check if wave ended
 	//If ended, update score and next wave
-	if (cEntityManager->CheckWave() == true)
+	//If main wave ended, spawn boss
+
+	static double dMainWaveTimer = 0.0f, dBossTimer = 0.0f;
+
+	if (CKeyboardController::GetInstance()->IsKeyPressed(GLFW_KEY_O) && cEntityManager->GetWaveStarted() == false)
+	{
+		cout << cWave->GetWaveNumber() << endl;
+		cWave->StartWave(cWave->GetWaveNumber());
+	}
+
+	//While wave is ongoing
+	if (cEntityManager->CheckWave() == false)
+	{
+		//Update score while wave is ongoing
+		cEntityManager->UpdateScore();
+		//Timer for wave
+		dMainWaveTimer += dElapsedTime;
+	}
+
+	else if (cEntityManager->CheckWave() == true)
+	{
+		cWave->SpawnBoss();
+		cout << "Boss Spawned" << endl;
+
+	}
+
+	if (cEntityManager->CheckBoss() == true)
 	{
 		cout << "Wave over" << endl;
-		cout << "Time Taken: " << WaveTimer << endl;
+		cout << "Time taken for main wave: " << dMainWaveTimer << endl;
+		cout << "Time taken for boss: " << dBossTimer << endl;
 		//Calculate Score from completing wave
-		cScore->AddScoreFromWave(cWave->GetWaveNumber(), WaveTimer);
+
+		cScore->AddScoreFromWave(cWave->GetWaveNumber(), dMainWaveTimer);
+		cScore->AddScoreFromWave(cWave->GetWaveNumber(), dBossTimer);
 
 		cout << "Total score is: " << cScore->GetScore() << endl;
 
 		//Set the wave number for next wave
 		cWave->SetWaveNumber(cWave->GetWaveNumber() + 1);
 
-		cWave->UpdateHighScore();
+		//If game ended update high scores
+		if (cWave->GetWaveNumber() == 2)
+		{
+			cScore->UpdateHighScores();
+			cScore->PrintHighScores();
+		}
 
 		//Set the score player will get from killing each enemy
 		cScore->SetScoreToAdd(cWave->GetWaveNumber() * 100);
 
 		cout << "Next wave is wave: " << cWave->GetWaveNumber() << endl;
 		cout << "Score per enemy is: " << cScore->GetScoreToAdd() << endl;
-	
+
+		//Reset timers
+		dMainWaveTimer = 0.0f;
+		dBossTimer = 0.0f;
+
 	}
-	
-	//While wave is ongoing
-	else if(cEntityManager->CheckWave() == false)
+
+	else if (cEntityManager->CheckBoss() == false)
 	{
-		//Update score while while is ongoing
-		cEntityManager->UpdateScore();
-		//Timer for wave
-		WaveTimer += dElapsedTime;
+		dBossTimer += dElapsedTime;
+		cout << dBossTimer << endl;
 	}
-		
-	
 
 	// collision between player and entity
 	if (cEntityManager->CollisionCheck(cPlayer3D))
@@ -694,10 +716,6 @@ void CSceneGame3D::Update(const double dElapsedTime)
 		//cScope->UpdateTierListOfScope(cPlayer3D->GetWeapon()->GetScope()->GetTierLevel());
 		cScope->Update(dElapsedTime);
 	}
-
-	
-
-	cScore->Update();
 }
 
 /**
@@ -911,8 +929,6 @@ void CSceneGame3D::Render(void)
 		cMinimap->Render();
 	}
 
-	
-	
 	return;
 }
 

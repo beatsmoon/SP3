@@ -208,7 +208,7 @@ void CShop::Update(const double dElapsedTime)
 			if ((cMouseController->GetMousePositionX() >= m_windowWidth * 0.31641 && cMouseController->GetMousePositionX() <= m_windowWidth * 0.44921)
 				&& (cMouseController->GetMousePositionY() >= m_windowHeight * 0.51315 && cMouseController->GetMousePositionY() <= m_windowHeight * 0.67105))
 			{
-				cout << "Middle  Box" << endl;
+				cout << "Middle Box" << endl;
 
 				CGunScope* cScope = new CGunScope();
 				cScope->Init();
@@ -230,8 +230,7 @@ void CShop::Update(const double dElapsedTime)
 
 				//cGunBarrel->SetTierLevel(static_cast<CGunBarrel::TIERLEVEL>(cPlayer3D->GetInventoryWeapon(0)->GetBarrel()->GetTierLevel()+ 1));
 				//cGunBarrel->SetTierLevel(cPlayer3D->GetInventoryWeapon(0)->GetBarrel()->SetTier());
-
-
+				
 				cout << static_cast<int>(cGunBarrel->GetTierLevel()) << "Recoil Reduction is:" << cGunBarrel->GetRecoilReduction();
 
 				cPlayer3D->GetInventoryWeapon(0)->SetBarrel(cGunBarrel);
