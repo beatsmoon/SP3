@@ -359,7 +359,6 @@ void Application::Run(void)
 		// Update Input Devices
 		UpdateInputDevices();
 		
-
 		dElapsedTime = cStopWatch.GetElapsedTime();
 		cFPSCounter->Update(dElapsedTime);
 
