@@ -328,6 +328,7 @@ void Application::Run(void)
 			cSceneManager->EnableScene(SCENES::MENU);
 			CSceneMenu3D* cSceneMenu3D = CSceneMenu3D::GetInstance();
 			cSceneMenu3D->RecalculateButtonPosition();
+			CEntityManager::GetInstance()->SetToMenu();
 		}
 
 		for (size_t i = 0; i < vActiveScenes.size(); ++i)
