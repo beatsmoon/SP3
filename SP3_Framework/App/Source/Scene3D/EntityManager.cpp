@@ -133,7 +133,7 @@ bool CEntityManager::CollisionCheck(CEntity3D* cEntity3D)
 			switch ((*it)->GetType())
 			{
 			case CEntity3D::TYPE::ZOMBIE:
-			case CEntity3D::TYPE::ATTACK_RANGE:
+			case CEntity3D::TYPE::POISON:
 			case CEntity3D::TYPE::BOSS:
 			{
 				// Rollback the cEntity3D's position

@@ -130,7 +130,7 @@ bool CEnemy3D::Init(void)
 	// Movement Control
 	iCurrentNumMovement = 0;
 	iMaxNumMovement = 100;
-	angleOfSight = 0.f;
+	status = S_IDLE;
 
 	std::vector<glm::vec3> vertices;
 	std::vector<glm::vec2> uvs;
@@ -138,58 +138,48 @@ bool CEnemy3D::Init(void)
 
 	switch (type)
 	{
-	case E_ENEMY1:
+	case T_ENEMY1:
 	{
 		health = 70;
-		speed = Math::RandFloatMinMax(0.8f, 1.3f);
+		speed = Math::RandFloatMinMax(0.7f, 0.9f);
+		rangeOfSight = 8.0f;
 
 		vec3Scale = glm::vec3(1, 1, 1);
 		vec3ColliderScale = glm::vec3(0.45, 1.6, 0.45);
 
-		std::string file_path = "OBJ/creeper.obj";
-		bool success = LoadOBJ(file_path.c_str(), vertices, uvs, normals);
-		if (!success)
-		{
-			return NULL;
-		}
-		
 		break;
 	}
-	case E_ENEMY2:
+	case T_ENEMY2:
 	{
 		health = 100;
-		speed = Math::RandFloatMinMax(1.0f, 1.2f);
+		speed = Math::RandFloatMinMax(0.7f, 0.9f);
+		rangeOfSight = 6.0f;
 
 		vec3Scale = glm::vec3(1, 1, 1);
 		vec3ColliderScale = glm::vec3(0.45, 1.6, 0.45);
 
-		std::string file_path = "OBJ/creeper.obj";
-		bool success = LoadOBJ(file_path.c_str(), vertices, uvs, normals);
-		if (!success)
-		{
-			return NULL;
-		}
-	
 		break;
 	}
-	case E_ENEMY3:
+	case T_ENEMY3:
 	{
 		health = 140;
-		speed = Math::RandFloatMinMax(0.1f, 1.5f);
+		speed = Math::RandFloatMinMax(0.6f, 0.9f);
+		rangeOfSight = 5.0f;
 
 		vec3Scale = glm::vec3(1, 1, 1);
 		vec3ColliderScale = glm::vec3(0.45, 1.6, 0.45);
 
-		std::string file_path = "OBJ/creeper.obj";
-		bool success = LoadOBJ(file_path.c_str(), vertices, uvs, normals);
-		if (!success)
-		{
-			return NULL;
-		}
-		
 		break;
 	}
 	}
+
+	std::string file_path = "OBJ/creeper.obj";
+	bool success = LoadOBJ(file_path.c_str(), vertices, uvs, normals);
+	if (!success)
+	{
+		return NULL;
+	}
+
 
 	std::vector<Vertex> vertex_buffer_data;
 	std::vector<GLuint> index_buffer_data;
@@ -281,13 +271,13 @@ bool CEnemy3D::IsCameraAttached(void)
 void CEnemy3D::ProcessMovement(const Enemy_Movement direction, const float deltaTime)
 {
 	float velocity = fMovementSpeed * deltaTime * speed;
-	if (direction == FORWARD)
+	if (direction == M_FORWARD)
 		vec3Position += vec3Front * velocity;
-	if (direction == BACKWARD)
+	if (direction == M_BACKWARD)
 		vec3Position -= vec3Front * velocity;
-	if (direction == LEFT)
+	if (direction == M_LEFT)
 		vec3Position -= vec3Right * velocity;
-	if (direction == RIGHT)
+	if (direction == M_RIGHT)
 		vec3Position += vec3Right * velocity;
 
 	// If the camera is attached to this player, then update the camera
@@ -323,6 +313,8 @@ void CEnemy3D::Update(const double dElapsedTime)
 	// Store the enemy's current position, if rollback is needed.
 	StorePositionForRollback();
 
+	// play roaming sound when the boss is alive
+	// sound delay to replay when the countdown is ended
 	static double soundDelay = 1500.f;
 	if (soundDelay < 1500.f)
 	{
@@ -336,39 +328,53 @@ void CEnemy3D::Update(const double dElapsedTime)
 		cout << "yes" << endl;
 	}
 
-	// moving forward
-	if (iCurrentNumMovement < iMaxNumMovement)
+	float fDistanceToPlayer = glm::length(cPlayer3D->GetPosition() - vec3Position);
+	if (fDistanceToPlayer > rangeOfSight) // player is out of range
 	{
-		// Process the movement
-		ProcessMovement(FORWARD, (float)dElapsedTime);
-
-		// Update the counter
-		iCurrentNumMovement++;
+		status = S_IDLE;
 	}
-	// rotating to face player
-	else if (angleOfSight > 40.0f)
+	else // player is inside range
 	{
-		// roate more if player is not in sight of the enemy
-		ProcessRotate(rand() % 90 - 45.0f);
+		status = S_ATTACKING;
+	}
+
+	switch (status)
+	{
+	case CEnemy3D::S_IDLE: // boss idle state
+	{
+		if (iCurrentNumMovement < iMaxNumMovement)
+		{
+			// moving forward
+			ProcessMovement(M_FORWARD, (float)dElapsedTime);
+
+			// Update the counter
+			iCurrentNumMovement++;
+		}
+		else // rotate randomly
+		{
+			// Randomly choose a new direction up to +30 or -30 degrees to the current direction 
+			ProcessRotate(Math::RandFloatMinMax(-30.0f, 30.0f));
+
+			// Reset the counter to 0
+			iCurrentNumMovement = 0;
+		}
+		break;
+	}
+	case CEnemy3D::S_ATTACKING: // boss attacking state
+	{
+		// player is inside range (update vector to face and chase the player)
+		UpdateEnemyVectors();
+
 		// Reset the counter to 0
 		iCurrentNumMovement = 0;
+
+		// actions of the enemy
+		ProcessMovement(M_FORWARD, (float)dElapsedTime);
+
+		break;
 	}
-	else // roate abit with player is already in sight of the enemy
-	{
-		// Randomly choose a new direction up to +30 or -30 degrees to the current direction 
-		ProcessRotate(rand() % 60 - 30.f);
-
-		// Reset the counter to 0
-		iCurrentNumMovement = 0;
 	}
-
-
-
-
-	glm::vec3 EnemyFacingPlayerVec;
-	EnemyFacingPlayerVec = glm::normalize(cPlayer3D->GetPosition() - vec3Position);
-	angleOfSight = ((EnemyFacingPlayerVec.x * vec3Front.x) + (EnemyFacingPlayerVec.y * vec3Front.y) + (EnemyFacingPlayerVec.z * vec3Front.z));
-
+	
 }
 
 /**
@@ -497,7 +503,7 @@ void CEnemy3D::UpdateEnemyVectors(void)
 	if (cPlayer3D)
 	{
 		float fDistanceToPlayer = glm::length(cPlayer3D->GetPosition() - vec3Position);
-		if (fDistanceToPlayer < 6.0f && angleOfSight < 40.0f)
+		if (fDistanceToPlayer < rangeOfSight)
 		{
 			// Update the direction of the enemy
 			front = glm::normalize(glm::vec3(cPlayer3D->GetPosition() - vec3Position));

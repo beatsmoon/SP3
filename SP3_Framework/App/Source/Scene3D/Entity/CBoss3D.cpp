@@ -139,13 +139,13 @@ bool CBoss3D::Init(void)
 	{
 	case T_BOSS1:
 	{
-		health = 1000;
+		health = 10;
 		speed = Math::RandFloatMinMax(0.8f, 1.3f);
 		rangeOfSight = 6.f;
 		splitting = 0;
 
-		vec3Scale = glm::vec3(1, 1, 1);
-		vec3ColliderScale = glm::vec3(0.45, 1.6, 0.45);
+		vec3Scale = glm::vec3(1.5, 1.5, 1.5);
+		vec3ColliderScale = glm::vec3(0.675, 2.4, 0.675);
 
 		std::string file_path = "OBJ/creeper.obj";
 		bool success = LoadOBJ(file_path.c_str(), vertices, uvs, normals);
@@ -158,15 +158,15 @@ bool CBoss3D::Init(void)
 	}
 	case T_BOSS2:
 	{
-		health = 1000;
+		health = 10;
 		speed = Math::RandFloatMinMax(1.0f, 1.2f);
 		rangeOfSight = 6.f;
 		splitting = 0;
 
-		vec3Scale = glm::vec3(1, 1, 1);
-		vec3ColliderScale = glm::vec3(0.45, 1.6, 0.45);
+		vec3Scale = glm::vec3(0.45, 0.45, 0.45);
+		vec3ColliderScale = glm::vec3(1, 1, 1);
 
-		std::string file_path = "OBJ/creeper.obj";
+		std::string file_path = "OBJ/slime.obj";
 		bool success = LoadOBJ(file_path.c_str(), vertices, uvs, normals);
 		if (!success)
 		{
@@ -178,14 +178,14 @@ bool CBoss3D::Init(void)
 	case T_BOSS3:
 	{
 		health = 10;
-		speed = Math::RandFloatMinMax(0.1f, 1.5f);
+		speed = Math::RandFloatMinMax(0.1f, 0.7f);
 		rangeOfSight = 6.f;
 		splitting = 3;
 
-		vec3Scale = glm::vec3(1, 1, 1);
-		vec3ColliderScale = glm::vec3(0.45, 1.6, 0.45);
+		vec3Scale = glm::vec3(0.45, 0.45, 0.45);
+		vec3ColliderScale = glm::vec3(1, 1, 1);
 
-		std::string file_path = "OBJ/creeper.obj";
+		std::string file_path = "OBJ/slime.obj";
 		bool success = LoadOBJ(file_path.c_str(), vertices, uvs, normals);
 		if (!success)
 		{
@@ -212,11 +212,40 @@ bool CBoss3D::Init(void)
 	glBufferData(GL_ELEMENT_ARRAY_BUFFER, index_buffer_data.size() * sizeof(GLuint), &index_buffer_data[0], GL_STATIC_DRAW);
 	index_buffer_size = index_buffer_data.size();
 
-	iTextureID = LoadTexture("Images/creeper.tga");
-	if (iTextureID == 0)
+	
+
+	switch (type)
 	{
-		cout << "Unable to load Images/creeper.tga" << endl;
-		return false;
+	case T_BOSS1:
+	{
+		iTextureID = LoadTexture("Images/creeper.tga");
+		if (iTextureID == 0)
+		{
+			cout << "Unable to load Images/creeper.tga" << endl;
+			return false;
+		}
+		break;
+	}
+	case T_BOSS2:
+	{
+		iTextureID = LoadTexture("Images/magma.tga");
+		if (iTextureID == 0)
+		{
+			cout << "Unable to load Images/magma.tga" << endl;
+			return false;
+		}
+		break;
+	}
+	case T_BOSS3:
+	{
+		iTextureID = LoadTexture("Images/slime.tga");
+		if (iTextureID == 0)
+		{
+			cout << "Unable to load Images/slime.tga" << endl;
+			return false;
+		}
+		break;
+	}
 	}
 
 	return true;
@@ -404,21 +433,24 @@ void CBoss3D::Update(const double dElapsedTime)
 				// shoot projectiles at the player
 				static float dCountdown = 0.0f;				
 				dCountdown += dElapsedTime;
-				if (dCountdown > Math::RandFloatMinMax(0.80f, 1.90f))
+				if (dCountdown > 1)
 				{
 					CEntity3D* currEntity = dynamic_cast<CEntity3D*>(this);
 
 					CProjectile* aProjectile = new CProjectile();
 					aProjectile->SetShader(cShader);
-					aProjectile->Init(vec3Position + vec3Front * 0.75f, vec3Front, 2.0f, 30.0f);
+					aProjectile->Init(vec3Position + vec3Front * 0.75f, vec3Front, 2.0f, 20.0f);
 					aProjectile->ActivateCollider(cShader);
 					aProjectile->SetStatus(true);
 					aProjectile->SetSource(currEntity);
 					aProjectile->SetCollisionDamage(5);
+					aProjectile->SetGravityMultiplier(1.0);
 
 					CEntityManager::GetInstance()->Add(aProjectile);
 					dCountdown = 0.0f;
 				}
+
+				
 			}
 			}
 			break;
@@ -530,7 +562,7 @@ void CBoss3D::Render(void)
 	if ((cCollider) && (cCollider->bIsDisplayed))
 	{
 		model = glm::mat4(1.0f);
-		model = glm::translate(model, vec3Position);
+		model = glm::translate(model, vec3Position + vec3ColliderTranslate);
 		model = glm::scale(model, vec3ColliderScale);
 
 		cCollider->model = model;
@@ -578,7 +610,18 @@ void CBoss3D::SplitIntoSmallerBoss()
 	cboss->Init();
 	cboss->ActivateCollider(cShader);
 	cboss->SetSplit(splitting);
+	cboss->ScaleBossBasedOnSplit(splitting);
 	CEntityManager::GetInstance()->Add(cboss);
+}
+
+void CBoss3D::ScaleBossBasedOnSplit(int splitSize)
+{
+	float size = 1.0f / (4 - splitSize);
+
+	vec3Scale = size * vec3Scale;
+	vec3ColliderScale = size * vec3ColliderScale;
+
+	vec3ColliderTranslate.y = -0.5f * (1 - size);
 }
 
 int CBoss3D::GetBossType()

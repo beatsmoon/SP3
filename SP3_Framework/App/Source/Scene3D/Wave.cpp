@@ -73,11 +73,11 @@ void CWave::SetWave(int waveNumber)
 		//Spawn the enemies in world		
 		cEntityManager->Add(cEnemy3DType1);
 
-		CRangeIndicator* cRangeIndicator = new CRangeIndicator(cEnemy3DType1->GetPosition(), k, cEnemy3DType1);
-		cRangeIndicator->SetShader(cShader);
-		cRangeIndicator->Init();
-		cRangeIndicator->ActivateCollider(cSimpleShader);
-		cEntityManager->Add(cRangeIndicator);
+		CPoison3D* cPoison3D = new CPoison3D(cEnemy3DType1->GetPosition(), k, cEnemy3DType1);
+		cPoison3D->SetShader(cShader);
+		cPoison3D->Init();
+		cPoison3D->ActivateCollider(cSimpleShader);
+		cEntityManager->Add(cPoison3D);
 
 		cEntityManager->SetWaveStarted(true);
 		

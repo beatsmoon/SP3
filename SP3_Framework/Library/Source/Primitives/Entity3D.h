@@ -23,7 +23,7 @@ public:
 		PLAYER,
 		ZOMBIE,
 		BOSS,
-		ATTACK_RANGE,
+		POISON,
 		AMMO,
 		PROJECTILE,
 		GUNBARREL,
@@ -128,6 +128,10 @@ public:
 	virtual void SetColliderScale(const glm::vec3 vec3Scale);
 	virtual const glm::vec3 GetColliderScale() const;
 
+	void SetColliderTranslate(glm::vec3 vec3ColliderScale);
+
+	const glm::vec3 GetColliderTranslate() const;
+
 	void SetCollisionState(const bool bState);
 
 	const bool GetCollisionState() const;
@@ -165,6 +169,8 @@ protected:
 	glm::vec3 vec3Scale;
 	// Scale
 	glm::vec3 vec3ColliderScale;
+	// translate
+	glm::vec3 vec3ColliderTranslate;
 	// Rotation angle and axis
 	float fRotationAngle;
 	glm::vec3 vec3RotationAxis;

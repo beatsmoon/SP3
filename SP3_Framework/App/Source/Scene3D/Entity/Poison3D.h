@@ -28,17 +28,17 @@
 #include "Enemy3D.h"
 
 
-class CRangeIndicator : public CEntity3D
+class CPoison3D : public CEntity3D
 {
 public:
 	// Default Constructor
-	CRangeIndicator(void);
+	CPoison3D(void);
 
 	// Constructor with vectors
-	CRangeIndicator(const glm::vec3 vec3Position, int enemy_type, CEnemy3D* currenemy);
+	CPoison3D(const glm::vec3 vec3Position, int enemy_type, CEnemy3D* currenemy);
 
 	// Destructor
-	virtual ~CRangeIndicator(void);
+	virtual ~CPoison3D(void);
 
 	// Initialise this class instance
 	bool Init(void);

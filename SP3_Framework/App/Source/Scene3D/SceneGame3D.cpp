@@ -20,7 +20,7 @@ using namespace std;
 // Include CEnemy3D
 #include "Entity/Enemy3D.h"
 #include "Entity/CBoss3D.h"
-#include "Entity/RangeIndicator.h"
+#include "Entity/Poison3D.h"
 
 // Include MyMath.h
 #include "../Library/Source/System/MyMath.h"
@@ -299,11 +299,11 @@ bool CSceneGame3D::Init(void)
 		cEnemy3D->ActivateCollider(cSimpleShader);
 		cEntityManager->Add(cEnemy3D);
 
-		CRangeIndicator* cRangeIndicator = new CRangeIndicator(cEnemy3D->GetPosition(), 2, cEnemy3D);
-		cRangeIndicator->SetShader(cShader);
-		cRangeIndicator->Init();
-		cRangeIndicator->ActivateCollider(cSimpleShader);
-		cEntityManager->Add(cRangeIndicator);*/
+		CPoison3D* CPoison3D = new CPoison3D(cEnemy3D->GetPosition(), 2, cEnemy3D);
+		CPoison3D->SetShader(cShader);
+		CPoison3D->Init();
+		CPoison3D->ActivateCollider(cSimpleShader);
+		cEntityManager->Add(CPoison3D);*/
 
 	/*	CStructure3D* rifleAmmo = new CStructure3D(glm::vec3(Math::RandFloatMinMax(-10.0f, 10.0f), 0.5f, Math::RandFloatMinMax(-10.0f, 10.0f))
 			, CEntity3D::TYPE::RIFLE_AMMO);
@@ -329,11 +329,11 @@ bool CSceneGame3D::Init(void)
 	cEntityManager->Add(cExplosiveBarrel);*/
 
 
-	/*CBoss3D* cEnemy3D = new CBoss3D(glm::vec3(Math::RandFloatMinMax(-10.0f, 10.0f), 0.5f, Math::RandFloatMinMax(-10.0f, 10.0f)), 2);
+	CBoss3D* cEnemy3D = new CBoss3D(glm::vec3(Math::RandFloatMinMax(-10.0f, 10.0f), 0.5f, Math::RandFloatMinMax(-10.0f, 10.0f)), 1);
 	cEnemy3D->SetShader(cShader);
 	cEnemy3D->Init();
 	cEnemy3D->ActivateCollider(cSimpleShader);
-	cEntityManager->Add(cEnemy3D);*/
+	cEntityManager->Add(cEnemy3D);
 
 	/*CStructure3D* cBarricade = new CStructure3D(glm::vec3(10.f, 0.5f, 10.f), CEntity3D::TYPE::BARRICADE);
 	cBarricade->SetShader(cShader);
@@ -350,6 +350,9 @@ bool CSceneGame3D::Init(void)
 */
 void CSceneGame3D::Update(const double dElapsedTime)
 {
+
+	cout << dElapsedTime << endl;
+
 	// respawn player
 	if (cPlayer3D->GetCurrHealth() < 1)
 	{

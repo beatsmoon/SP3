@@ -25,6 +25,7 @@ CEntity3D::CEntity3D()
 	, projection(glm::mat4(1.0f))
 	, eType(OTHERS)
 	, vec3Position(0.0f)
+	, vec3ColliderTranslate(0.0f)
 	, vec3Front(glm::vec3(0.0f, 0.0f, -1.0f))
 	, vec3PreviousPosition(0.0f)
 	, vec3Scale(1.0f)
@@ -218,6 +219,16 @@ const glm::vec3 CEntity3D::GetColliderScale() const
 	return vec3ColliderScale;
 }
 
+void CEntity3D::SetColliderTranslate(glm::vec3 vec3ColliderScale)
+{
+	this->vec3ColliderTranslate = vec3ColliderTranslate;
+}
+
+const glm::vec3 CEntity3D::GetColliderTranslate() const
+{
+	return vec3ColliderTranslate;
+}
+
 void CEntity3D::SetCollisionState(const bool bState)
 {
 	bCollisionEnabled = bState;
@@ -235,10 +246,10 @@ const bool CEntity3D::GetCollisionState() const
 */
 bool CEntity3D::CheckForCollision(const CEntity3D* cEntity3D)
 {
-	tempVec3A_BottomLeft = vec3Position + vec3ColliderScale * cCollider->vec3BottomLeft;
-	tempVec3A_TopRight = vec3Position + vec3ColliderScale * cCollider->vec3TopRight;
-	tempVec3B_BottomLeft = cEntity3D->vec3Position + vec3ColliderScale * cEntity3D->cCollider->vec3BottomLeft;
-	tempVec3B_TopRight = cEntity3D->vec3Position + vec3ColliderScale * cEntity3D->cCollider->vec3TopRight;
+	tempVec3A_BottomLeft = vec3Position + vec3ColliderTranslate + vec3ColliderScale * cCollider->vec3BottomLeft;
+	tempVec3A_TopRight = vec3Position + vec3ColliderTranslate + vec3ColliderScale * cCollider->vec3TopRight;
+	tempVec3B_BottomLeft = cEntity3D->vec3Position + cEntity3D->vec3ColliderTranslate + vec3ColliderScale * cEntity3D->cCollider->vec3BottomLeft;
+	tempVec3B_TopRight = cEntity3D->vec3Position + cEntity3D->vec3ColliderTranslate + vec3ColliderScale * cEntity3D->cCollider->vec3TopRight;
 
 	// Check if the bottom left of the cEntity3D is within this collider
 	if ((tempVec3A_BottomLeft.x <= tempVec3B_BottomLeft.x) &&

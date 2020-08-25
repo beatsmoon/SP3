@@ -1,4 +1,4 @@
-#include "RangeIndicator.h"
+#include "Poison3D.h"
 
 #include "../../Meshes/MeshBuilder.h"
 #include "../../Meshes/Mtx44.h"
@@ -6,25 +6,25 @@
 #include <iostream>
 using namespace std;
 
-CRangeIndicator::CRangeIndicator(void)
+CPoison3D::CPoison3D(void)
 {
 	this->vec3Position = glm::vec3(1, 1, 1);
 	this->type = Enemy_Type::E_ENEMY1;
 }
 
-CRangeIndicator::CRangeIndicator(const glm::vec3 vec3Position, int enemy_type, CEnemy3D* currenemy)
+CPoison3D::CPoison3D(const glm::vec3 vec3Position, int enemy_type, CEnemy3D* currenemy)
 {
 	this->vec3Position = vec3Position;
 	this->type = enemy_type;
 	this->currEnemy = currenemy;
 }
 
-CRangeIndicator::~CRangeIndicator(void)
+CPoison3D::~CPoison3D(void)
 {
 	
 }
 
-bool CRangeIndicator::Init(void)
+bool CPoison3D::Init(void)
 {
 	// Check if the shader is ready
 	if (!cShader)
@@ -37,7 +37,7 @@ bool CRangeIndicator::Init(void)
 	CEntity3D::Init();
 
 	// Set the type
-	SetType(CEntity3D::TYPE::ATTACK_RANGE);
+	SetType(CEntity3D::TYPE::POISON);
 
 	vec3Position = currEnemy->GetPosition();
 
@@ -110,7 +110,7 @@ bool CRangeIndicator::Init(void)
 	glBufferData(GL_ELEMENT_ARRAY_BUFFER, index_buffer_data.size() * sizeof(GLuint), &index_buffer_data[0], GL_STATIC_DRAW);
 	index_buffer_size = index_buffer_data.size();
 
-	iTextureID = LoadTexture("Images/chicken.tga");
+	iTextureID = LoadTexture("Images/poison.tga");
 	if (iTextureID == 0)
 	{
 		cout << "Unable to load Images/chicken.tga" << endl;
@@ -120,23 +120,23 @@ bool CRangeIndicator::Init(void)
 	return true;
 }
 
-void CRangeIndicator::SetModel(glm::mat4 model)
+void CPoison3D::SetModel(glm::mat4 model)
 {
 	this->model = model;
 }
 
-void CRangeIndicator::SetView(glm::mat4 view)
+void CPoison3D::SetView(glm::mat4 view)
 {
 	this->view = view;
 
 }
 
-void CRangeIndicator::SetProjection(glm::mat4 projection)
+void CPoison3D::SetProjection(glm::mat4 projection)
 {
 	this->projection = projection;
 }
 
-void CRangeIndicator::Update(const double dElapsedTime)
+void CPoison3D::Update(const double dElapsedTime)
 {
 	if (currEnemy->GetHealth() > 0)
 	{
@@ -150,7 +150,7 @@ void CRangeIndicator::Update(const double dElapsedTime)
 	
 }
 
-void CRangeIndicator::ActivateCollider(Shader* cLineShader)
+void CPoison3D::ActivateCollider(Shader* cLineShader)
 {
 	// Since we are changing the colour, we don't call the parent's ActivateCollider() method.
 	// Instead we create it here and insert our colour changing codes
@@ -166,13 +166,13 @@ void CRangeIndicator::ActivateCollider(Shader* cLineShader)
 	cCollider->SetLineShader(cLineShader);
 }
 
-void CRangeIndicator::PreRender(void)
+void CPoison3D::PreRender(void)
 {
 	// Draw this as last
 	glDepthFunc(GL_LEQUAL);  // change depth function so depth test passes when values are equal to depth buffer's content
 }
 
-void CRangeIndicator::Render(void)
+void CPoison3D::Render(void)
 {
 	// If the shader is in this class, then do not render
 	if (!cShader)
@@ -231,12 +231,12 @@ void CRangeIndicator::Render(void)
 	}
 }
 
-void CRangeIndicator::PostRender(void)
+void CPoison3D::PostRender(void)
 {
 	glDepthFunc(GL_LESS); // set depth function back to default
 }
 
-CEnemy3D* CRangeIndicator::GetCurrEnemy(void)
+CEnemy3D* CPoison3D::GetCurrEnemy(void)
 {
 	return currEnemy;
 }

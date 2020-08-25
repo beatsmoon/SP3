@@ -111,6 +111,7 @@ public:
 	int GetSplit();
 
 	void SplitIntoSmallerBoss();
+	void ScaleBossBasedOnSplit(int splitSize);
 
 	int GetBossType();
 
