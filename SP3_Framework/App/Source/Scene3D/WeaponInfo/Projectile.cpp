@@ -320,12 +320,14 @@ void CProjectile::UpdateBulletDrop(const double dElapsedTime)
 
 		// constrain the player's position to the groundmap
 		glm::vec3 vec3CheckPosition = cGroundMap->GetExactPosition(vec3Position);
-
-		//if (vec3CheckPosition.y > vec3Position.y)
-		//{
-		//	vec3Position = vec3CheckPosition;
-		//	cPhysics3D.SetStatus(CPhysics3D::STATUS::IDLE);
-		//}
+		vec3CheckPosition.y -= 0.5f;
+		if (vec3CheckPosition.y > vec3Position.y)
+		{
+			//vec3Position = vec3CheckPosition;
+			//cPhysics3D.SetStatus(CPhysics3D::STATUS::IDLE);
+			//cout << "vec3Position.y : "<< vec3Position.y << endl;
+			SetToDelete(this);
+		}
 	}
 
 }

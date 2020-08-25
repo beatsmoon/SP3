@@ -184,6 +184,10 @@ bool CSceneGame3D::Init(void)
 	cGunScope->SetShader(cShader);
 	cGunScope->Init();
 	cGunScope->SetTierLevel(CGunScope::TIERLEVEL::TIER1);
+	CGunBarrel* cGunBarrel = new CGunBarrel();
+	cGunBarrel->SetShader(cShader);
+	cGunBarrel->Init();
+	cGunBarrel->SetTierLevel(CGunBarrel::TIERLEVEL::TIER1);
 
 	// add weapon to player
 	CWeapon* cPistol = new CWeapon(Weapon_Type::W_PISTOL);
@@ -192,12 +196,13 @@ bool CSceneGame3D::Init(void)
 	cPlayer3D->SetWeapon(1, cPistol);
 	cPlayer3D->SetCurrentWeapon(1);
 	cPlayer3D->GetWeapon()->SetScope(cGunScope);
+	cPlayer3D->GetWeapon()->SetBarrel(cGunBarrel);
 
 	//Creating Attachment
-	CGunBarrel* cGunBarrel = new CGunBarrel();
+	cGunBarrel = new CGunBarrel();
 	cGunBarrel->SetShader(cShader);
 	cGunBarrel->Init();
-	cGunBarrel->SetTierLevel(CGunBarrel::TIERLEVEL::TIER1);
+	cGunBarrel->SetTierLevel(CGunBarrel::TIERLEVEL::TIER3);
 
 	CGunExtMag* cGunExtMag = new CGunExtMag();
 	cGunExtMag->SetShader(cShader);
@@ -209,7 +214,7 @@ bool CSceneGame3D::Init(void)
 	cGunScope->Init();
 	cGunScope->SetTierLevel(CGunScope::TIERLEVEL::TIER3);
 
-	CWeapon* rifle = new CWeapon(Weapon_Type::W_SHOTGUN);
+	CWeapon* rifle = new CWeapon(Weapon_Type::W_AK47);
 	rifle->Init();
 	rifle->SetShader(cSimpleShader);
 	cPlayer3D->SetWeapon(0, rifle);

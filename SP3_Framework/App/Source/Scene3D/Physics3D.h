@@ -70,7 +70,7 @@ protected:
 	float fTotalElapsedTime;		// Total elapsed time since the motion was started
 	float fElapsedTime;				// Elapsed time between the previous and current update
 
-	const glm::vec3 v3Gravity = glm::vec3( 0.0f, -0.5f, 0.0f);		// Gravity constant
+	const glm::vec3 v3Gravity = glm::vec3( 0.0f, -10.0f, 0.0f);		// Gravity constant
 
 	STATUS sCurrentStatus;
 

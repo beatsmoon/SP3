@@ -609,7 +609,8 @@ void CPlayer3D::Update(const double dElapsedTime)
 			if (GetWeapon()->GetBarrel() != NULL)
 				fCameraRecoilAngle -= GetWeapon()->GetBarrel()->GetRecoilReduction();
 			//add to pitch to tilt up
-			fPitch += GetWeapon()->GetRecoilAngle();;
+			fPitch += fCameraRecoilAngle;
+			//fPitch += GetWeapon()->GetRecoilAngle();
 			if (fPitch > fCameraSwayAngle_UpLimit)
 			{
 				fPitch = fCameraSwayAngle_UpLimit;
