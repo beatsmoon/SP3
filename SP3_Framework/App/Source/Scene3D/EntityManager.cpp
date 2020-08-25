@@ -3,6 +3,7 @@
 #include "Entity/Enemy3D.h"
 #include "Entity/CBoss3D.h"
 #include "Structure3D.h"
+#include "../SceneControl/SceneManager.h"
 
 #include <iostream>
 using namespace std;
@@ -217,20 +218,35 @@ void CEntityManager::Update(const double dElapsedTime)
 	end = lEntity3D.end();
 	for (it = lEntity3D.begin(); it != end; ++it)
 	{
-		(*it)->Update(dElapsedTime);
-		if ((*it)->GetDespawnQueue())
+		if (bMenuOnly)
 		{
-			(*it)->AddDespawnTime(dElapsedTime);
-			std::cout << (*it)->GetDespawnTime() << std::endl;
-			switch ((*it)->GetType())
+			if ((*it)->GetType() > CEntity3D::MENU_START && (*it)->GetType() < CEntity3D::MENU_END ||
+				(*it)->GetType() == CEntity3D::PROJECTILE)
 			{
-			case CEntity3D::TYPE::BARRICADE:
-			case CEntity3D::TYPE::EXPLOSIVE_BARREL:
-			{
-				if ((*it)->GetDespawnTime() > EXPLOSIVE_BARREL_DESPAWN_TIME)
-					(*it)->SetToDelete(true);
-				break;
+				(*it)->Update(dElapsedTime);
 			}
+		}
+		else
+		{
+			if ((*it)->GetType() > CEntity3D::MENU_START && (*it)->GetType() < CEntity3D::MENU_END)
+			{
+				continue;
+			}
+			(*it)->Update(dElapsedTime);
+			if ((*it)->GetDespawnQueue())
+			{
+				(*it)->AddDespawnTime(dElapsedTime);
+				std::cout << (*it)->GetDespawnTime() << std::endl;
+				switch ((*it)->GetType())
+				{
+				case CEntity3D::TYPE::BARRICADE:
+				case CEntity3D::TYPE::EXPLOSIVE_BARREL:
+				{
+					if ((*it)->GetDespawnTime() > EXPLOSIVE_BARREL_DESPAWN_TIME)
+						(*it)->SetToDelete(true);
+					break;
+				}
+				}
 			}
 		}
 	}
@@ -250,272 +266,314 @@ void CEntityManager::Update(const double dElapsedTime)
 			{
 				continue;
 			}
-		
-			// Check for collisions between the 2 entities
-			if ((*it)->CheckForCollision(*it_other) == true)
+			
+			// Check if the game is in menu mode, update menu entites only
+			if (bMenuOnly)
 			{
-				if (((*it)->GetType() == CEntity3D::TYPE::ZOMBIE) &&
-					((*it_other)->GetType() == CEntity3D::TYPE::PROJECTILE))
+				//std::cout << "Menu only" << std::endl;
+				//CSceneMenu3D::GetInstance()
+				if ((*it)->GetType() > CEntity3D::TYPE::MENU_START && (*it)->GetType() < CEntity3D::TYPE::MENU_END
+					&& (*it_other)->GetType() > CEntity3D::TYPE::MENU_START && (*it_other)->GetType() < CEntity3D::TYPE::MENU_END)
 				{
-					(*it)->RollbackPosition();
-					(*it_other)->SetToDelete(true);
-					
-					CEnemy3D* enemy = dynamic_cast<CEnemy3D*>(*it);
-					if (enemy->GetHealth() > 0)
-					{
-						enemy->SetHealth(enemy->GetHealth() - cPlayer3D->GetWeapon()->GetDamageOutput());
-						cSoundController->PlaySoundByID(5);
-					}
-					else
+					continue;
+				}
+				if ((*it)->CheckForCollision(*it_other) == true)
+				{
+					if (((*it)->GetType() == CEntity3D::TYPE::PROJECTILE) &&
+						(*it_other)->GetType() > CEntity3D::TYPE::MENU_START &&
+						(*it_other)->GetType() < CEntity3D::TYPE::MENU_END)
 					{
 						(*it)->SetToDelete(true);
-						//cScore->AddScore(cScore->GetScoreToAdd());
-						//cout << cScore->GetScore();
-						
+						std::cout << "Collision between projectile and Menu button" << std::endl;
+						switch ((*it_other)->GetType())
+						{
+						case CEntity3D::TYPE::PLAY_BUTTON:
+							CSceneManager::GetInstance()->DisableScene(SCENES::MENU);
+							CSceneManager::GetInstance()->EnableScene(SCENES::GAME);
+							break;
+						case CEntity3D::TYPE::HIGHSCORE_BUTTON:
+							break;
+						case CEntity3D::TYPE::QUIT_BUTTON:
+							CSceneManager::GetInstance()->SetApplicationToEnd();
+							break;
+						}
 					}
-					cout << "** Collision between zombie and Projectile ***" << endl;
-				}
-				else if (((*it)->GetType() == CEntity3D::TYPE::PROJECTILE) &&
-					((*it_other)->GetType() == CEntity3D::TYPE::ZOMBIE))
-				{
-					(*it_other)->RollbackPosition();
-					(*it)->SetToDelete(true);
-
-					CEnemy3D* enemy = dynamic_cast<CEnemy3D*>(*it_other);
-					if (enemy->GetHealth() > 0)
-					{
-						enemy->SetHealth(enemy->GetHealth() - cPlayer3D->GetWeapon()->GetDamageOutput());
-						cSoundController->PlaySoundByID(5);
-					}
-					else
+					else if (((*it_other)->GetType() == CEntity3D::TYPE::PROJECTILE) &&
+						(*it)->GetType() > CEntity3D::TYPE::MENU_START &&
+						(*it)->GetType() < CEntity3D::TYPE::MENU_END)
 					{
 						(*it_other)->SetToDelete(true);
-						//cScore->AddScore(cScore->GetScoreToAdd());
-						//cout << cScore->GetScore() << endl;
+						std::cout << "Collision between Menu button and Projectile" << std::endl;
+						switch ((*it)->GetType())
+						{
+						case CEntity3D::TYPE::PLAY_BUTTON:
+							CSceneManager::GetInstance()->DisableScene(SCENES::MENU);
+							CSceneManager::GetInstance()->EnableScene(SCENES::GAME);
+							bMenuOnly = false;
+							break;
+						case CEntity3D::TYPE::HIGHSCORE_BUTTON:
+							break;
+						case CEntity3D::TYPE::QUIT_BUTTON:
+							CSceneManager::GetInstance()->SetApplicationToEnd();
+							break;
+						}
 					}
-					cout << "** Collision between zombie and Projectile ***" << endl;
 				}
-
-				else if (((*it)->GetType() == CEntity3D::TYPE::BOSS) &&
-					((*it_other)->GetType() == CEntity3D::TYPE::PROJECTILE))
+			}
+			// If the game is not in menu mode, update game entites only
+			else
+			{
+				// Check for collisions between the 2 entities
+				if ((*it)->CheckForCollision(*it_other) == true)
 				{
-					(*it)->RollbackPosition();
-					(*it_other)->SetToDelete(true);
-
-					CBoss3D* boss = dynamic_cast<CBoss3D*>(*it);
-					if (boss->GetBossType() == T_BOSS3)
+					if (((*it)->GetType() == CEntity3D::TYPE::ZOMBIE) &&
+						((*it_other)->GetType() == CEntity3D::TYPE::PROJECTILE))
 					{
-						if (boss->GetHealth() > 0)
+						(*it)->RollbackPosition();
+						(*it_other)->SetToDelete(true);
+
+						CEnemy3D* enemy = dynamic_cast<CEnemy3D*>(*it);
+						if (enemy->GetHealth() > 0)
 						{
-							boss->SetHealth(boss->GetHealth() - 1);
+							enemy->SetHealth(enemy->GetHealth() - cPlayer3D->GetWeapon()->GetDamageOutput());
 							cSoundController->PlaySoundByID(5);
 						}
 						else
 						{
-							if (boss->GetSplit() > 0)
-							{
-								boss->SplitIntoSmallerBoss();
-							}
-							else
-							{
-								cout << "Boss died" << endl;
-								(*it)->SetToDelete(true);
-
-							}
-						}
-					}
-					else
-					{
-						if (boss->GetHealth() > 0)
-						{
-							boss->SetHealth(boss->GetHealth() - 1);
-							cSoundController->PlaySoundByID(5);
-						}
-						else
-						{
-							cout << "Boss died" << endl;
 							(*it)->SetToDelete(true);
-					
+							//cScore->AddScore(cScore->GetScoreToAdd());
+							//cout << cScore->GetScore();
 						}
+						cout << "** Collision between zombie and Projectile ***" << endl;
 					}
-					cout << "** Collision between boss and Projectile ***" << endl;
-				}
-				else if (((*it)->GetType() == CEntity3D::TYPE::PROJECTILE) &&
-					((*it_other)->GetType() == CEntity3D::TYPE::BOSS))
-				{
-					(*it_other)->RollbackPosition();
-					(*it)->SetToDelete(true);
-
-					CBoss3D* boss = dynamic_cast<CBoss3D*>(*it_other);
-					if (boss->GetBossType() == T_BOSS3)
+					else if (((*it)->GetType() == CEntity3D::TYPE::PROJECTILE) &&
+						((*it_other)->GetType() == CEntity3D::TYPE::ZOMBIE))
 					{
-						if (boss->GetHealth() > 0)
+						(*it_other)->RollbackPosition();
+						(*it)->SetToDelete(true);
+
+						CEnemy3D* enemy = dynamic_cast<CEnemy3D*>(*it_other);
+						if (enemy->GetHealth() > 0)
 						{
-							boss->SetHealth(boss->GetHealth() - 1);
+							enemy->SetHealth(enemy->GetHealth() - cPlayer3D->GetWeapon()->GetDamageOutput());
 							cSoundController->PlaySoundByID(5);
 						}
-
 						else
 						{
-							if (boss->GetSplit() > 0)
+							(*it_other)->SetToDelete(true);
+							//cScore->AddScore(cScore->GetScoreToAdd());
+							//cout << cScore->GetScore() << endl;
+						}
+						cout << "** Collision between zombie and Projectile ***" << endl;
+					}
+					else if (((*it)->GetType() == CEntity3D::TYPE::BOSS) &&
+						((*it_other)->GetType() == CEntity3D::TYPE::PROJECTILE))
+					{
+						(*it)->RollbackPosition();
+						(*it_other)->SetToDelete(true);
+
+						CBoss3D* boss = dynamic_cast<CBoss3D*>(*it);
+						if (boss->GetBossType() == T_BOSS3)
+						{
+							if (boss->GetHealth() > 0)
 							{
-								boss->SplitIntoSmallerBoss();
+								boss->SetHealth(boss->GetHealth() - cPlayer3D->GetWeapon()->GetDamageOutput());
+								cSoundController->PlaySoundByID(5);
 							}
 							else
 							{
-								cout << "Boss died 2" << endl;
-								(*it)->SetToDelete(true);
+								if (boss->GetSplit() > 0)
+								{
+									boss->SplitIntoSmallerBoss();
+								}
+								else
+								{
+									(*it)->SetToDelete(true);
+								}
 							}
-						}
-					}
-					else
-					{
-						if (boss->GetHealth() > 0)
-						{
-							boss->SetHealth(boss->GetHealth() - 1);
-							cSoundController->PlaySoundByID(5);
 						}
 						else
 						{
-							cout << "Boss died" << endl;
-							(*it_other)->SetToDelete(true);
+							if (boss->GetHealth() > 0)
+							{
+								boss->SetHealth(boss->GetHealth() - cPlayer3D->GetWeapon()->GetDamageOutput());
+								cSoundController->PlaySoundByID(5);
+							}
+							else
+							{
+								(*it)->SetToDelete(true);
+								//cScore->AddScore(cScore->GetScoreToAdd());
+								//cout << cScore->GetScore();
+							}
 						}
+						cout << "** Collision between boss and Projectile ***" << endl;
 					}
-					cout << "** Collision between boss and Projectile ***" << endl;
-				}
-				else if (((*it)->GetType() == CEntity3D::TYPE::ZOMBIE) &&
-					((*it_other)->GetType() == CEntity3D::TYPE::STRUCTURE))
-				{
-					(*it)->RollbackPosition();
-					//(*it_other)->SetToDelete(true);
-					cout << "** Collision between zombie and Structure ***" << endl;
-				}
-				else if (((*it)->GetType() == CEntity3D::TYPE::STRUCTURE) &&
-					((*it_other)->GetType() == CEntity3D::TYPE::ZOMBIE))
-				{
-					(*it_other)->RollbackPosition();
-					//(*it)->SetToDelete(true);
-					cout << "** Collision between Structure and zombie ***" << endl;
-				}
-
-				else if (((*it)->GetType() == CEntity3D::TYPE::ZOMBIE) &&
-					((*it_other)->GetType() == CEntity3D::TYPE::BARRICADE))
-				{
-					(*it)->RollbackPosition();
-					//(*it_other)->SetToDelete(true);
-					cout << "** Collision between zombie and Barricade ***" << endl;
-				}
-				else if (((*it)->GetType() == CEntity3D::TYPE::BARRICADE) &&
-					((*it_other)->GetType() == CEntity3D::TYPE::ZOMBIE))
-				{
-					(*it_other)->RollbackPosition();
-					//(*it)->SetToDelete(true);
-					cout << "** Collision between Barricade and zombie ***" << endl;
-				}
-
-				else if (((*it)->GetType() == CEntity3D::TYPE::PROJECTILE) &&
-					((*it_other)->GetType() == CEntity3D::TYPE::EXPLOSIVE_BARREL))
-				{
-					//(*it_other)->RollbackPosition();
-					(*it)->SetToDelete(true);
-				
-					CStructure3D* cExplosiveBarrel = dynamic_cast<CStructure3D*>(*it_other);
-					if (cExplosiveBarrel->GetHealth() > 0)
+					else if (((*it)->GetType() == CEntity3D::TYPE::PROJECTILE) &&
+						((*it_other)->GetType() == CEntity3D::TYPE::BOSS))
 					{
-						cExplosiveBarrel->SetHealth(cExplosiveBarrel->GetHealth() - 10);
-						cSoundController->PlaySoundByID(5);
-					}
-					else if (cExplosiveBarrel->GetDespawnQueue() == false)
-					{
-						cExplosiveBarrel->SetCollisionState(false);
-						cExplosiveBarrel->SetColliderScale(cExplosiveBarrel->GetColliderScale() * 2.f);
-						cExplosiveBarrel->SetDespawnQueue(true);
-						if (cPlayer3D->CheckForCollision(cExplosiveBarrel))
+						(*it_other)->RollbackPosition();
+						(*it)->SetToDelete(true);
+
+						CBoss3D* boss = dynamic_cast<CBoss3D*>(*it_other);
+						if (boss->GetBossType() == T_BOSS3)
 						{
-							std::cout << "Player hit by Explosive Barrel explosion" << std::endl;
-							cPlayer3D->SetCurrHealth(cPlayer3D->GetCurrHealth() - 30);
+							if (boss->GetHealth() > 0)
+							{
+								boss->SetHealth(boss->GetHealth() - cPlayer3D->GetWeapon()->GetDamageOutput());
+								cSoundController->PlaySoundByID(5);
+							}
+							else
+							{
+								if (boss->GetSplit() > 0)
+								{
+									boss->SplitIntoSmallerBoss();
+								}
+								else
+								{
+									(*it)->SetToDelete(true);
+								}
+							}
 						}
-
+						else
+						{			
+							if (boss->GetHealth() > 0)
+							{
+								boss->SetHealth(boss->GetHealth() - cPlayer3D->GetWeapon()->GetDamageOutput());
+								cSoundController->PlaySoundByID(5);
+							}
+							else
+							{
+								(*it_other)->SetToDelete(true);
+								//cScore->AddScore(cScore->GetScoreToAdd());
+								//cout << cScore->GetScore();
+							}
+						}
+						cout << "** Collision between boss and Projectile ***" << endl;
 					}
-					cout << "** Collision between Projectile and Explosive Barrel ***" << endl;
-				}
-				else if (((*it)->GetType() == CEntity3D::TYPE::EXPLOSIVE_BARREL) &&
-					((*it_other)->GetType() == CEntity3D::TYPE::PROJECTILE))
-				{
-					//(*it_other)->RollbackPosition();
-					(*it_other)->SetToDelete(true);
-
-					CStructure3D* cExplosiveBarrel = static_cast<CStructure3D*>(*it);
-					//CEnemy3D* enemy = dynamic_cast<CEnemy3D*>(*it_other);
-					if (cExplosiveBarrel->GetHealth() > 0)
+					else if (((*it)->GetType() == CEntity3D::TYPE::ZOMBIE) &&
+						((*it_other)->GetType() == CEntity3D::TYPE::STRUCTURE))
 					{
-						cExplosiveBarrel->SetHealth(cExplosiveBarrel->GetHealth() - 10);
-						cSoundController->PlaySoundByID(5);
+						(*it)->RollbackPosition();
+						//(*it_other)->SetToDelete(true);
+						cout << "** Collision between zombie and Structure ***" << endl;
 					}
-					else if (cExplosiveBarrel->GetDespawnQueue() == false)
+					else if (((*it)->GetType() == CEntity3D::TYPE::STRUCTURE) &&
+						((*it_other)->GetType() == CEntity3D::TYPE::ZOMBIE))
 					{
-						
+						(*it_other)->RollbackPosition();
+						//(*it)->SetToDelete(true);
+						cout << "** Collision between Structure and zombie ***" << endl;
+					}
 
-						cExplosiveBarrel->SetCollisionState(false);
-						cExplosiveBarrel->SetColliderScale(cExplosiveBarrel->GetColliderScale() * 2.f);
-						cExplosiveBarrel->SetDespawnQueue(true);
-						if (cPlayer3D->CheckForCollision(cExplosiveBarrel))
+					else if (((*it)->GetType() == CEntity3D::TYPE::ZOMBIE) &&
+						((*it_other)->GetType() == CEntity3D::TYPE::BARRICADE))
+					{
+						(*it)->RollbackPosition();
+						//(*it_other)->SetToDelete(true);
+						cout << "** Collision between zombie and Barricade ***" << endl;
+					}
+					else if (((*it)->GetType() == CEntity3D::TYPE::BARRICADE) &&
+						((*it_other)->GetType() == CEntity3D::TYPE::ZOMBIE))
+					{
+						(*it_other)->RollbackPosition();
+						//(*it)->SetToDelete(true);
+						cout << "** Collision between Barricade and zombie ***" << endl;
+					}
+
+					else if (((*it)->GetType() == CEntity3D::TYPE::PROJECTILE) &&
+						((*it_other)->GetType() == CEntity3D::TYPE::EXPLOSIVE_BARREL))
+					{
+						//(*it_other)->RollbackPosition();
+						(*it)->SetToDelete(true);
+
+						CStructure3D* cExplosiveBarrel = dynamic_cast<CStructure3D*>(*it_other);
+						if (cExplosiveBarrel->GetHealth() > 0)
 						{
-							std::cout << "Player hit by Explosive Barrel explosion" << std::endl;
-							cPlayer3D->SetCurrHealth(cPlayer3D->GetCurrHealth() - 30);
+							cExplosiveBarrel->SetHealth(cExplosiveBarrel->GetHealth() - 10);
+							cSoundController->PlaySoundByID(5);
 						}
+						else if (cExplosiveBarrel->GetDespawnQueue() == false)
+						{
+							cExplosiveBarrel->SetCollisionState(false);
+							cExplosiveBarrel->SetColliderScale(cExplosiveBarrel->GetColliderScale() * 2.f);
+							cExplosiveBarrel->SetDespawnQueue(true);
+							if (cPlayer3D->CheckForCollision(cExplosiveBarrel))
+							{
+								std::cout << "Player hit by Explosive Barrel explosion" << std::endl;
+								cPlayer3D->SetCurrHealth(cPlayer3D->GetCurrHealth() - 30);
+							}
 
+						}
+						cout << "** Collision between Projectile and Explosive Barrel ***" << endl;
 					}
-					cout << "** Collision between Explosive Barrel and Projectile ***" << endl;
-				}
-
-
-				else if (((*it)->GetType() == CEntity3D::TYPE::PROJECTILE) &&
-					((*it_other)->GetType() == CEntity3D::TYPE::BARRICADE))
-				{
-					//(*it_other)->RollbackPosition();
-					(*it)->SetToDelete(true);
-
-					CStructure3D* cBarricade = dynamic_cast<CStructure3D*>(*it_other);
-					if (cBarricade->GetHealth() > 0)
+					else if (((*it)->GetType() == CEntity3D::TYPE::EXPLOSIVE_BARREL) &&
+						((*it_other)->GetType() == CEntity3D::TYPE::PROJECTILE))
 					{
-						cBarricade->SetHealth(cBarricade->GetHealth() - 10);
-						cSoundController->PlaySoundByID(5);
-					}
-					else if (cBarricade->GetDespawnQueue() == false)
-					{
-						cBarricade->SetCollisionState(false);
-						cBarricade->SetDespawnQueue(true);
-					}
-					cout << "** Collision between Projectile and Barricade ***" << endl;
-				}
-				else if (((*it)->GetType() == CEntity3D::TYPE::BARRICADE) &&
-					((*it_other)->GetType() == CEntity3D::TYPE::PROJECTILE))
-				{
-					(*it_other)->SetToDelete(true);
+						//(*it_other)->RollbackPosition();
+						(*it_other)->SetToDelete(true);
 
-					CStructure3D* cBarricade = static_cast<CStructure3D*>(*it);
-					if (cBarricade->GetHealth() > 0)
-					{
-						cBarricade->SetHealth(cBarricade->GetHealth() - 10);
-						cSoundController->PlaySoundByID(5);
+						CStructure3D* cExplosiveBarrel = static_cast<CStructure3D*>(*it);
+						//CEnemy3D* enemy = dynamic_cast<CEnemy3D*>(*it_other);
+						if (cExplosiveBarrel->GetHealth() > 0)
+						{
+							cExplosiveBarrel->SetHealth(cExplosiveBarrel->GetHealth() - 10);
+							cSoundController->PlaySoundByID(5);
+						}
+						else if (cExplosiveBarrel->GetDespawnQueue() == false)
+						{
+
+
+							cExplosiveBarrel->SetCollisionState(false);
+							cExplosiveBarrel->SetColliderScale(cExplosiveBarrel->GetColliderScale() * 2.f);
+							cExplosiveBarrel->SetDespawnQueue(true);
+							if (cPlayer3D->CheckForCollision(cExplosiveBarrel))
+							{
+								std::cout << "Player hit by Explosive Barrel explosion" << std::endl;
+								cPlayer3D->SetCurrHealth(cPlayer3D->GetCurrHealth() - 30);
+							}
+
+						}
+						cout << "** Collision between Explosive Barrel and Projectile ***" << endl;
 					}
-					else if (cBarricade->GetDespawnQueue() == false)
+
+
+					else if (((*it)->GetType() == CEntity3D::TYPE::PROJECTILE) &&
+						((*it_other)->GetType() == CEntity3D::TYPE::BARRICADE))
 					{
-						cBarricade->SetCollisionState(false);
-						cBarricade->SetDespawnQueue(true);
+						//(*it_other)->RollbackPosition();
+						(*it)->SetToDelete(true);
+
+						CStructure3D* cBarricade = dynamic_cast<CStructure3D*>(*it_other);
+						if (cBarricade->GetHealth() > 0)
+						{
+							cBarricade->SetHealth(cBarricade->GetHealth() - 10);
+							cSoundController->PlaySoundByID(5);
+						}
+						else if (cBarricade->GetDespawnQueue() == false)
+						{
+							cBarricade->SetCollisionState(false);
+							cBarricade->SetDespawnQueue(true);
+						}
+						cout << "** Collision between Projectile and Barricade ***" << endl;
 					}
-					cout << "** Collision between Barricade and Projectile ***" << endl;
-				}
-				else if (((*it)->GetType() == CEntity3D::TYPE::PROJECTILE) &&
-					((*it_other)->GetType() == CEntity3D::TYPE::PLAY_BUTTON) ||
-					((*it_other)->GetType() == CEntity3D::TYPE::HIGHSCORE_BUTTON) || 
-					((*it_other)->GetType() == CEntity3D::TYPE::QUIT_BUTTON))
-				{
-					//(*it_other)->RollbackPosition();
-					(*it)->SetToDelete(true);
-					(*it_other)->SetRotation(45.f, glm::vec3(1.f, 0.f, 0.f));
-					cout << "** Collision between Projectile and Menu button***" << endl;
+					else if (((*it)->GetType() == CEntity3D::TYPE::BARRICADE) &&
+						((*it_other)->GetType() == CEntity3D::TYPE::PROJECTILE))
+					{
+						(*it_other)->SetToDelete(true);
+
+						CStructure3D* cBarricade = static_cast<CStructure3D*>(*it);
+						if (cBarricade->GetHealth() > 0)
+						{
+							cBarricade->SetHealth(cBarricade->GetHealth() - 10);
+							cSoundController->PlaySoundByID(5);
+						}
+						else if (cBarricade->GetDespawnQueue() == false)
+						{
+							cBarricade->SetCollisionState(false);
+							cBarricade->SetDespawnQueue(true);
+						}
+						cout << "** Collision between Barricade and Projectile ***" << endl;
+					}
 				}
 			}
 		}
@@ -557,11 +615,33 @@ void CEntityManager::Render(void)
 	end = lEntity3D.end();
 	for (it = lEntity3D.begin(); it != end; ++it)
 	{
-		(*it)->SetView(view);
-		(*it)->SetProjection(projection);
-		(*it)->PreRender();
-		(*it)->Render();
-		(*it)->PostRender();
+		if (bMenuOnly)
+		{
+			if ((*it)->GetType() > CEntity3D::MENU_START && (*it)->GetType() < CEntity3D::MENU_END ||
+				(*it)->GetType() == CEntity3D::PROJECTILE)
+			{
+ 				(*it)->SetView(view);
+				(*it)->SetProjection(projection);
+				(*it)->PreRender();
+				(*it)->Render();
+				(*it)->PostRender();
+			}
+		}
+		else
+		{
+			if ((*it)->GetType() > CEntity3D::MENU_START && (*it)->GetType() < CEntity3D::MENU_END)
+			{
+				continue;
+			}
+			else
+			{
+				(*it)->SetView(view);
+				(*it)->SetProjection(projection);
+				(*it)->PreRender();
+				(*it)->Render();
+				(*it)->PostRender();
+			}
+		}
 	}
 }
 
@@ -660,6 +740,16 @@ void CEntityManager::UpdateScore(void)
 		}
 	}
 
+}
+
+void CEntityManager::SetToMenu()
+{
+	bMenuOnly = true;
+}
+
+void CEntityManager::SetToGame()
+{
+	bMenuOnly = false;
 }
 
 

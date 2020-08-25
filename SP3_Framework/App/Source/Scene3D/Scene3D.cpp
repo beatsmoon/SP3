@@ -254,7 +254,7 @@ bool CScene3D::UpdateSceneDelay(const double dElapsedTime)
 	// Scene change animations, events can all be updated here
 
 	// Check if the delay is more than a constant value
-	if (dSceneChangeDelay > 0)
+	if (dSceneChangeDelay > 0.0)
 	{
 		bSceneChangeDelay = false;
 		bSceneChangeEnabled = true;

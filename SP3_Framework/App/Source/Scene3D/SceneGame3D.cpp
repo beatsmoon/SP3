@@ -322,11 +322,11 @@ bool CSceneGame3D::Init(void)
 
 	}
 
-	/*CStructure3D* cExplosiveBarrel = new CStructure3D(glm::vec3(0.f, 0.5f, 0.f), CEntity3D::TYPE::EXPLOSIVE_BARREL);
+	CStructure3D* cExplosiveBarrel = new CStructure3D(glm::vec3(0.f, 0.5f, 0.f), CEntity3D::TYPE::EXPLOSIVE_BARREL);
 	cExplosiveBarrel->SetShader(cShader);
 	cExplosiveBarrel->Init();
 	cExplosiveBarrel->ActivateCollider(cSimpleShader);
-	cEntityManager->Add(cExplosiveBarrel);*/
+	cEntityManager->Add(cExplosiveBarrel);
 
 
 	CBoss3D* cEnemy3D = new CBoss3D(glm::vec3(Math::RandFloatMinMax(-10.0f, 10.0f), 0.5f, Math::RandFloatMinMax(-10.0f, 10.0f)), 1);

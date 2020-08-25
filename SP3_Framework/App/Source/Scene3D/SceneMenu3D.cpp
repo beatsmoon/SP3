@@ -68,7 +68,6 @@ bool CSceneMenu3D::Init(void)
 	cPlayer3D->AttachCamera();
 	cPlayer3D->ActivateCollider(cSimpleShader);
 
-
 	cEntityManager = CEntityManager::GetInstance();
 	cEntityManager->Init();
 
@@ -78,11 +77,12 @@ bool CSceneMenu3D::Init(void)
 
 	for (unsigned int i = 0; i < M_END; ++i)
 	{
-		cButton = new CStructure3D(glm::vec3(cPlayer3D->GetPosition().x, fYButtonOffset + fRelativeScale, cPlayer3D->GetPosition().z), static_cast<CEntity3D::TYPE>(i + static_cast<int>(CEntity3D::TYPE::BUTTON_START) + 1), glm::vec3(0.f, 0.f, 1.f));
+		cButton = new CStructure3D(glm::vec3(cPlayer3D->GetPosition().x, fYButtonOffset + fRelativeScale, cPlayer3D->GetPosition().z), static_cast<CEntity3D::TYPE>(i + static_cast<int>(CEntity3D::TYPE::MENU_START) + 1), glm::vec3(0.f, 0.f, 1.f));
 		cButton->SetPosition(cButton->GetPosition() + cPlayer3D->GetFront() * 2.f);
 		cButton->SetShader(cShader);
 		cButton->Init();
 		cButton->ActivateCollider(cSimpleShader);
+		cEntityManager->Add(cButton);
 		vStructures.push_back(cButton);
 
 		fYButtonOffset -= fRelativeScale;
@@ -92,7 +92,6 @@ bool CSceneMenu3D::Init(void)
 	cPistol = new CWeapon(Weapon_Type::W_PISTOL);
 	cPistol->Init();
 	cPistol->SetShader(cSimpleShader);
-	cPlayer3D->SetWeapon(0, cPistol);
 	
 	cSkybox = CSkyBox::GetInstance();
 	cSkybox->SetShader(skyBoxShader);
@@ -114,20 +113,47 @@ void CSceneMenu3D::Update(const double dElapsedTime)
 		cCamera->ProcessMouseScroll((float)cMouseController->GetMouseScrollStatus(
 			CMouseController::SCROLL_TYPE::SCROLL_TYPE_YOFFSET));
 	}
-	if (cPlayer3D->GetShootingMode())
+
+	if (cMouseController->IsButtonDown(CMouseController::BUTTON_TYPE::LMB) && cPistol->GetMagRound() > 0
+		&& cPistol->GetFiringType() == CWeaponInfo::FIRINGTYPE::AUTO)
 	{
-		if (cMouseController->IsButtonDown(CMouseController::BUTTON_TYPE::LMB))
 		{
-			cPistol->SetCanFire(true);
-			CProjectile* cProjectile = cPlayer3D->DischargeWeapon();
+			CProjectile* cProjectile = cPistol->Discharge(cPlayer3D->GetPosition(), cPlayer3D->GetFront(), cPlayer3D);
 			if (cProjectile)
 			{
+				cProjectile->SetGravityMultiplier(cPistol->CalculateGravityMultiplier());
+
 				cEntityManager->Add(cProjectile);
+				cPlayer3D->TriggerRecoil();
+			}
+			//if (i == BulletPerShot - 1)
+			{
+				cPistol->SetMagRound(cPistol->GetMagRound() - 1);
+				//cPistol->SetCanFire(false);
+			}
+		}
+	}
+	else if (cMouseController->IsButtonReleased(CMouseController::BUTTON_TYPE::LMB) && cPistol->GetMagRound() > 0
+		&& cPistol->GetFiringType() == CWeaponInfo::FIRINGTYPE::SINGLE)
+	{
+		{
+			CProjectile* cProjectile = cPistol->Discharge(cPlayer3D->GetPosition(), cPlayer3D->GetFront(), cPlayer3D);
+			if (cProjectile)
+			{
+				cProjectile->SetGravityMultiplier(cPistol->CalculateGravityMultiplier());
+				cEntityManager->Add(cProjectile);
+				cPlayer3D->TriggerRecoil();
+			}
+			//if (i == BulletPerShot - 1)
+			{
+				cPistol->SetMagRound((cPistol->GetMagRound()) - 1);
+				//cPistol->SetCanFire(false);
 			}
 		}
 	}
 
-	if (CKeyboardController::GetInstance()->IsKeyPressed(GLFW_KEY_R))
+	if (CKeyboardController::GetInstance()->IsKeyPressed(GLFW_KEY_R)
+		&& cPistol->GetMagRound() < cPistol->GetMaxMagRound())
 	{
 		static double InputDelay = 10.f;
 		if (InputDelay < 10.f)
@@ -138,57 +164,25 @@ void CSceneMenu3D::Update(const double dElapsedTime)
 		else
 		{
 			InputDelay = 0.f;
-			if (cPlayer3D->GetWeapon() != NULL)
+			if (cPistol != NULL)
 			{
-				cPlayer3D->GetWeapon()->Reload();
+				cPistol->Reload();
+				//cPlayer3D->GetWeapon()->SetCanFire(false);
+
 			}
 			else
 			{
 				cout << "there is no weapon to reload" << endl;
 			}
 		}
-
 	}
+
+	cPistol->Update(dElapsedTime);
 
 	cMouseController->PostUpdate();
 
 	// Update cEntityManager
 	cEntityManager->Update(dElapsedTime);
-
-	// Delay for exiting not active. Update collisions with buttons
-	if (!bSceneChangeDelay)
-	{
-		for (size_t i = 0; i < vStructures.size(); ++i)
-		{
-			if (cEntityManager->CollisionCheck(vStructures.at(i)))
-			{
-				e_MenuChoice = static_cast<MENU_CHOICES>(i);
-				bSceneChangeDelay = true;
-			}
-		}
-	}
-	// Delay already active, check if delay is done
-	else
-	{
-		// Update delay
-		if (UpdateSceneDelay(dElapsedTime))
-		{
-			// If delay is done, switch to whatever screen needed
-			switch (e_MenuChoice)
-			{
-			case M_PLAY:
-				CSceneManager::GetInstance()->EnableScene(SCENES::GAME);
-				CSceneManager::GetInstance()->DisableScene(SCENES::MENU);
-				break;
-			case M_HIGHSCORE:
-				break;
-			case M_QUIT:
-				CSceneManager::GetInstance()->SetApplicationToEnd();
-				break;
-			}
-		}	
-	}
-
 }
 
 /**
@@ -289,15 +283,6 @@ void CSceneMenu3D::Render(void)
 	cEntityManager->SetView(view);
 	cEntityManager->SetProjection(projection);
 	cEntityManager->Render();
-
-	CStructure3D* tempStructure = NULL;
-	for (size_t i = 0; i < M_END; ++i)
-	{
-		tempStructure = vStructures.at(i);
-		tempStructure->SetView(view);
-		tempStructure->SetProjection(projection);
-		tempStructure->Render();
-	}
 
 	// now draw the mirror quad with screen texture
 	// --------------------------------------------

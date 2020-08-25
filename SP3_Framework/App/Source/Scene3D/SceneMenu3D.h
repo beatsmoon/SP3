@@ -67,14 +67,6 @@ class CSceneMenu3D : public CScene3D, public CSingletonTemplate<CSceneMenu3D>
 {
 	friend class CSingletonTemplate<CSceneMenu3D>;
 
-	enum MENU_CHOICES
-	{
-		M_PLAY,
-		M_HIGHSCORE,
-		M_QUIT,
-		M_END,
-	};
-
 	std::vector<CStructure3D*> vStructures;
 
 public:
@@ -94,6 +86,14 @@ public:
 	void PostRender(void);
 
 	void RecalculateButtonPosition();
+
+	enum MENU_CHOICES
+	{
+		M_PLAY,
+		M_HIGHSCORE,
+		M_QUIT,
+		M_END,
+	};
 
 protected:
 	// Constructor
