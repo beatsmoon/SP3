@@ -76,7 +76,8 @@ public:
 	//Score related function
 	virtual void UpdateScore(void);
 
-	
+	void SetToMenu();
+	void SetToGame();
 
 protected:
 	// Render Settings
@@ -103,6 +104,9 @@ protected:
 	//Wave related members
 
 	bool bIsWaveStarted;
+
+	// This boolean will disable all entites except menu button and projectile
+	bool bMenuOnly;
 
 	
 
