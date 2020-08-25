@@ -34,8 +34,6 @@ public:
 
 	virtual void Init(void);
 	
-
-	virtual void UpdateHighScore();
 	//Wave Control Functions
 
 	//Set the number and stats of enemies in each wave

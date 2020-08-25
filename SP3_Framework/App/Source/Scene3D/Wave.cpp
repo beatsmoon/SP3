@@ -29,18 +29,6 @@ void CWave::Init(void)
 
 }
 
-void CWave::UpdateHighScore()
-{
-	if (iWaveCounter > 10)
-	{
-		ofstream highscore;
-		highscore.open("highscore.txt", ios::app);
-		string sInString = to_string(cScore->GetScore());
-		highscore << sInString << endl;
-		highscore.close();
-	}
-	
-}
 
 
 

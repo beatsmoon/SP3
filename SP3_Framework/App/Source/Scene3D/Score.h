@@ -2,6 +2,8 @@
 
 #include "DesignPatterns/SingletonTemplate.h"
 
+#include <fstream>
+
 class CScore : public CSingletonTemplate<CScore>
 {
 
@@ -35,10 +37,16 @@ public:
 
 	virtual void AddScoreFromWave(int iWaveNumber, double dWaveTimer);
 
-	//Update score
-	virtual void Update(void);
-
 	virtual bool Init(void);
+
+	virtual void BubbleSort(int* list, int length);
+
+	virtual void Swap(int* list, int location1, int location2);
+
+	virtual void UpdateHighScores(void);
+
+	virtual void PrintHighScores(void);
+
 
 protected:
 	
