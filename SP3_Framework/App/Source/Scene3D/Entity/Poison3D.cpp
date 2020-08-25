@@ -9,7 +9,7 @@ using namespace std;
 CPoison3D::CPoison3D(void)
 {
 	this->vec3Position = glm::vec3(1, 1, 1);
-	this->type = Enemy_Type::E_ENEMY1;
+	this->type = Enemy_Type::T_ENEMY1;
 }
 
 CPoison3D::CPoison3D(const glm::vec3 vec3Position, int enemy_type, CEnemy3D* currenemy)
@@ -48,50 +48,34 @@ bool CPoison3D::Init(void)
 	
 	switch (type)
 	{
-	case E_ENEMY1:
+	case T_ENEMY1:
 	{
 		vec3Scale = glm::vec3(2, 2, 2);
 		vec3ColliderScale = glm::vec3(4, 0.1, 4);
 		
-
-		std::string file_path = "OBJ/range.obj";
-		bool success = LoadOBJ(file_path.c_str(), vertices, uvs, normals);
-		if (!success)
-		{
-			return NULL;
-		}
-
-
 		break;
 	}
-	case E_ENEMY2:
+	case T_ENEMY2:
 	{
 		vec3Scale = glm::vec3(1, 1, 1);
 		vec3ColliderScale = glm::vec3(2, 0.2, 2);
 
-		std::string file_path = "OBJ/range.obj";
-		bool success = LoadOBJ(file_path.c_str(), vertices, uvs, normals);
-		if (!success)
-		{
-			return NULL;
-		}
-
 		break;
 	}
-	case E_ENEMY3:
+	case T_ENEMY3:
 	{
 		vec3Scale = glm::vec3(0, 0, 0);
 		vec3ColliderScale = glm::vec3(0, 0, 0);
 
-		std::string file_path = "OBJ/range.obj";
-		bool success = LoadOBJ(file_path.c_str(), vertices, uvs, normals);
-		if (!success)
-		{
-			return NULL;
-		}
-
 		break;
 	}
+	}
+
+	std::string file_path = "OBJ/range.obj";
+	bool success = LoadOBJ(file_path.c_str(), vertices, uvs, normals);
+	if (!success)
+	{
+		return NULL;
 	}
 
 	std::vector<Vertex> vertex_buffer_data;
