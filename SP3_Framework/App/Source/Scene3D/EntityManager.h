@@ -77,6 +77,8 @@ public:
 
 	virtual bool CheckWave(void);
 
+	virtual bool CheckBoss(void);
+
 	//Score related function
 	virtual void UpdateScore(void);
 

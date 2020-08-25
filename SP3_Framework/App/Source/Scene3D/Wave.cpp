@@ -83,6 +83,7 @@ void CWave::StartWave(int waveNumber)
 		cEntityManager->SetWaveStarted(true);
 		
 	}
+
 }
 
 void CWave::SpawnBoss(void)
@@ -91,7 +92,7 @@ void CWave::SpawnBoss(void)
 
 	if (iWaveCounter < 11)
 	{
-		rand = Math::RandIntMinMax(1, 2);
+		rand = Math::RandIntMinMax(1, 1);
 	}
 
 	CBoss3D* cBoss3D = new CBoss3D(glm::vec3(Math::RandFloatMinMax(-10.0f, 10.0f), 0.5f, Math::RandFloatMinMax(-10.0f, 10.0f)), rand);
@@ -101,9 +102,6 @@ void CWave::SpawnBoss(void)
 	cEntityManager->Add(cBoss3D);
 
 	cEntityManager->SetBossStatus(true);
-	
-
-
 }
 
 

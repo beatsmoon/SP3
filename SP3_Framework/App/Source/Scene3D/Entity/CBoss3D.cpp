@@ -158,7 +158,7 @@ bool CBoss3D::Init(void)
 	}
 	case T_BOSS2:
 	{
-		health = 1000;
+		health = 50;
 		speed = Math::RandFloatMinMax(1.0f, 1.2f);
 		rangeOfSight = 6.f;
 		splitting = 0;
