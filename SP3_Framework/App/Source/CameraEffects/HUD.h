@@ -56,6 +56,10 @@ public:
 	// PostRender
 	void PostRender(void);
 
+	void UpdateBarrelVisualStatus();
+	void UpdateScopeVisualStatus();
+	void UpdateFullStatus();
+
 protected:
 	// A transformation matrix for controlling where to render the entities
 	glm::mat4 transform;
@@ -67,6 +71,11 @@ protected:
 	Weapon_Type type;
 	Weapon_Type prevtype;
 
+	CGunBarrel::TIERLEVEL tPrevBarrel;
+	CGunBarrel::TIERLEVEL tBarrel;
+
+	CGunScope::TIERLEVEL tPrevScope;
+	CGunScope::TIERLEVEL tScope;
 	//float fHeight, fWidth;
 
 	

@@ -1,6 +1,6 @@
 #include "Weapon.h"
 
-CWeapon::CWeapon() : type(W_PISTOL)
+CWeapon::CWeapon() : type(Weapon_Type::W_PISTOL)
 {
 }
 
@@ -183,14 +183,15 @@ float CWeapon::CalculateGravityMultiplier()
 	switch (type)
 	{
 	case W_PISTOL:
-		return 1.0;
+		return 0.2f;
 	case W_SHOTGUN:
-		return 1.5;
+		return 0.4f; //0.175
 	case W_AK47:
-		return 0.8;
+		return 0.075f;
 	case W_SNIPER:
-		return 1.0;
-
+		return 0.04f;
+	default:
+		return -1.0f;
 	}
-	return 0;
+	return 0.0f;
 }

@@ -111,11 +111,12 @@ bool CHUD::Init(void)
 	//default:
 	//	break;
 	//}
-	vec3Position = glm::vec3(0.5f, -0.5f, 0.0f);
+	vec3Position = glm::vec3(0.5f, -0.9f, 0.0f);
 	vec3Scale.x = 0.5;
-	vec3Scale.y = 0.5;
+	vec3Scale.y = 0.8;
 	type = prevtype = Weapon_Type::W_PISTOL;
-
+	tPrevBarrel = tBarrel = CGunBarrel::TIERLEVEL::NOTIER;
+	tPrevScope = tScope = CGunScope::TIERLEVEL::NOTIER;
 	return true;
 }
 
@@ -143,88 +144,14 @@ bool CHUD::GetStatus(void) const
 {
     return bActive;
 }
-
-void CHUD::Update(const double dElapsedTime)
+void CHUD::UpdateScopeVisualStatus()
 {
-	//switch (type)
-	//{
-	//case H_HOLDING_GUN:
-	//{
-	//	// prevent updating texture after the 1st update
-	//	static bool isActivated = false;
-	//	// 1 == rifle
-	//	// 2 == pistol
-	//	// set the prev weapon
-	//	static int prevWeapon = 2;
-	//	if (cPlayer3D->GetWeapon() == cPlayer3D->GetInventoryWeapon(0))
-	//	{
-	//		if (prevWeapon != 1)
-	//		{
-	//			isActivated = false;
-	//		}
-	//		if (!isActivated && prevWeapon != 1)
-	//		{
-	//			iTextureID = LoadTexture("Images/GUI/holding_rifle.tga");
-	//			isActivated = true;
-	//			prevWeapon = 1;
-	//		}
-	//	}
-	//	else
-	//	{
-	//		if (prevWeapon != 2)
-	//		{
-	//			isActivated = false;
-	//		}
-	//		if (!isActivated && prevWeapon != 2)
-	//		{
-	//			iTextureID = LoadTexture("Images/GUI/holding_pistol.tga");
-	//			isActivated = true;
-	//			prevWeapon = 2;
-	//		}
-	//	}
-	//	break;
-	//}
-	//	
-	//case H_SELECTION_GUN:
-	//{
-	//	// prevent updating texture after the 1st update
-	//	static bool isActivated = false;
-	//	// 1 == rifle
-	//	// 2 == pistol
-	//	// set the prev weapon
-	//	static int prevWeapon = 2;
-	//	if (cPlayer3D->GetWeapon() == cPlayer3D->GetInventoryWeapon(0))
-	//	{
-	//		if (prevWeapon != 1)
-	//		{
-	//			isActivated = false;
-	//		}
-	//		if (!isActivated && prevWeapon != 1)
-	//		{
-	//			iTextureID = LoadTexture("Images/GUI/rifle_HUD.tga");
-	//			isActivated = true;
-	//			prevWeapon = 1;
-	//		}
-	//	}
-	//	else
-	//	{
-	//		if (prevWeapon != 2)
-	//		{
-	//			isActivated = false;
-	//		}
-	//		if (!isActivated && prevWeapon != 2)
-	//		{
-	//			iTextureID = LoadTexture("Images/GUI/pistol_HUD.tga");
-	//			isActivated = true;
-	//			prevWeapon = 2;
-	//		}
-	//	}
-	//	break;
-	//}
-	//	
-	//default:
-	//	break;
-	//}
+	tScope = cPlayer3D->GetWeapon()->GetScope()->GetTierLevel();
+	if (tScope == tPrevScope)
+	{
+		return;
+	}
+	tPrevScope = tScope;
 
 	type = cPlayer3D->GetWeapon()->GetWeaponName();
 	if (type == prevtype)
@@ -234,19 +161,161 @@ void CHUD::Update(const double dElapsedTime)
 	prevtype = type;
 	switch (type)
 	{
+	case Weapon_Type::W_PISTOL:
+	{
+		iTextureID = LoadTexture("Images/GUI/BarrelAttachment/Scene3D_Holding_Pistol_Barreled.tga");
+	}
+	break;
+	case Weapon_Type::W_SHOTGUN:
+	{
+		iTextureID = LoadTexture("Images/GUI/ScopeAttachment/Scene3D_Holding_Shotgun_Scoped.tga");
+	}
+	break;
+	case Weapon_Type::W_AK47:
+	{
+		iTextureID = LoadTexture("Images/GUI/ScopeAttachment/Scene3D_Holding_AK47_Scoped.tga");
+	}
+	break;
+	case Weapon_Type::W_M4:
+	{
+		iTextureID = LoadTexture("Images/GUI/BarrelAttachment/Scene3D_Holding_M4.tga");
+	}
+	break;
+	case Weapon_Type::W_SNIPER:
+	{
+		iTextureID = LoadTexture("Images/GUI/ScopeAttachment/Scene3D_Holding_Sniper_Barreled.tga");
+	}
+	break;
+	}
+}
+void CHUD::UpdateFullStatus()
+{
+	tScope = cPlayer3D->GetWeapon()->GetScope()->GetTierLevel();
+	if (tScope == tPrevScope)
+	{
+		return;
+	}
+	tPrevScope = tScope;
+
+	type = cPlayer3D->GetWeapon()->GetWeaponName();
+	if (type == prevtype)
+	{
+		return;
+	}
+	prevtype = type;
+	switch (type)
+	{
+	case Weapon_Type::W_PISTOL:
+	{
+		iTextureID = LoadTexture("Images/GUI/BarrelAttachment/Scene3D_Holding_Pistol_Barreled.tga");
+	}
+	break;
+	case Weapon_Type::W_SHOTGUN:
+	{
+		iTextureID = LoadTexture("Images/GUI/FullAttachment/Scene3D_Holding_Shotgun_Full.tga");
+	}
+	break;
+	case Weapon_Type::W_AK47:
+	{
+		iTextureID = LoadTexture("Images/GUI/FullAttachment/Scene3D_Holding_AK47_Full.tga");
+	}
+	break;
+	case Weapon_Type::W_M4:
+	{
+		iTextureID = LoadTexture("Images/GUI/BarrelAttachment/Scene3D_Holding_M4.tga");
+	}
+	break;
+	case Weapon_Type::W_SNIPER:
+	{
+		iTextureID = LoadTexture("Images/GUI/ScopeAttachment/Scene3D_Holding_Sniper_Barreled.tga");
+	}
+	break;
+	}
+}
+void CHUD::UpdateBarrelVisualStatus()
+{
+	tBarrel = cPlayer3D->GetWeapon()->GetBarrel()->GetTierLevel();
+	if (tBarrel == tPrevBarrel)
+	{
+		return;
+	}
+	tPrevBarrel = tBarrel;
+
+	type = cPlayer3D->GetWeapon()->GetWeaponName();
+	if (type == prevtype)
+	{
+		return;
+	}
+	prevtype = type;
+	switch (type)
+	{
+	case Weapon_Type::W_PISTOL:
+	{
+		iTextureID = LoadTexture("Images/GUI/BarrelAttachment/Scene3D_Holding_Pistol_Barreled.tga");
+	}
+	break;
+	case Weapon_Type::W_SHOTGUN:
+	{
+		iTextureID = LoadTexture("Images/GUI/BarrelAttachment/Scene3D_Holding_Shotgun_Barreled.tga");
+	}
+	break;
+	case Weapon_Type::W_AK47:
+	{
+		iTextureID = LoadTexture("Images/GUI/BarrelAttachment/Scene3D_Holding_AK47_Barreled.tga");
+	}
+	break;
+	case Weapon_Type::W_M4:
+	{
+		iTextureID = LoadTexture("Images/GUI/BarrelAttachment/Scene3D_Holding_M4.tga");
+	}
+	break;
+	case Weapon_Type::W_SNIPER:
+	{
+		iTextureID = LoadTexture("Images/GUI/BarrelAttachment/Scene3D_Holding_Sniper_Barreled.tga");
+	}
+	break;
+	}
+}
+void CHUD::Update(const double dElapsedTime)
+{
+	if (cPlayer3D->GetWeapon()->GetBarrel() != NULL && cPlayer3D->GetWeapon()->GetScope() == NULL)
+	{
+		//if gun only have barrel 
+		UpdateBarrelVisualStatus();
+	}
+	else if (cPlayer3D->GetWeapon()->GetBarrel() == NULL && cPlayer3D->GetWeapon()->GetScope() != NULL)
+	{
+		//if gun only have scope
+		UpdateScopeVisualStatus();
+	}
+	else if (cPlayer3D->GetWeapon()->GetBarrel() != NULL && cPlayer3D->GetWeapon()->GetScope() != NULL)
+	{
+		//if gun only have scope
+		UpdateFullStatus();
+	}
+	else
+	{
+		type = cPlayer3D->GetWeapon()->GetWeaponName();
+		if (type == prevtype)
+		{
+			return;
+		}
+		prevtype = type;
+		switch (type)
+		{
 		case Weapon_Type::W_PISTOL:
 		{
-			iTextureID = LoadTexture("Images/GUI/Scene3D_Holding_Pistol.tga");
+			iTextureID = LoadTexture("Images/GUI/NoAttachment/Scene3D_Holding_Pistol.tga");
 		}
 		break;
 		case Weapon_Type::W_SHOTGUN:
 		{
-			iTextureID = LoadTexture("Images/GUI/Scene3D_Holding_Shotgun.tga");
+			iTextureID = LoadTexture("Images/GUI/NoAttachment/Scene3D_Holding_Shotgun.tga");
 		}
 		break;
 		case Weapon_Type::W_AK47:
 		{
-			iTextureID = LoadTexture("Images/GUI/Scene3D_Holding_AK47.tga");
+			iTextureID = LoadTexture("Images/GUI/NoAttachment/Scene3D_Holding_AK47.tga");
 		}
 		break;
 		case Weapon_Type::W_M4:
@@ -256,11 +325,11 @@ void CHUD::Update(const double dElapsedTime)
 		break;
 		case Weapon_Type::W_SNIPER:
 		{
-			iTextureID = LoadTexture("Images/GUI/Scene3D_Holding_Sniper.tga");
+			iTextureID = LoadTexture("Images/GUI/NoAttachment/Scene3D_Holding_Sniper.tga");
 		}
 		break;
+		}
 	}
-
 }
 
 void CHUD::PreRender(void)
