@@ -169,15 +169,35 @@ void CShop::Update(const double dElapsedTime)
 
 				//If player does not already have sniper
 				if (cPlayer3D->GetInventoryWeapon(0)->GetWeaponName() != Weapon_Type::W_SNIPER)
-				{	
-					sItemBought = "Bought Sniper Rifle";
-					//Player buys Sniper
-					delete cPlayer3D->GetInventoryWeapon(0);
+				{
 
-					CWeapon* Sniper = new CWeapon(Weapon_Type::W_SNIPER);
-					Sniper->Init();
-					Sniper->SetShader(cSimpleShader);
-					cPlayer3D->SetWeapon(0, Sniper);
+					sItemBought = "Bought Sniper Rifle";
+					delete cPlayer3D->GetInventoryWeapon(0);
+					
+					//Player buys Sniper
+					CGunBarrel* cGunBarrel = new CGunBarrel();
+					cGunBarrel->SetShader(cShader);
+					cGunBarrel->Init();
+					cGunBarrel->SetTierLevel(CGunBarrel::TIERLEVEL::NOTIER);
+
+					CGunExtMag* cGunExtMag = new CGunExtMag();
+					cGunExtMag->SetShader(cShader);
+					cGunExtMag->Init();
+					cGunExtMag->SetTierLevel(CGunExtMag::TIERLEVEL::NOTIER);
+
+					CGunScope* cGunScope = new CGunScope();
+					cGunScope->SetShader(cShader);
+					cGunScope->Init();
+					cGunScope->SetTierLevel(CGunScope::TIERLEVEL::TIER3);
+
+					CWeapon* rifle = new CWeapon(Weapon_Type::W_SNIPER);
+					rifle->Init();
+					rifle->SetShader(cSimpleShader);
+					cPlayer3D->SetWeapon(0, rifle);
+					cPlayer3D->SetCurrentWeapon(0);
+					cPlayer3D->GetWeapon()->SetBarrel(cGunBarrel);
+					cPlayer3D->GetWeapon()->SetExtMag(cGunExtMag);
+					cPlayer3D->GetWeapon()->SetScope(cGunScope);
 				}
 
 				else
@@ -199,10 +219,30 @@ void CShop::Update(const double dElapsedTime)
 					//Player buys AK47
 					delete cPlayer3D->GetInventoryWeapon(0);
 
-					CWeapon* AK47 = new CWeapon(Weapon_Type::W_AK47);
-					AK47->Init();
-					AK47->SetShader(cSimpleShader);
-					cPlayer3D->SetWeapon(0, AK47);
+					//Player buys AK47
+					CGunBarrel* cGunBarrel = new CGunBarrel();
+					cGunBarrel->SetShader(cShader);
+					cGunBarrel->Init();
+					cGunBarrel->SetTierLevel(CGunBarrel::TIERLEVEL::NOTIER);
+
+					CGunExtMag* cGunExtMag = new CGunExtMag();
+					cGunExtMag->SetShader(cShader);
+					cGunExtMag->Init();
+					cGunExtMag->SetTierLevel(CGunExtMag::TIERLEVEL::NOTIER);
+
+					CGunScope* cGunScope = new CGunScope();
+					cGunScope->SetShader(cShader);
+					cGunScope->Init();
+					cGunScope->SetTierLevel(CGunScope::TIERLEVEL::NOTIER);
+
+					CWeapon* rifle = new CWeapon(Weapon_Type::W_AK47);
+					rifle->Init();
+					rifle->SetShader(cSimpleShader);
+					cPlayer3D->SetWeapon(0, rifle);
+					cPlayer3D->SetCurrentWeapon(0);
+					cPlayer3D->GetWeapon()->SetBarrel(cGunBarrel);
+					cPlayer3D->GetWeapon()->SetExtMag(cGunExtMag);
+					cPlayer3D->GetWeapon()->SetScope(cGunScope);
 				}
 
 				else
@@ -223,10 +263,29 @@ void CShop::Update(const double dElapsedTime)
 					//Player buys shotgun
 					delete cPlayer3D->GetInventoryWeapon(0);
 
-					CWeapon* Shotgun = new CWeapon(Weapon_Type::W_SHOTGUN);
-					Shotgun->Init();
-					Shotgun->SetShader(cSimpleShader);
-					cPlayer3D->SetWeapon(0, Shotgun);
+					CGunBarrel* cGunBarrel = new CGunBarrel();
+					cGunBarrel->SetShader(cShader);
+					cGunBarrel->Init();
+					cGunBarrel->SetTierLevel(CGunBarrel::TIERLEVEL::NOTIER);
+
+					CGunExtMag* cGunExtMag = new CGunExtMag();
+					cGunExtMag->SetShader(cShader);
+					cGunExtMag->Init();
+					cGunExtMag->SetTierLevel(CGunExtMag::TIERLEVEL::NOTIER);
+
+					CGunScope* cGunScope = new CGunScope();
+					cGunScope->SetShader(cShader);
+					cGunScope->Init();
+					cGunScope->SetTierLevel(CGunScope::TIERLEVEL::NOTIER);
+
+					CWeapon* rifle = new CWeapon(Weapon_Type::W_SHOTGUN);
+					rifle->Init();
+					rifle->SetShader(cSimpleShader);
+					cPlayer3D->SetWeapon(0, rifle);
+					cPlayer3D->SetCurrentWeapon(0);
+					cPlayer3D->GetWeapon()->SetBarrel(cGunBarrel);
+					cPlayer3D->GetWeapon()->SetExtMag(cGunExtMag);
+					cPlayer3D->GetWeapon()->SetScope(cGunScope);
 				}
 
 				else
@@ -241,14 +300,23 @@ void CShop::Update(const double dElapsedTime)
 				&& (cMouseController->GetMousePositionY() >= m_windowHeight * 0.51315 && cMouseController->GetMousePositionY() <= m_windowHeight * 0.67105))
 			{
 				cout << "Middle Left Box" << endl;
-				CGunExtMag* cExtendedMag = new CGunExtMag();
-				cExtendedMag->Init();
-				cExtendedMag->SetTierLevel(CGunExtMag::TIERLEVEL::TIER1);
-				cPlayer3D->GetInventoryWeapon(0)->SetExtMag(cExtendedMag);
-				cPlayer3D->GetInventoryWeapon(0)->SetMaxMagRound(cPlayer3D->GetInventoryWeapon(0)->GetMaxMagRound() + cPlayer3D->GetInventoryWeapon(0)->GetExtMag()->GetAdditionMag());
-				cout << static_cast<int>(cExtendedMag->GetTierLevel());
 
-				
+
+				if (cPlayer3D->GetInventoryWeapon(0)->GetExtMag()->GetTierLevel() != cPlayer3D->GetInventoryWeapon(0)->GetExtMag()->TIER3)
+				{
+
+					cPlayer3D->GetInventoryWeapon(0)->GetExtMag()->UpgradeExtMag();
+
+					cPlayer3D->GetInventoryWeapon(0)->SetMaxMagRound(cPlayer3D->GetInventoryWeapon(0)->GetMaxMagRound()
+						+ cPlayer3D->GetInventoryWeapon(0)->GetExtMag()->GetAdditionMag());
+					sItemBought = "Bought a tier " + std::to_string(static_cast<int>(cPlayer3D->GetInventoryWeapon(0)->GetExtMag()->GetTierLevel())) + "Extended Magazine";
+				}
+
+				else
+				{
+					sItemBought = "Extended Magazine is maxed";
+				}
+
 			}
 
 			//Middle Box
@@ -257,11 +325,17 @@ void CShop::Update(const double dElapsedTime)
 			{
 				cout << "Middle Box" << endl;
 
-				CGunScope* cScope = new CGunScope();
-				cScope->Init();
-				cScope->SetTierLevel(CGunScope::TIERLEVEL::TIER1);
+				if (cPlayer3D->GetInventoryWeapon(0)->GetScope()->GetTierLevel() != cPlayer3D->GetInventoryWeapon(0)->GetScope()->TIER3)
+				{
 
-				cPlayer3D->GetInventoryWeapon(0)->SetScope(cScope);
+					cPlayer3D->GetInventoryWeapon(0)->GetScope()->UpgradeScope();
+					sItemBought = "Bought a tier " + std::to_string(static_cast<int>(cPlayer3D->GetInventoryWeapon(0)->GetScope()->GetTierLevel())) + " Scope";
+				}
+
+				else
+				{
+					sItemBought = "Scope is maxed";
+				}
 
 			}
 
@@ -275,23 +349,32 @@ void CShop::Update(const double dElapsedTime)
 				CGunBarrel* cGunBarrel = new CGunBarrel();
 				cGunBarrel->Init();
 
-				//cGunBarrel->SetTierLevel(static_cast<CGunBarrel::TIERLEVEL>(cPlayer3D->GetInventoryWeapon(0)->GetBarrel()->GetTierLevel()+ 1));
-				//cGunBarrel->SetTierLevel(cPlayer3D->GetInventoryWeapon(0)->GetBarrel()->SetTier());
-				
-				cout << static_cast<int>(cGunBarrel->GetTierLevel()) << "Recoil Reduction is:" << cGunBarrel->GetRecoilReduction();
+				if (cPlayer3D->GetInventoryWeapon(0)->GetBarrel()->GetTierLevel() != cPlayer3D->GetInventoryWeapon(0)->GetBarrel()->TIER3)
+				{
+					cPlayer3D->GetInventoryWeapon(0)->GetBarrel()->UpgradeBarrel();
+					//cout << static_cast<int>(cPlayer3D->GetInventoryWeapon(0)->GetBarrel()->GetTierLevel()) << endl;
+					sItemBought = "Bought a tier " + std::to_string(static_cast<int>(cPlayer3D->GetInventoryWeapon(0)->GetBarrel()->GetTierLevel())) + " Barrel";
+				}
 
-				cPlayer3D->GetInventoryWeapon(0)->SetBarrel(cGunBarrel);
+				else
+				{
+					sItemBought = "Barrel is maxed";
+				}
+
 			}
 
+	
 			//Bottom Left Box
 			if ((cMouseController->GetMousePositionX() >= m_windowWidth * 0.076562 && cMouseController->GetMousePositionX() <= m_windowWidth * 0.1625)
 				&& (cMouseController->GetMousePositionY() >= m_windowHeight * 0.76973 && cMouseController->GetMousePositionY() <= m_windowHeight * 0.92105))
 			{
-				cout << "Ammo Bought" << endl;
-				//Player buys Ammo
-				cPlayer3D->GetInventoryWeapon(0)->AddRounds(cPlayer3D->GetWeapon()->GetMaxMagRound());
+				if (cPlayer3D->GetWeapon()->GetTotalRound() != cPlayer3D->GetWeapon()->GetMaxTotalRound())
+				{
+					cout << "Ammo Bought" << endl;
+					//Player buys Ammo
+					cPlayer3D->GetInventoryWeapon(0)->AddRounds(cPlayer3D->GetWeapon()->GetMaxMagRound());
+				}
 			}
-
 			bouncetime = GetTickCount64() + 500;
 
 		}
@@ -322,6 +405,8 @@ void CShop::SetItemBought(std::string sItemBought)
 {
 	this->sItemBought = sItemBought;
 }
+
+
 
 void CShop::PreRender(void)
 {

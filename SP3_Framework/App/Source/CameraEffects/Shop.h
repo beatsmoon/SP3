@@ -72,7 +72,10 @@ public:
 	void DeactivateShop(void);
 
 	std::string GetItemBought(void);
+
 	void SetItemBought(std::string);
+
+
 
 
 protected:
@@ -90,6 +93,7 @@ protected:
 	
 	bool bActive;
 	bool bShopActive;
+	
 
 	// Constructor
 	CShop(void);

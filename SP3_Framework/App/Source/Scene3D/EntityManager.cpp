@@ -135,7 +135,6 @@ bool CEntityManager::CollisionCheck(CEntity3D* cEntity3D)
 			switch ((*it)->GetType())
 			{
 			case CEntity3D::TYPE::ZOMBIE:
-			case CEntity3D::TYPE::POISON:
 			case CEntity3D::TYPE::BOSS:
 			{
 				// Rollback the cEntity3D's position
@@ -154,6 +153,29 @@ bool CEntityManager::CollisionCheck(CEntity3D* cEntity3D)
 					cout << "** Collision between Player and NPC ***" << endl;
 					cCameraEffects->Activate_BloodScreen();
 					cPlayer3D->SetCurrHealth(cPlayer3D->GetCurrHealth() - 10);
+					bResult = true;
+				}
+				// Quit this loop since a collision has been found
+				break;
+			}
+			case CEntity3D::TYPE::POISON:
+			{
+				// Rollback the cEntity3D's position
+				static double damageDelay = 1.0f;
+				if (damageDelay < 1.0f)
+				{
+					damageDelay += 1.f;
+
+				}
+				else
+				{
+					damageDelay = 0.f;
+					cEntity3D->RollbackPosition();
+					// Rollback the NPC's position
+					(*it)->RollbackPosition();
+					cout << "** Collision between Player and Poison ***" << endl;
+					cCameraEffects->Activate_BloodScreen();
+					cPlayer3D->SetCurrHealth(cPlayer3D->GetCurrHealth() - 5);
 					bResult = true;
 				}
 				// Quit this loop since a collision has been found
@@ -182,6 +204,8 @@ bool CEntityManager::CollisionCheck(CEntity3D* cEntity3D)
 				// Quit this loop since a collision has been found
 				break;
 			}
+
+		
 			case CEntity3D::TYPE::EXPLOSIVE_BARREL:
 			{
 				// Collider enabled, barrel not destroyed
@@ -198,6 +222,10 @@ bool CEntityManager::CollisionCheck(CEntity3D* cEntity3D)
 					bResult = true;
 				}
 			}
+
+
+			
+
 			default:
 				break;
 			}
@@ -341,8 +369,7 @@ void CEntityManager::Update(const double dElapsedTime)
 						else
 						{
 							(*it)->SetToDelete(true);
-							//cScore->AddScore(cScore->GetScoreToAdd());
-							//cout << cScore->GetScore();
+							
 						}
 						cout << "** Collision between zombie and Projectile ***" << endl;
 					}
@@ -361,8 +388,7 @@ void CEntityManager::Update(const double dElapsedTime)
 						else
 						{
 							(*it_other)->SetToDelete(true);
-							//cScore->AddScore(cScore->GetScoreToAdd());
-							//cout << cScore->GetScore() << endl;
+							
 						}
 						cout << "** Collision between zombie and Projectile ***" << endl;
 					}
@@ -479,6 +505,7 @@ void CEntityManager::Update(const double dElapsedTime)
 						//(*it)->SetToDelete(true);
 						cout << "** Collision between Barricade and zombie ***" << endl;
 					}
+					
 
 					else if (((*it)->GetType() == CEntity3D::TYPE::PROJECTILE) &&
 						((*it_other)->GetType() == CEntity3D::TYPE::EXPLOSIVE_BARREL))

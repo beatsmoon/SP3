@@ -66,7 +66,7 @@ public:
 	// PostRender
 	virtual void PostRender(void);
 
-	virtual void UpgradeBarrel
+	void UpgradeBarrel();
 
 	enum TIERLEVEL
 	{

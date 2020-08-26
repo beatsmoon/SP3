@@ -317,6 +317,13 @@ void CGunScope::PostRender(void)
 {
 	glDepthFunc(GL_LESS); // set depth function back to default
 }
+
+void CGunScope::UpgradeScope()
+{
+	eTierLevel = static_cast<TIERLEVEL>(static_cast<int>(eTierLevel) + 1);
+}
+
+
 float CGunScope::GetAdditionMag(void)
 {
 	switch (eTierLevel)

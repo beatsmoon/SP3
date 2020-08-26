@@ -28,13 +28,13 @@ void CWeapon::Init(void)
 	case W_PISTOL:
 
 		// The number of ammunition in a magazine for this weapon
-		iMagRounds = 8;
+		iMagRounds = 12;
 		// The maximum number of ammunition for this magazine for this weapon
-		iMaxMagRounds = 8;
+		iMaxMagRounds = 12;
 		// The current total number of rounds currently carried by this player
-		iTotalRounds = 40;
+		iTotalRounds = 96;
 		// The max total number of rounds currently carried by this player
-		iMaxTotalRounds = 40;
+		iMaxTotalRounds = 96;
 
 		// The time between shots
 		dTimeBetweenShots = 0.3333;

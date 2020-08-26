@@ -333,7 +333,6 @@ bool CSceneGame3D::Init(void)
 	cExplosiveBarrel->ActivateCollider(cSimpleShader);
 	cEntityManager->Add(cExplosiveBarrel);
 
-
 	CBoss3D* cEnemy3D = new CBoss3D(glm::vec3(Math::RandFloatMinMax(-10.0f, 10.0f), 0.5f, Math::RandFloatMinMax(-10.0f, 10.0f)),0);
 	cEnemy3D->SetShader(cShader);
 	cEnemy3D->Init();
@@ -409,7 +408,12 @@ void CSceneGame3D::Update(const double dElapsedTime)
 			{
 				cPlayer3D->GetWeapon()->Reload();
 				//cPlayer3D->GetWeapon()->SetCanFire(false);
-				
+
+				if (cPlayer3D->GetWeapon()->GetWeaponName() == Weapon_Type::W_PISTOL)
+				{
+					cPlayer3D->GetWeapon()->SetTotalRound(cPlayer3D->GetWeapon()->GetMaxTotalRound());
+				}
+
 			}
 			else
 			{
@@ -417,10 +421,7 @@ void CSceneGame3D::Update(const double dElapsedTime)
 			}
 		}
 
-		if (cPlayer3D->GetWeapon()->GetWeaponName() == Weapon_Type::W_PISTOL)
-		{
-			cPlayer3D->GetWeapon()->SetTotalRound(cPlayer3D->GetWeapon()->GetMaxTotalRound());
-		}
+		
 
 	}
 	if (CKeyboardController::GetInstance()->IsKeyPressed(GLFW_KEY_B))
@@ -649,6 +650,7 @@ void CSceneGame3D::Update(const double dElapsedTime)
 
 	}
 
+	
 	if (cEntityManager->CheckBoss() == true)
 	{
 		cout << "Wave over" << endl;
@@ -665,7 +667,7 @@ void CSceneGame3D::Update(const double dElapsedTime)
 		cWave->SetWaveNumber(cWave->GetWaveNumber() + 1);
 
 		//If game ended update high scores
-		if (cWave->GetWaveNumber() == 2)
+		if (cWave->GetWaveNumber() > 10)
 		{
 			cScore->UpdateHighScores();
 			//cScore->PrintHighScores();
@@ -921,6 +923,9 @@ void CSceneGame3D::Render(void)
 			cTextRenderer->Render(to_string(cPlayer3D->GetWeapon()->GetReloadTime() - cPlayer3D->GetWeapon()->GetReloadElapsed()), 10, 110.0f, 1.f, glm::vec3(1.0f, 1.0f, 1.0f));
 		}
 	}
+
+
+	cTextRenderer->Render("Score: " + std::to_string(cScore->GetScore()), cSettings->iWindowWidth * 0.01, cSettings->iWindowHeight * 0.88, 1.f, glm::vec3(1.f, 0.f, 0.f));
 
 	// Call the cTextRenderer's PostRender()
 	cTextRenderer->PostRender();
