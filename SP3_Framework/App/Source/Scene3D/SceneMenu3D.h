@@ -95,6 +95,9 @@ public:
 		M_END,
 	};
 
+	bool GetHighscoreStatus() const;
+	void SetHighscoreStatus(bool bStatus);
+
 protected:
 	// Constructor
 	CSceneMenu3D(void);
@@ -110,6 +113,9 @@ protected:
 	CSkyBox* cSkybox;
 
 	MENU_CHOICES e_MenuChoice = M_END;
+
+	bool bHighscoreEnabled;
+
 public:
 };
 

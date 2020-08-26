@@ -62,7 +62,7 @@
 // Include HUD
 #include "../App/Source/CameraEffects/HUD.h"
 
-
+#include "Score.h"
 
 
 class CSettings;
@@ -132,6 +132,8 @@ protected:
 
 	// Handler to the camera class
 	CCamera* cCamera;
+
+	CScore* cScore;
 
 	bool bSceneEnabled;
 

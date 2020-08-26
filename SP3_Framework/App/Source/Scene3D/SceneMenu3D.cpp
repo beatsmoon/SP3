@@ -26,6 +26,16 @@ using namespace std;
 
 #include "../SceneControl/SceneManager.h"
 
+bool CSceneMenu3D::GetHighscoreStatus() const
+{
+	return bHighscoreEnabled;
+}
+
+void CSceneMenu3D::SetHighscoreStatus(bool bStatus)
+{
+	bHighscoreEnabled = true;
+}
+
 /**
  @brief Constructor This constructor has protected access modifier as this class will be a Singleton
  */
@@ -34,6 +44,7 @@ CSceneMenu3D::CSceneMenu3D(void)
 	, cEntityManager(NULL)
 	, cSkybox(NULL)
 	, cPistol(NULL)
+	, bHighscoreEnabled(false)
 {
 }
 
@@ -70,6 +81,9 @@ bool CSceneMenu3D::Init(void)
 
 	cEntityManager = CEntityManager::GetInstance();
 	cEntityManager->Init();
+
+	cScore = CScore::GetInstance();
+	cScore->GetHighScores();
 
 	CStructure3D* cButton = NULL;
 	float fYButtonOffset = cPlayer3D->GetPosition().y;
@@ -302,8 +316,23 @@ void CSceneMenu3D::Render(void)
 	// Render Camera Position
 	cTextRenderer->Render("MENU", 10.0f, 10.0f, 0.5f, glm::vec3(1.0f, 1.0f, 0.0f));
 
+	int iScoreCounter = 1;
+	float yPos = cSettings->iWindowHeight * 0.5f + 50.f;
+	if (bHighscoreEnabled)
+	{
+		cTextRenderer->Render("HIGHSCORE: ", cSettings->iWindowWidth * 0.8f, yPos + 40.f, 1.f, glm::vec3(1.f, 1.f, 0.f));
+		std::vector<int> tempScoreboard = CScore::GetInstance()->GetScoreboard();
+		for (size_t i = 0; i < 10; ++i)
+		{
+			cTextRenderer->Render(std::to_string(iScoreCounter) + ". " + std::to_string(tempScoreboard.at(i)),
+				cSettings->iWindowWidth * 0.8f, yPos, 1.f, glm::vec3(1.f, 1.f, 0.f));
+			yPos -= 40.f;
+			++iScoreCounter;
+		}
+	}
 	// Call the cTextRenderer's PostRender()
 	cTextRenderer->PostRender();
+
 
 
 	return;

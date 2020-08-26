@@ -346,7 +346,6 @@ bool CSceneGame3D::Init(void)
 	cBarricade->ActivateCollider(cSimpleShader);
 	cEntityManager->Add(cBarricade);*/
 
-
 	return true;
 }
 
@@ -671,7 +670,7 @@ void CSceneGame3D::Update(const double dElapsedTime)
 		if (cWave->GetWaveNumber() == 2)
 		{
 			cScore->UpdateHighScores();
-			cScore->PrintHighScores();
+			//cScore->PrintHighScores();
 		}
 
 		//Set the score player will get from killing each enemy
@@ -924,6 +923,8 @@ void CSceneGame3D::Render(void)
 			cTextRenderer->Render(to_string(cPlayer3D->GetWeapon()->GetReloadTime() - cPlayer3D->GetWeapon()->GetReloadElapsed()), 10, 110.0f, 1.f, glm::vec3(1.0f, 1.0f, 1.0f));
 		}
 	}
+
+	cTextRenderer->Render("Score: " + std::to_string(cScore->GetScore()), cSettings->iWindowWidth * 0.01, cSettings->iWindowHeight * 0.88, 1.f, glm::vec3(1.f, 0.f, 0.f));
 
 	// Call the cTextRenderer's PostRender()
 	cTextRenderer->PostRender();

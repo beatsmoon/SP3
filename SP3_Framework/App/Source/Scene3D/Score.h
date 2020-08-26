@@ -4,6 +4,8 @@
 
 #include <fstream>
 
+#include <vector>
+
 class CScore : public CSingletonTemplate<CScore>
 {
 
@@ -39,17 +41,19 @@ public:
 
 	virtual bool Init(void);
 
-	virtual void BubbleSort(int* list, int length);
+	virtual void BubbleSort();
 
-	virtual void Swap(int* list, int location1, int location2);
+	virtual void Swap(int location1, int location2);
 
 	virtual void UpdateHighScores(void);
 
-	virtual void PrintHighScores(void);
+	virtual void GetHighScores(void);
+
+	std::vector<int>& GetScoreboard();
 
 
 protected:
-	
+
 	CScore();
 	~CScore();
 
@@ -57,6 +61,7 @@ protected:
 
 	float fMultiplier;
 
+	std::vector<int> vScoreBoard;
 
 
 

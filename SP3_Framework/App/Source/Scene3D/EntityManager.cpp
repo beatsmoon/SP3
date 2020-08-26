@@ -290,8 +290,10 @@ void CEntityManager::Update(const double dElapsedTime)
 						case CEntity3D::TYPE::PLAY_BUTTON:
 							CSceneManager::GetInstance()->DisableScene(SCENES::MENU);
 							CSceneManager::GetInstance()->EnableScene(SCENES::GAME);
+							bMenuOnly = false;
 							break;
 						case CEntity3D::TYPE::HIGHSCORE_BUTTON:
+							CSceneMenu3D::GetInstance()->SetHighscoreStatus(!CSceneMenu3D::GetInstance()->GetHighscoreStatus());
 							break;
 						case CEntity3D::TYPE::QUIT_BUTTON:
 							CSceneManager::GetInstance()->SetApplicationToEnd();
@@ -312,6 +314,7 @@ void CEntityManager::Update(const double dElapsedTime)
 							bMenuOnly = false;
 							break;
 						case CEntity3D::TYPE::HIGHSCORE_BUTTON:
+							CSceneMenu3D::GetInstance()->SetHighscoreStatus(!CSceneMenu3D::GetInstance()->GetHighscoreStatus());
 							break;
 						case CEntity3D::TYPE::QUIT_BUTTON:
 							CSceneManager::GetInstance()->SetApplicationToEnd();
