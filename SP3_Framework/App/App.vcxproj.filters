@@ -50,10 +50,10 @@
     <ClCompile Include="Source\SoundController\SoundInfo.cpp" />
     <ClCompile Include="Source\TimeControl\FPSCounter.cpp" />
     <ClCompile Include="Source\CameraEffects\WeaponHUD.cpp" />
-    <ClCompile Include="Source\Scene3D\Score.cpp" />
     <ClCompile Include="Source\Scene3D\Entity\CBoss3D.cpp" />
     <ClCompile Include="Source\Scene3D\Entity\Poison3D.cpp" />
     <ClCompile Include="Source\Scene3D\CVirus.cpp" />
+    <ClCompile Include="Source\Scene3D\Score.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Application.h" />
@@ -106,9 +106,9 @@
     <ClInclude Include="Source\SoundController\SoundInfo.h" />
     <ClInclude Include="Source\TimeControl\FPSCounter.h" />
     <ClInclude Include="Source\CameraEffects\WeaponHUD.h" />
-    <ClInclude Include="Source\Scene3D\Score.h" />
     <ClInclude Include="Source\Scene3D\Entity\CBoss3D.h" />
     <ClInclude Include="Source\Scene3D\Entity\Poison3D.h" />
     <ClInclude Include="Source\Scene3D\CVirus.h" />
+    <ClInclude Include="Source\Scene3D\Score.h" />
   </ItemGroup>
 </Project>

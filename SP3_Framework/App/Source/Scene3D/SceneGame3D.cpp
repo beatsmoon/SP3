@@ -342,7 +342,7 @@ bool CSceneGame3D::Init(void)
 
 	
 
-	CStructure3D* cBarricade = new CStructure3D(glm::vec3(0.f, 0.5f, 10.f), CEntity3D::TYPE::BARRICADE);
+	CStructure3D* cBarricade = new CStructure3D(glm::vec3(0.f, 0.5f, 10.f), CEntity3D::TYPE::EXPLOSIVE_BARREL);
 	cBarricade->SetShader(cShader);
 	cBarricade->Init();
 	cBarricade->ActivateCollider(cSimpleShader);
@@ -729,7 +729,7 @@ void CSceneGame3D::Update(const double dElapsedTime)
 			if (cWave->GetWaveNumber() == 2)
 			{
 				cScore->UpdateHighScores();
-				cScore->PrintHighScores();
+				//cScore->PrintHighScores();
 			}
 
 			//Set the score player will get from killing each enemy
