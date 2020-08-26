@@ -63,9 +63,9 @@
 
 class CSettings;
 
-class CSceneMenu3D : public CScene3D, public CSingletonTemplate<CSceneMenu3D>
+class CSceneGameEnd3D : public CScene3D, public CSingletonTemplate<CSceneGameEnd3D>
 {
-	friend class CSingletonTemplate<CSceneMenu3D>;
+	friend class CSingletonTemplate<CSceneGameEnd3D>;
 
 	std::vector<CStructure3D*> vStructures;
 
@@ -86,22 +86,20 @@ public:
 	void PostRender(void);
 
 	void RecalculateButtonPosition();
-	void SetBackButton(const bool bState);
 
 	enum MENU_CHOICES
 	{
 		M_PLAY,
 		M_HIGHSCORE,
-		M_BACK,
 		M_QUIT,
 		M_END,
 	};
 
 protected:
 	// Constructor
-	CSceneMenu3D(void);
+	CSceneGameEnd3D(void);
 	// Destructor
-	virtual ~CSceneMenu3D(void);
+	virtual ~CSceneGameEnd3D(void);
 
 	CPlayer3D* cPlayer3D;
 
@@ -112,8 +110,6 @@ protected:
 	CSkyBox* cSkybox;
 
 	MENU_CHOICES e_MenuChoice = M_END;
-
-	bool bBackButtonEnabled;
 public:
 };
 

@@ -1,4 +1,4 @@
-#include "SceneMenu3D.h"
+#include "SceneGameEnd3D.h"
 #include <iostream>
 using namespace std;
 
@@ -29,33 +29,31 @@ using namespace std;
 /**
  @brief Constructor This constructor has protected access modifier as this class will be a Singleton
  */
-CSceneMenu3D::CSceneMenu3D(void)
+CSceneGameEnd3D::CSceneGameEnd3D(void)
 	: cPlayer3D(NULL)
 	, cEntityManager(NULL)
 	, cSkybox(NULL)
 	, cPistol(NULL)
-	, bBackButtonEnabled(false)
 {
 }
 
 /**
  @brief Destructor
  */
-CSceneMenu3D::~CSceneMenu3D(void)
+CSceneGameEnd3D::~CSceneGameEnd3D(void)
 {
 	if (cPistol)
 	{
 		delete cPistol;
 		cPistol = NULL;
-	}
-	
+	}	
 }
 
 /**
  @brief Init Initialise this instance
  @return true if the initialisation is successful, else false
  */ 
-bool CSceneMenu3D::Init(void)
+bool CSceneGameEnd3D::Init(void)
 {
 	if (!CScene3D::Init())
 		return false;
@@ -64,13 +62,8 @@ bool CSceneMenu3D::Init(void)
 	//cCamera->vec3Position = glm::vec3(0.0f, 0.5f, 3.0f);
 
 	cPlayer3D = CPlayer3D::GetInstance();
-	cPlayer3D->SetShader(cShader);
-	cPlayer3D->Init();
-	cPlayer3D->AttachCamera();
-	cPlayer3D->ActivateCollider(cSimpleShader);
 
 	cEntityManager = CEntityManager::GetInstance();
-	cEntityManager->Init();
 
 	CStructure3D* cButton = NULL;
 	float fYButtonOffset = cPlayer3D->GetPosition().y;
@@ -95,8 +88,6 @@ bool CSceneMenu3D::Init(void)
 	cPistol->SetShader(cSimpleShader);
 	
 	cSkybox = CSkyBox::GetInstance();
-	cSkybox->SetShader(skyBoxShader);
-	cSkybox->Init();
 
 	return true;
 }
@@ -104,7 +95,7 @@ bool CSceneMenu3D::Init(void)
 /**
 @brief Update Update this instance
 */
-void CSceneMenu3D::Update(const double dElapsedTime)
+void CSceneGameEnd3D::Update(const double dElapsedTime)
 {
 	if (cPlayer3D->IsCameraAttached())
 	{
@@ -189,7 +180,7 @@ void CSceneMenu3D::Update(const double dElapsedTime)
 /**
  @brief PreRender Set up the OpenGL display environment before rendering
  */
-void CSceneMenu3D::PreRender(void)
+void CSceneGameEnd3D::PreRender(void)
 {
 	// Reset the OpenGL rendering environment
 	glLoadIdentity();
@@ -202,7 +193,7 @@ void CSceneMenu3D::PreRender(void)
 /**
  @brief Render Render this instance
  */
-void CSceneMenu3D::Render(void)
+void CSceneGameEnd3D::Render(void)
 {
 	//if (cPlayer3D->GetScopeMode() == false)
 	{
@@ -313,11 +304,11 @@ void CSceneMenu3D::Render(void)
 /**
  @brief PostRender Set up the OpenGL display environment after rendering.
  */
-void CSceneMenu3D::PostRender(void)
+void CSceneGameEnd3D::PostRender(void)
 {
 }
 
-void CSceneMenu3D::RecalculateButtonPosition()
+void CSceneGameEnd3D::RecalculateButtonPosition()
 {
 	float fYButtonOffset = cPlayer3D->GetPosition().y;
 	float fRelativeScale = 1.5f / M_END;
@@ -329,11 +320,6 @@ void CSceneMenu3D::RecalculateButtonPosition()
 		cButton->SetPosition(glm::vec3(cPlayer3D->GetPosition().x, fYButtonOffset + fRelativeScale, cPlayer3D->GetPosition().z) + cPlayer3D->GetFront() * 2.f);
 		fYButtonOffset -= fRelativeScale;
 	}
-}
-
-void CSceneMenu3D::SetBackButton(const bool bState)
-{
-	bBackButtonEnabled = bState;
 }
 
 

@@ -111,6 +111,7 @@ bool CStructure3D::Init(void)
 		
 	case PLAY_BUTTON:
 	case HIGHSCORE_BUTTON:
+	case BACK_BUTTON:
 	case QUIT_BUTTON:
 	{
 		// init structureMesh
@@ -163,39 +164,26 @@ bool CStructure3D::Init(void)
 	{
 	case EXPLOSIVE_BARREL:
 		iTextureID = LoadTexture("Images/TrainingBot.tga");
-		if (iTextureID == 0)
-		{
-			cout << "Unable to load texture for structure " << endl;
-			return false;
-		}
 		break;
 	case PLAY_BUTTON:
 		iTextureID = LoadTexture("Images/playbutton.tga");
-		if (iTextureID == 0)
-		{
-			cout << "Unable to load texture for structure " << endl;
-			return false;
-		}
 		break;
 	case HIGHSCORE_BUTTON:
 		iTextureID = LoadTexture("Images/highscorebutton.tga");
-		if (iTextureID == 0)
-		{
-			cout << "Unable to load texture for structure " << endl;
-			return false;
-		}
+		break;
+	case BACK_BUTTON:
+		iTextureID = LoadTexture("Images/backbutton.tga");
 		break;
 	case QUIT_BUTTON:
 		iTextureID = LoadTexture("Images/quitbutton.tga");
-		if (iTextureID == 0)
-		{
-			cout << "Unable to load texture for structure " << endl;
-			return false;
-		}
 		break;
 	}
 
-	
+	if (iTextureID == 0)
+	{
+		cout << "Unable to load texture for structure " << endl;
+		return false;
+	}
 
 	return true;
 }

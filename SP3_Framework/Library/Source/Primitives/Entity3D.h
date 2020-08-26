@@ -34,6 +34,7 @@ public:
 		MENU_START, //  Do not delete this enum, needed for menu entites
 		PLAY_BUTTON,
 		HIGHSCORE_BUTTON,
+		BACK_BUTTON, // back to game, back to menu
 		QUIT_BUTTON,
 		MENU_END,
 		OTHERS,		// Default value: Other entities such as ground and skybox

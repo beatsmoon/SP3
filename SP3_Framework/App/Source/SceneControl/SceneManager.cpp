@@ -3,6 +3,7 @@
 CSceneManager::CSceneManager()
 {
 	iSceneIndex = 0;
+	iPrevSceneIndex = 0;
 	bApplicationShouldEnd = false;
 }
 
@@ -50,12 +51,26 @@ void CSceneManager::EnableScene(const int iSceneID)
 {
 	if (vScenes.at(iSceneID)->GetSceneStatus() == false)
 		vScenes.at(iSceneID)->EnableScene();
+
+	iPrevSceneIndex = iSceneIndex;
+	iSceneIndex = iSceneID;
 }
 
 void CSceneManager::DisableScene(const int iSceneID)
 {
 	if (vScenes.at(iSceneID)->GetSceneStatus() == true)
 		vScenes.at(iSceneID)->DisableScene();
+}
+
+void CSceneManager::DisableAllScenes()
+{
+	for (size_t i = 0; i < vScenes.size(); ++i)
+	{
+		if (vScenes.at(i)->GetSceneStatus())
+		{
+			vScenes.at(i)->DisableScene();
+		}
+	}
 }
 
 bool CSceneManager::CheckForApplicationEnd()
@@ -71,6 +86,11 @@ void CSceneManager::SetApplicationToEnd()
 int CSceneManager::GetCurrentScene() const
 {
 	return iSceneIndex;
+}
+
+int CSceneManager::GetPreviousScene() const
+{
+	return iPrevSceneIndex;
 }
 
 CScene3D* CSceneManager::GetScene()

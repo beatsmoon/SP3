@@ -293,6 +293,9 @@ void CEntityManager::Update(const double dElapsedTime)
 							break;
 						case CEntity3D::TYPE::HIGHSCORE_BUTTON:
 							break;
+						case CEntity3D::TYPE::BACK_BUTTON:
+							CSceneManager::GetInstance()->DisableScene(CSceneManager::GetInstance()->GetCurrentScene());
+							CSceneManager::GetInstance()->EnableScene(CSceneManager::GetInstance()->GetPreviousScene());
 						case CEntity3D::TYPE::QUIT_BUTTON:
 							CSceneManager::GetInstance()->SetApplicationToEnd();
 							break;

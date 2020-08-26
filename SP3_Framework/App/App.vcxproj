@@ -47,6 +47,8 @@
     <ClCompile Include="Source\Scene3D\Player3D.cpp" />
     <ClCompile Include="Source\Scene3D\Scene3D.cpp" />
     <ClCompile Include="Source\Scene3D\SceneGame3D.cpp" />
+    <ClCompile Include="Source\Scene3D\SceneGameEnd.cpp" />
+    <ClCompile Include="Source\Scene3D\SceneGameEnd3D.cpp" />
     <ClCompile Include="Source\Scene3D\SceneMenu3D.cpp" />
     <ClCompile Include="Source\Scene3D\SceneShop3D.cpp" />
     <ClCompile Include="Source\Scene3D\Score.cpp" />
@@ -102,6 +104,8 @@
     <ClInclude Include="Source\Scene3D\Player3D.h" />
     <ClInclude Include="Source\Scene3D\Scene3D.h" />
     <ClInclude Include="Source\Scene3D\SceneGame3D.h" />
+    <ClInclude Include="Source\Scene3D\SceneGameEnd.h" />
+    <ClInclude Include="Source\Scene3D\SceneGameEnd3D.h" />
     <ClInclude Include="Source\Scene3D\SceneMenu3D.h" />
     <ClInclude Include="Source\Scene3D\SceneShop3D.h" />
     <ClInclude Include="Source\Scene3D\Score.h" />

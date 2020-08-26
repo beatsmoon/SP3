@@ -263,6 +263,9 @@ void Application::Run(void)
 	CSceneShop3D* cSceneShop3D = CSceneShop3D::GetInstance();
 	cSceneManager->AddScene(cSceneShop3D);
 
+	CSceneGameEnd3D* cSceneGameEnd3D = CSceneGameEnd3D::GetInstance();
+	cSceneManager->AddScene(cSceneGameEnd3D);
+
 	// Initialise the cSceneManager to initialise all the scenes added in
 	if (cSceneManager->Init() == false)
 		return;
