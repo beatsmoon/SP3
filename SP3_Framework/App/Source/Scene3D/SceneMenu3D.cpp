@@ -26,6 +26,26 @@ using namespace std;
 
 #include "../SceneControl/SceneManager.h"
 
+bool CSceneMenu3D::GetHighscoreStatus() const
+{
+	return bHighscoreEnabled;
+}
+
+void CSceneMenu3D::SetHighscoreStatus(bool bStatus)
+{
+	bHighscoreEnabled = true;
+}
+
+CSceneMenu3D::MENU_TYPE CSceneMenu3D::GetMenuType()
+{
+	return e_MenuType;
+}
+
+void CSceneMenu3D::SetMenuType(const MENU_TYPE type)
+{
+	e_MenuType = type;
+}
+
 /**
  @brief Constructor This constructor has protected access modifier as this class will be a Singleton
  */
@@ -34,6 +54,7 @@ CSceneMenu3D::CSceneMenu3D(void)
 	, cEntityManager(NULL)
 	, cSkybox(NULL)
 	, cPistol(NULL)
+	, bHighscoreEnabled(false)
 {
 }
 
@@ -70,6 +91,9 @@ bool CSceneMenu3D::Init(void)
 
 	cEntityManager = CEntityManager::GetInstance();
 	cEntityManager->Init();
+
+	cScore = CScore::GetInstance();
+	cScore->GetHighScores();
 
 	CStructure3D* cButton = NULL;
 	float fYButtonOffset = cPlayer3D->GetPosition().y;
@@ -279,11 +303,13 @@ void CSceneMenu3D::Render(void)
 	cPlayer3D->Render();
 	cPlayer3D->PostRender();
 
-	// Render cEntityManager
-	cEntityManager->SetView(view);
-	cEntityManager->SetProjection(projection);
-	cEntityManager->Render();
-
+	if (e_MenuType == MENU_TYPE::M_MAIN_MENU)
+	{
+		// Render cEntityManager
+		cEntityManager->SetView(view);
+		cEntityManager->SetProjection(projection);
+		cEntityManager->Render();
+	}
 	// now draw the mirror quad with screen texture
 	// --------------------------------------------
 	glDisable(GL_DEPTH_TEST); // disable depth test so screen-space quad isn't discarded due to depth test.
@@ -300,10 +326,28 @@ void CSceneMenu3D::Render(void)
 	//cTextRenderer->Render(glm::to_string(cPlayer3D->GetPosition()), 10.0f, 30.0f, 0.5f, glm::vec3(1.0f, 1.0f, 0.0f));
 
 	// Render Camera Position
-	cTextRenderer->Render("MENU", 10.0f, 10.0f, 0.5f, glm::vec3(1.0f, 1.0f, 0.0f));
+	if (e_MenuType == MENU_TYPE::M_MAIN_MENU)
+		cTextRenderer->Render("MAIN MENU", 10.0f, 10.0f, 0.5f, glm::vec3(1.0f, 1.0f, 0.0f));
+	else if (e_MenuType == MENU_TYPE::M_END_MENU)
+		cTextRenderer->Render("END MENU", 10.0f, 10.0f, 0.5f, glm::vec3(1.0f, 1.0f, 0.0f));
 
+	int iScoreCounter = 1;
+	float yPos = cSettings->iWindowHeight * 0.5f + 50.f;
+	if (bHighscoreEnabled)
+	{
+		cTextRenderer->Render("HIGHSCORE: ", cSettings->iWindowWidth * 0.8f, yPos + 40.f, 1.f, glm::vec3(1.f, 1.f, 0.f));
+		std::vector<int> tempScoreboard = CScore::GetInstance()->GetScoreboard();
+		for (size_t i = 0; i < 10; ++i)
+		{
+			cTextRenderer->Render(std::to_string(iScoreCounter) + ". " + std::to_string(tempScoreboard.at(i)),
+				cSettings->iWindowWidth * 0.8f, yPos, 1.f, glm::vec3(1.f, 1.f, 0.f));
+			yPos -= 40.f;
+			++iScoreCounter;
+		}
+	}
 	// Call the cTextRenderer's PostRender()
 	cTextRenderer->PostRender();
+
 
 
 	return;

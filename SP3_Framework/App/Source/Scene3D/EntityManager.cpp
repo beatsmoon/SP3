@@ -293,8 +293,6 @@ void CEntityManager::Update(const double dElapsedTime)
 			// Check if the game is in menu mode, update menu entites only
 			if (bMenuOnly)
 			{
-				//std::cout << "Menu only" << std::endl;
-				//CSceneMenu3D::GetInstance()
 				if ((*it)->GetType() > CEntity3D::TYPE::MENU_START && (*it)->GetType() < CEntity3D::TYPE::MENU_END
 					&& (*it_other)->GetType() > CEntity3D::TYPE::MENU_START && (*it_other)->GetType() < CEntity3D::TYPE::MENU_END)
 				{
@@ -306,43 +304,90 @@ void CEntityManager::Update(const double dElapsedTime)
 				}
 				if ((*it)->CheckForCollision(*it_other) == true)
 				{
-					if (((*it)->GetType() == CEntity3D::TYPE::PROJECTILE) &&
-						(*it_other)->GetType() > CEntity3D::TYPE::MENU_START &&
-						(*it_other)->GetType() < CEntity3D::TYPE::MENU_END)
+					// Check if the menu type is a main menu
+					if (CSceneMenu3D::GetInstance()->GetMenuType() == CSceneMenu3D::MENU_TYPE::M_MAIN_MENU)
 					{
-						(*it)->SetToDelete(true);
-						std::cout << "Collision between projectile and Menu button" << std::endl;
-						switch ((*it_other)->GetType())
+						if (((*it)->GetType() == CEntity3D::TYPE::PROJECTILE) &&
+							(*it_other)->GetType() > CEntity3D::TYPE::MENU_START &&
+							(*it_other)->GetType() < CEntity3D::TYPE::MENU_END)
 						{
-						case CEntity3D::TYPE::PLAY_BUTTON:
-							CSceneManager::GetInstance()->DisableScene(SCENES::MENU);
-							CSceneManager::GetInstance()->EnableScene(SCENES::GAME);
-							break;
-						case CEntity3D::TYPE::HIGHSCORE_BUTTON:
-							break;
-						case CEntity3D::TYPE::QUIT_BUTTON:
-							CSceneManager::GetInstance()->SetApplicationToEnd();
-							break;
+							(*it)->SetToDelete(true);
+							std::cout << "Collision between projectile and Menu button" << std::endl;
+							switch ((*it_other)->GetType())
+							{
+							case CEntity3D::TYPE::PLAY_BUTTON:
+								CSceneManager::GetInstance()->DisableScene(SCENES::MENU);
+								CSceneManager::GetInstance()->EnableScene(SCENES::GAME);
+								bMenuOnly = false;
+								break;
+							case CEntity3D::TYPE::HIGHSCORE_BUTTON:
+								CSceneMenu3D::GetInstance()->SetHighscoreStatus(!CSceneMenu3D::GetInstance()->GetHighscoreStatus());
+								break;
+							case CEntity3D::TYPE::QUIT_BUTTON:
+								CSceneManager::GetInstance()->SetApplicationToEnd();
+								break;
+							}
+						}
+						else if (((*it_other)->GetType() == CEntity3D::TYPE::PROJECTILE) &&
+							(*it)->GetType() > CEntity3D::TYPE::MENU_START &&
+							(*it)->GetType() < CEntity3D::TYPE::MENU_END)
+						{
+							(*it_other)->SetToDelete(true);
+							std::cout << "Collision between Menu button and Projectile" << std::endl;
+							switch ((*it)->GetType())
+							{
+							case CEntity3D::TYPE::PLAY_BUTTON:
+								CSceneManager::GetInstance()->DisableScene(SCENES::MENU);
+								CSceneManager::GetInstance()->EnableScene(SCENES::GAME);
+								bMenuOnly = false;
+								break;
+							case CEntity3D::TYPE::HIGHSCORE_BUTTON:
+								CSceneMenu3D::GetInstance()->SetHighscoreStatus(!CSceneMenu3D::GetInstance()->GetHighscoreStatus());
+								break;
+							case CEntity3D::TYPE::QUIT_BUTTON:
+								CSceneManager::GetInstance()->SetApplicationToEnd();
+								break;
+							}
 						}
 					}
-					else if (((*it_other)->GetType() == CEntity3D::TYPE::PROJECTILE) &&
-						(*it)->GetType() > CEntity3D::TYPE::MENU_START &&
-						(*it)->GetType() < CEntity3D::TYPE::MENU_END)
+					// Game end menu, check for back to menu or quit only
+					else if (CSceneMenu3D::GetInstance()->GetMenuType() == CSceneMenu3D::MENU_TYPE::M_END_MENU)
 					{
-						(*it_other)->SetToDelete(true);
-						std::cout << "Collision between Menu button and Projectile" << std::endl;
-						switch ((*it)->GetType())
+						if (((*it)->GetType() == CEntity3D::TYPE::PROJECTILE) &&
+							(*it_other)->GetType() > CEntity3D::TYPE::MENU_START &&
+							(*it_other)->GetType() < CEntity3D::TYPE::MENU_END ||
+							(*it_other)->GetType() == CEntity3D::TYPE::BACK_TO_MENU_BUTTON)
 						{
-						case CEntity3D::TYPE::PLAY_BUTTON:
-							CSceneManager::GetInstance()->DisableScene(SCENES::MENU);
-							CSceneManager::GetInstance()->EnableScene(SCENES::GAME);
-							bMenuOnly = false;
-							break;
-						case CEntity3D::TYPE::HIGHSCORE_BUTTON:
-							break;
-						case CEntity3D::TYPE::QUIT_BUTTON:
-							CSceneManager::GetInstance()->SetApplicationToEnd();
-							break;
+							(*it)->SetToDelete(true);
+							std::cout << "Collision between projectile and back to menu button" << std::endl;
+							switch ((*it_other)->GetType())
+							{
+							case CEntity3D::TYPE::QUIT_BUTTON:
+								CSceneManager::GetInstance()->SetApplicationToEnd();
+								break;
+							case CEntity3D::TYPE::BACK_TO_MENU_BUTTON:
+								CSceneManager::GetInstance()->DisableScene(CSceneManager::GetInstance()->GetCurrentScene());
+								CSceneManager::GetInstance()->EnableScene(SCENES::MENU);
+								break;
+							}
+						}
+						else if (((*it_other)->GetType() == CEntity3D::TYPE::PROJECTILE) &&
+							(*it)->GetType() > CEntity3D::TYPE::MENU_START &&
+							(*it)->GetType() < CEntity3D::TYPE::MENU_END || 
+							(*it)->GetType() == CEntity3D::BACK_TO_MENU_BUTTON)
+						{
+							(*it_other)->SetToDelete(true);
+							std::cout << "Collision between back to menu button and Projectile" << std::endl;
+							switch ((*it)->GetType())
+							{
+							case CEntity3D::TYPE::QUIT_BUTTON:
+								CSceneManager::GetInstance()->SetApplicationToEnd();
+								break;
+							case CEntity3D::TYPE::BACK_TO_MENU_BUTTON:
+								CSceneManager::GetInstance()->DisableScene(CSceneManager::GetInstance()->GetCurrentScene());
+								CSceneManager::GetInstance()->EnableScene(SCENES::MENU);
+								break;
+							}
 						}
 					}
 				}
