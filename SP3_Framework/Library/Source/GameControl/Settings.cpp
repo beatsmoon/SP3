@@ -20,11 +20,14 @@ CSettings::CSettings(void)
 	SetKeyInformation();
 	// Load all keys
 	LoadKeyInformation();
+
+	cKeyboardController = CKeyboardController::GetInstance();
 }
 
 
 CSettings::~CSettings(void)
 {
+	ParseKeyInformation();
 }
 
 
@@ -64,10 +67,10 @@ void CSettings::SetMousePointer(bool bDisableMousePointer, bool bShowMousePointe
 
 void CSettings::SetKeyInformation()
 {
-	totalKeys = std::stoi(cConfigFile->ParseFromFile("Constants", "totalKeys"));
-
+	//totalKeys = std::stoi(cConfigFile->ParseFromFile("Constants", "totalKeys"));
+	
 	// Set all key names
-	for (unsigned int i = 0; i < totalKeys; ++i)
+	for (unsigned int i = 0; i < NUM_KEYS; ++i)
 	{
 		keys[i].key_name = cConfigFile->ParseFromFile("Keys", "key" + std::to_string(i));
 		std::cout << keys[i].key_name << std::endl;
@@ -80,6 +83,31 @@ void CSettings::LoadKeyInformation()
 	for (size_t i = 0; i < NUM_KEYS; ++i)
 	{
 		cConfigFile->ParseFromFile("Main Settings", keys[i].key_value, keys[i].key_name);
+	}
+}
+
+void CSettings::ParseKeyInformation()
+{
+	for (size_t i = 0; i < NUM_KEYS; ++i)
+	{
+		cConfigFile->ParseToFile("Main Settings", keys[i].key_name, keys[i].key_value);
+	}
+}
+
+void CSettings::ChangeKeyInformation(unsigned int keyToChange)
+{
+	for (size_t i = 0; i < NUM_KEYS; ++i)
+	{
+		if (keys[i].key_value == keyToChange)
+		{
+			int keyReplacement = cKeyboardController->GetActiveKey();
+			if (keyReplacement == GLFW_KEY_UNKNOWN)
+				return;
+
+			keys[i].key_value = keyReplacement;
+			std::cout << keys[i].key_value << std::endl;
+			return;
+		}
 	}
 }
 

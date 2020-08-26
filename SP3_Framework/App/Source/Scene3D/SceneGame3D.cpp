@@ -144,6 +144,12 @@ CSceneGame3D::~CSceneGame3D(void)
 		cScore->Destroy();
 		cScore = NULL;
 	}
+
+	if (cSettings)
+	{
+		cSettings->Destroy();
+		cSettings = NULL;
+	}
 }
 
 
@@ -340,7 +346,6 @@ bool CSceneGame3D::Init(void)
 	cBarricade->Init();
 	cBarricade->ActivateCollider(cSimpleShader);
 	cEntityManager->Add(cBarricade);*/
-
 
 	return true;
 }

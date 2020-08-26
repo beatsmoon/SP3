@@ -87,3 +87,14 @@ void CKeyboardController::ResetKey(const int key)
     currStatus[key] = false;
     prevStatus[key] = false;
 }
+
+int CKeyboardController::GetActiveKey()
+{
+	for (size_t i = 0; i < MAX_KEYS; ++i)
+	{
+		if (currStatus[i] == true)
+			return i;
+	}
+	return -1;
+}
+

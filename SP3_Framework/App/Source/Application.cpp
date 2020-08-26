@@ -277,7 +277,8 @@ void Application::Run(void)
 
 	// Render loop
 	while (!glfwWindowShouldClose(cSettings->pWindow)
-		&& cSceneManager->CheckForApplicationEnd() == false)
+		&& cSceneManager->CheckForApplicationEnd() == false
+		&& !CKeyboardController::GetInstance()->IsKeyPressed(GLFW_KEY_ESCAPE))
 	{
 		// TODO: Add conditions for how scenes should be changed. E.g. Press A to change to second scene
 		if (CKeyboardController::GetInstance()->IsKeyPressed(GLFW_KEY_P) && CShop::GetInstance()->GetStatus() == false)

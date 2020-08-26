@@ -33,6 +33,7 @@ public:
 
 	void ResetKey(const int key);
 
+	int GetActiveKey();
 protected:
 	// Constructor
 	CKeyboardController(void);

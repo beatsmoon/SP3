@@ -10,6 +10,7 @@
 
 #include <Windows.h>
 #include "../Library/Source/System/ConfigFile.h"
+#include "../Inputs/KeyboardController.h"
 
 // Include GLEW
 #ifndef GLEW_STATIC
@@ -69,6 +70,8 @@ public:
 	Key keys[NUM_KEYS];
 	int totalKeys;
 
+	CKeyboardController* cKeyboardController;
+
 	// 2D Settings
 	// The variables which stores the specifications of the map
 	unsigned int NUM_TILES_XAXIS;
@@ -97,6 +100,10 @@ public:
 
 	// Load all key values from text file
 	void LoadKeyInformation();
+	// Parse all key values back to the text file
+	void ParseKeyInformation();
+
+	void ChangeKeyInformation(unsigned int keyToChange);
 
 protected:
 	// Constructor
