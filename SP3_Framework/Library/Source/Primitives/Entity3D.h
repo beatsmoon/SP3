@@ -196,6 +196,7 @@ protected:
 	float fHealth;
 	float fCollisionDamage;
 	float fGravityMultiplier;
+
 	// glm::vec3 variables use during for checking of collision
 	glm::vec3 tempVec3A_BottomLeft;
 	glm::vec3 tempVec3A_TopRight;

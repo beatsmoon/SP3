@@ -327,7 +327,7 @@ bool CSceneGame3D::Init(void)
 
 	}
 
-	CStructure3D* cExplosiveBarrel = new CStructure3D(glm::vec3(0.f, 0.5f, 0.f), CEntity3D::TYPE::EXPLOSIVE_BARREL);
+	CStructure3D* cExplosiveBarrel = new CStructure3D(glm::vec3(10.f, 0.5f, 10.f), CEntity3D::TYPE::EXPLOSIVE_BARREL);
 	cExplosiveBarrel->SetShader(cShader);
 	cExplosiveBarrel->Init();
 	cExplosiveBarrel->ActivateCollider(cSimpleShader);
@@ -340,11 +340,11 @@ bool CSceneGame3D::Init(void)
 	cEnemy3D->ActivateCollider(cSimpleShader);
 	cEntityManager->Add(cEnemy3D);
 
-	/*CStructure3D* cBarricade = new CStructure3D(glm::vec3(10.f, 0.5f, 10.f), CEntity3D::TYPE::BARRICADE);
+	CStructure3D* cBarricade = new CStructure3D(glm::vec3(0.f, 0.5f, 10.f), CEntity3D::TYPE::BARRICADE);
 	cBarricade->SetShader(cShader);
 	cBarricade->Init();
 	cBarricade->ActivateCollider(cSimpleShader);
-	cEntityManager->Add(cBarricade);*/
+	cEntityManager->Add(cBarricade);
 
 
 	return true;
@@ -355,8 +355,8 @@ bool CSceneGame3D::Init(void)
 */
 void CSceneGame3D::Update(const double dElapsedTime)
 {
-
-	cout << dElapsedTime << endl;
+	cPlayer3D->StorePositionForRollback();
+	//cout << dElapsedTime << endl;
 
 	// respawn player
 	if (cPlayer3D->GetCurrHealth() < 1)
@@ -479,8 +479,6 @@ void CSceneGame3D::Update(const double dElapsedTime)
 	{
 		cPlayer3D->SetToJump();
 	}
-
-	cPlayer3D->StorePositionForRollback();
 
 	// Attach or Dettach camera
 	if (CKeyboardController::GetInstance()->IsKeyPressed(GLFW_KEY_0))
@@ -618,7 +616,7 @@ void CSceneGame3D::Update(const double dElapsedTime)
 			}
 		}
 	}
-	
+
 	// Post Update Camera
 	cMouseController->PostUpdate();
 	// Update cEntityManager
