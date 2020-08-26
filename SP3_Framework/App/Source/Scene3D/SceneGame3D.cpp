@@ -328,47 +328,25 @@ bool CSceneGame3D::Init(void)
 
 
 	}
+//	CEnemy3D* cEnemy3D = new CEnemy3D(glm::vec3(Math::RandFloatMinMax(-10.0f, 10.0f), 0.5f, Math::RandFloatMinMax(-10.0f, 10.0f)), 2);
+//	cEnemy3D->SetShader(cShader);
+//	cEnemy3D->Init();
+//	cEnemy3D->ActivateCollider(cSimpleShader);
+//	cEntityManager->Add(cEnemy3D);
+//
+//	CPoison3D* cPoison3D = new CPoison3D(cEnemy3D->GetPosition(), glm::uvec2(0,0), cEnemy3D);
+//	cPoison3D->SetShader(cShader);
+//	cPoison3D->Init();
+//	cPoison3D->ActivateCollider(cSimpleShader);
+//	cEntityManager->Add(cPoison3D);
 
-	CEnemy3D* cEnemy3D = new CEnemy3D(glm::vec3(Math::RandFloatMinMax(-10.0f, 10.0f), 0.5f, Math::RandFloatMinMax(-10.0f, 10.0f)), 2);
-	cEnemy3D->SetShader(cShader);
-	cEnemy3D->Init();
-	cEnemy3D->ActivateCollider(cSimpleShader);
-	cEntityManager->Add(cEnemy3D);
+	
 
-	CPoison3D* cPoison3D = new CPoison3D(cEnemy3D->GetPosition(), glm::uvec2(0,0), cEnemy3D);
-	cPoison3D->SetShader(cShader);
-	cPoison3D->Init();
-	cPoison3D->ActivateCollider(cSimpleShader);
-	cEntityManager->Add(cPoison3D);
-
-	/*CStructure3D* cExplosiveBarrel = new CStructure3D(glm::vec3(0.f, 0.5f, 0.f), CEntity3D::TYPE::EXPLOSIVE_BARREL);
-	cExplosiveBarrel->SetShader(cShader);
-	cExplosiveBarrel->Init();
-	cExplosiveBarrel->ActivateCollider(cSimpleShader);
-	cEntityManager->Add(cExplosiveBarrel);*/
-
-	/*CVirus* cVirus = new CVirus();
-	cVirus->SetShader(cGUIShader);
-	cVirus->Init();
-	cPlayer3D->AddVirus(cVirus);
-
-	CVirus* cVirus1 = new CVirus();
-	cVirus1->SetShader(cGUIShader);
-	cVirus1->Init();
-	cVirus1->SetPosition(glm::vec3(cVirus->GetPosition().x + (2 * cVirus->GetScale().x + 0.02), cVirus->GetPosition().y, cVirus->GetPosition().z));
-	cPlayer3D->AddVirus(cVirus1);*/
-
-	/*CBoss3D* cEnemy3D = new CBoss3D(glm::vec3(Math::RandFloatMinMax(-10.0f, 10.0f), 0.5f, Math::RandFloatMinMax(-10.0f, 10.0f)), 1);
-	cEnemy3D->SetShader(cShader);
-	cEnemy3D->Init();
-	cEnemy3D->ActivateCollider(cSimpleShader);
-	cEntityManager->Add(cEnemy3D);*/
-
-	/*CStructure3D* cBarricade = new CStructure3D(glm::vec3(10.f, 0.5f, 10.f), CEntity3D::TYPE::BARRICADE);
+	CStructure3D* cBarricade = new CStructure3D(glm::vec3(0.f, 0.5f, 10.f), CEntity3D::TYPE::BARRICADE);
 	cBarricade->SetShader(cShader);
 	cBarricade->Init();
 	cBarricade->ActivateCollider(cSimpleShader);
-	cEntityManager->Add(cBarricade);*/
+	cEntityManager->Add(cBarricade);
 
 	return true;
 }
@@ -378,7 +356,7 @@ bool CSceneGame3D::Init(void)
 */
 void CSceneGame3D::Update(const double dElapsedTime)
 {
-
+	cPlayer3D->StorePositionForRollback();
 	//cout << dElapsedTime << endl;
 
 	// respawn player
@@ -502,8 +480,6 @@ void CSceneGame3D::Update(const double dElapsedTime)
 	{
 		cPlayer3D->SetToJump();
 	}
-
-	cPlayer3D->StorePositionForRollback();
 
 	// Attach or Dettach camera
 	if (CKeyboardController::GetInstance()->IsKeyPressed(GLFW_KEY_0))
@@ -641,7 +617,7 @@ void CSceneGame3D::Update(const double dElapsedTime)
 			}
 		}
 	}
-	
+
 	// Post Update Camera
 	cMouseController->PostUpdate();
 	// Update cEntityManager

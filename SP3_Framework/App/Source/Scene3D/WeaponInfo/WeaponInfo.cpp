@@ -299,7 +299,7 @@ CProjectile* CWeaponInfo::Discharge(glm::vec3 vec3Position, glm::vec3 vec3Front,
 
 			CProjectile* aProjectile = new CProjectile();
 			aProjectile->SetShader(cShader);
-			aProjectile->Init(vec3Position + vec3Front * 0.75f, vec3Front, 2.0f, 20.0f);
+			aProjectile->Init(vec3Position + vec3Front, vec3Front, 2.0f, 20.0f);
 			//aProjectile->SetFront(glm::vec3(vec3Front.x + 0.3, vec3Front.y, vec3Front.z));
 			aProjectile->ActivateCollider(cShader);
 			aProjectile->SetStatus(true);

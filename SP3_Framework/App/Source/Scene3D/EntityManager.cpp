@@ -4,6 +4,7 @@
 #include "Entity/CBoss3D.h"
 #include "Structure3D.h"
 #include "../SceneControl/SceneManager.h"
+#include "SceneMenu3D.h"
 
 #include <iostream>
 using namespace std;
@@ -197,11 +198,13 @@ bool CEntityManager::CollisionCheck(CEntity3D* cEntity3D)
 			case CEntity3D::TYPE::BARRICADE:
 			case CEntity3D::TYPE::STRUCTURE:
 			{
-				cEntity3D->RollbackPosition();
-				// Rollback the NPC's position
-				cout << "** Collision between Player and structure ***" << endl;
-				bResult = true;
-				
+				if ((*it)->GetCollisionState())
+				{
+					cEntity3D->RollbackPosition();
+					// Rollback the NPC's position
+					cout << "** Collision between Player and structure ***" << endl;
+					bResult = true;
+				}
 				// Quit this loop since a collision has been found
 				break;
 			}
@@ -216,7 +219,7 @@ bool CEntityManager::CollisionCheck(CEntity3D* cEntity3D)
 				}
 				else
 				{
-					static_cast<CPlayer3D*>(cEntity3D)->SetCurrHealth(static_cast<CPlayer3D*>(cEntity3D)->GetCurrHealth() - 10);
+					static_cast<CPlayer3D*>(cEntity3D)->SetCurrHealth(static_cast<CPlayer3D*>(cEntity3D)->GetCurrHealth() - 1);
 					cout << "** Collision between Player and Destroyed Explosive Barrel***" << endl;
 					bResult = true;
 				}
@@ -556,6 +559,20 @@ void CEntityManager::Update(const double dElapsedTime)
 						cout << "** Collision between Barricade and zombie ***" << endl;
 					}
 
+					else if (((*it)->GetType() == CEntity3D::TYPE::ZOMBIE) &&
+					((*it_other)->GetType() == CEntity3D::TYPE::EXPLOSIVE_BARREL))
+					{
+						(*it)->RollbackPosition();
+						//(*it_other)->SetToDelete(true);
+						cout << "** Collision between zombie and Barricade ***" << endl;
+					}
+					else if (((*it)->GetType() == CEntity3D::TYPE::EXPLOSIVE_BARREL) &&
+					((*it_other)->GetType() == CEntity3D::TYPE::ZOMBIE))
+					{
+						(*it_other)->RollbackPosition();
+						//(*it)->SetToDelete(true);
+						cout << "** Collision between Barricade and zombie ***" << endl;
+					}
 					else if (((*it)->GetType() == CEntity3D::TYPE::PROJECTILE) &&
 						((*it_other)->GetType() == CEntity3D::TYPE::EXPLOSIVE_BARREL))
 					{
@@ -565,19 +582,19 @@ void CEntityManager::Update(const double dElapsedTime)
 						CStructure3D* cExplosiveBarrel = dynamic_cast<CStructure3D*>(*it_other);
 						if (cExplosiveBarrel->GetHealth() > 0)
 						{
-							cExplosiveBarrel->SetHealth(cExplosiveBarrel->GetHealth() - 10);
+							cExplosiveBarrel->SetHealth(cExplosiveBarrel->GetHealth() - cPlayer3D->GetWeapon()->GetDamageOutput());
 							cSoundController->PlaySoundByID(5);
 						}
 						else if (cExplosiveBarrel->GetDespawnQueue() == false)
 						{
-							cExplosiveBarrel->SetCollisionState(false);
-							cExplosiveBarrel->SetColliderScale(cExplosiveBarrel->GetColliderScale() * 2.f);
+							cExplosiveBarrel->SetColliderScale(cExplosiveBarrel->GetColliderScale() * 3.f);
 							cExplosiveBarrel->SetDespawnQueue(true);
 							if (cPlayer3D->CheckForCollision(cExplosiveBarrel))
 							{
 								std::cout << "Player hit by Explosive Barrel explosion" << std::endl;
 								cPlayer3D->SetCurrHealth(cPlayer3D->GetCurrHealth() - 30);
 							}
+							cExplosiveBarrel->SetCollisionState(false);
 
 						}
 						cout << "** Collision between Projectile and Explosive Barrel ***" << endl;
@@ -592,21 +609,19 @@ void CEntityManager::Update(const double dElapsedTime)
 						//CEnemy3D* enemy = dynamic_cast<CEnemy3D*>(*it_other);
 						if (cExplosiveBarrel->GetHealth() > 0)
 						{
-							cExplosiveBarrel->SetHealth(cExplosiveBarrel->GetHealth() - 10);
+							cExplosiveBarrel->SetHealth(cExplosiveBarrel->GetHealth() - cPlayer3D->GetWeapon()->GetDamageOutput());
 							cSoundController->PlaySoundByID(5);
 						}
 						else if (cExplosiveBarrel->GetDespawnQueue() == false)
 						{
-
-
-							cExplosiveBarrel->SetCollisionState(false);
-							cExplosiveBarrel->SetColliderScale(cExplosiveBarrel->GetColliderScale() * 2.f);
+							cExplosiveBarrel->SetColliderScale(cExplosiveBarrel->GetColliderScale() * 3.f);
 							cExplosiveBarrel->SetDespawnQueue(true);
 							if (cPlayer3D->CheckForCollision(cExplosiveBarrel))
 							{
 								std::cout << "Player hit by Explosive Barrel explosion" << std::endl;
 								cPlayer3D->SetCurrHealth(cPlayer3D->GetCurrHealth() - 30);
 							}
+							cExplosiveBarrel->SetCollisionState(false);
 
 						}
 						cout << "** Collision between Explosive Barrel and Projectile ***" << endl;

@@ -206,10 +206,8 @@ void CEntity3D::ActivateCollider(Shader* cLineShader)
 {
 	cCollider = new CCollider();
 	cCollider->Init();
-
-	//cCollider->vec3BottomLeft = glm::vec4(-1.0f, -1.0f, -1.0f, 1.0f);
-	//cCollider->vec3TopRight = glm::vec4(1.0f, 1.0f, 1.0f, 1.0f);
-
+	cCollider->vec3BottomLeft = glm::vec4(-1.0f, -1.0f, -1.0f, 1.0f);
+	cCollider->vec3TopRight = glm::vec4(1.0f, 1.0f, 1.0f, 1.0f);
 	cCollider->SetLineShader(cLineShader);
 }
 
