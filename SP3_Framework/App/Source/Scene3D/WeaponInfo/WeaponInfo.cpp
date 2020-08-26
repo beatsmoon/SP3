@@ -1,6 +1,8 @@
 #include "WeaponInfo.h"
 #include "Projectile.h"
 
+#include "../App/Source/Scene3D/Player3D.h"
+
 #include <iostream>
 using namespace std;
 
@@ -245,7 +247,7 @@ void CWeaponInfo::Update(const double dt)
 	{
 		dReloadElapsedTime += dt;
 
-		if (dReloadElapsedTime > dReloadTime)
+		if (dReloadElapsedTime > dReloadTime * CPlayer3D::GetInstance()->GetReloadSpeedMultiplier())
 		{
 			if (iMagRounds < iMaxMagRounds)
 			{
@@ -326,14 +328,22 @@ void CWeaponInfo::Reload(void)
 	bFire = false;
 	PrintSelf();
 }
+
 double CWeaponInfo::GetReloadElapsed(void) const
 {
 	return dReloadElapsedTime;
 }
+
 double CWeaponInfo::GetReloadTime(void) const
 {
 	return dReloadTime;
 }
+
+void CWeaponInfo::SetReloadTime(float time)
+{
+	dReloadTime = time;
+}
+
 /**
  @brief Add rounds
  */

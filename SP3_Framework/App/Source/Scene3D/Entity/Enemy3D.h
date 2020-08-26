@@ -26,10 +26,6 @@
 
 #include "../App/Source/SoundController/SoundController.h"
 
-#include "../../Meshes/Mesh.h"
-
-#include "../../Meshes/MatrixStack.h"
-
 enum Enemy_Type
 {
 	T_ENEMY1 = 0,

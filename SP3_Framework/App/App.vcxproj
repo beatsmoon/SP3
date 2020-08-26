@@ -36,6 +36,7 @@
     <ClCompile Include="Source\Scene3D\Camera.cpp" />
     <ClCompile Include="Source\Scene3D\CrossHair\CrossHair.cpp" />
     <ClCompile Include="Source\Scene3D\CrossHair\Scope.cpp" />
+    <ClCompile Include="Source\Scene3D\CVirus.cpp" />
     <ClCompile Include="Source\Scene3D\EntityManager.cpp" />
     <ClCompile Include="Source\Scene3D\Entity\CBoss3D.cpp" />
     <ClCompile Include="Source\Scene3D\Entity\Enemy3D.cpp" />
@@ -91,6 +92,7 @@
     <ClInclude Include="Source\Scene3D\Camera.h" />
     <ClInclude Include="Source\Scene3D\CrossHair\CrossHair.h" />
     <ClInclude Include="Source\Scene3D\CrossHair\Scope.h" />
+    <ClInclude Include="Source\Scene3D\CVirus.h" />
     <ClInclude Include="Source\Scene3D\EntityManager.h" />
     <ClInclude Include="Source\Scene3D\Entity\CBoss3D.h" />
     <ClInclude Include="Source\Scene3D\Entity\Enemy3D.h" />

@@ -10,6 +10,7 @@
 #include "../Meshes/Mtx44.h"
 
 #include <iostream>
+#include <vector>
 
 using namespace std;
 
@@ -195,6 +196,10 @@ bool CPlayer3D::Init(void)
 
 	maxHealth = 100;
 	currHealth = 100;
+	speed = 1.0f;
+	realoadSpeedMultiplier = 1.0f;
+	damageMultiplier = 1.0f;
+	numOfVirus = 0;
 
 	return true;
 }
@@ -274,7 +279,7 @@ bool CPlayer3D::IsCameraAttached(void)
  */
 void CPlayer3D::ProcessMovement(const Player_Movement movement, const float deltaTime)
 {
-	float velocity = fMovementSpeed * deltaTime;
+	float velocity = fMovementSpeed * deltaTime * speed;
 	if (movement == FORWARD)
 	{
 		vec3Position += vec3Front * velocity;
@@ -508,6 +513,36 @@ void CPlayer3D::SetCurrHealth(int currhealth)
 	this->currHealth = currhealth;
 }
 
+void CPlayer3D::SetMaxHealth(int maxhealth)
+{
+	this->maxHealth = maxhealth;
+}
+
+void CPlayer3D::SetSpeed(float _speed)
+{
+	this->speed = _speed;
+}
+
+void CPlayer3D::SetDmageMultiplier(float multiplier)
+{
+	damageMultiplier = multiplier;
+}
+
+void CPlayer3D::SetReloadSpeedMultiplier(float multiplier)
+{
+	realoadSpeedMultiplier = multiplier;
+}
+
+void CPlayer3D::SetNumOfVirus(int num)
+{
+	numOfVirus = num;
+}
+
+void CPlayer3D::AddVirus(CVirus* _virus)
+{
+	virus.push_back(_virus);
+}
+
 bool CPlayer3D::GetScopeMode()
 {
 	return scopeMode;
@@ -526,6 +561,26 @@ int CPlayer3D::GetMaxHealth()
 int CPlayer3D::GetCurrHealth()
 {
 	return currHealth;
+}
+
+float CPlayer3D::GetSpeed()
+{
+	return speed;
+}
+
+float CPlayer3D::GetDmageMultiplier()
+{
+	return damageMultiplier;
+}
+
+float CPlayer3D::GetReloadSpeedMultiplier()
+{
+	return realoadSpeedMultiplier;
+}
+
+int CPlayer3D::GetNumOfVirus()
+{
+	return numOfVirus;
 }
 
 void CPlayer3D::SetToJump(void)
@@ -628,6 +683,22 @@ void CPlayer3D::Update(const double dElapsedTime)
 	UpdatePlayerVectors();
 	if (fCameraRecoilAngle < 0)
 		fCameraRecoilAngle = 0;
+
+	static int prevNumOfVirus = numOfVirus;
+
+	if (prevNumOfVirus != numOfVirus)
+	{
+		for (std::vector<CVirus*>::iterator it = virus.begin(); it != virus.end(); ++it)
+		{
+			CVirus* go = (CVirus*)*it;
+
+			if (it == virus.end() - 1)
+			{
+				go->Update(dElapsedTime);
+			}
+		}
+		prevNumOfVirus = numOfVirus;
+	}
 }
 
 /**
@@ -703,6 +774,18 @@ void CPlayer3D::Render(void)
 void CPlayer3D::PostRender(void)
 {
 	glDepthFunc(GL_LESS); // set depth function back to default
+}
+
+void CPlayer3D::RenderVirusHUD()
+{
+	for (std::vector<CVirus*>::iterator it = virus.begin(); it != virus.end(); ++it)
+	{
+		CVirus* go = (CVirus*)*it;
+
+		go->PreRender();
+		go->Render();
+		go->PostRender();
+	}
 }
 
 /**

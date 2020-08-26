@@ -53,6 +53,7 @@
     <ClCompile Include="Source\Scene3D\Score.cpp" />
     <ClCompile Include="Source\Scene3D\Entity\CBoss3D.cpp" />
     <ClCompile Include="Source\Scene3D\Entity\Poison3D.cpp" />
+    <ClCompile Include="Source\Scene3D\CVirus.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Application.h" />
@@ -108,5 +109,6 @@
     <ClInclude Include="Source\Scene3D\Score.h" />
     <ClInclude Include="Source\Scene3D\Entity\CBoss3D.h" />
     <ClInclude Include="Source\Scene3D\Entity\Poison3D.h" />
+    <ClInclude Include="Source\Scene3D\CVirus.h" />
   </ItemGroup>
 </Project>

@@ -134,13 +134,36 @@ bool CEntityManager::CollisionCheck(CEntity3D* cEntity3D)
 		{
 			switch ((*it)->GetType())
 			{
-			case CEntity3D::TYPE::ZOMBIE:
+			
 			case CEntity3D::TYPE::POISON:
+			{
+				// Rollback the cEntity3D's position
+				static double damageDelay = 2.0f;
+				if (damageDelay < 2.0f)
+				{
+					damageDelay += 1.f;
+
+				}
+				else
+				{
+					damageDelay = 0.f;
+					cEntity3D->RollbackPosition();
+					// Rollback the NPC's position
+					(*it)->RollbackPosition();
+					cout << "** Collision between Player and poison ***" << endl;
+					cCameraEffects->Activate_BloodScreen();
+					cPlayer3D->SetCurrHealth(cPlayer3D->GetCurrHealth() - 2);
+					bResult = true;
+				}
+				// Quit this loop since a collision has been found
+				break;
+			}
+			case CEntity3D::TYPE::ZOMBIE:
 			case CEntity3D::TYPE::BOSS:
 			{
 				// Rollback the cEntity3D's position
-				static double damageDelay = 15.0f;
-				if (damageDelay < 15.0f)
+				static double damageDelay = 5.0f;
+				if (damageDelay < 5.0f)
 				{
 					damageDelay += 1.f;
 
@@ -236,7 +259,7 @@ void CEntityManager::Update(const double dElapsedTime)
 			if ((*it)->GetDespawnQueue())
 			{
 				(*it)->AddDespawnTime(dElapsedTime);
-				std::cout << (*it)->GetDespawnTime() << std::endl;
+				//std::cout << (*it)->GetDespawnTime() << std::endl;
 				switch ((*it)->GetType())
 				{
 				case CEntity3D::TYPE::BARRICADE:
@@ -274,6 +297,10 @@ void CEntityManager::Update(const double dElapsedTime)
 				//CSceneMenu3D::GetInstance()
 				if ((*it)->GetType() > CEntity3D::TYPE::MENU_START && (*it)->GetType() < CEntity3D::TYPE::MENU_END
 					&& (*it_other)->GetType() > CEntity3D::TYPE::MENU_START && (*it_other)->GetType() < CEntity3D::TYPE::MENU_END)
+				{
+					continue;
+				}
+				if (((*it)->GetType() == CEntity3D::TYPE::OTHERS) || ((*it_other)->GetType() == CEntity3D::TYPE::OTHERS))
 				{
 					continue;
 				}
@@ -323,6 +350,10 @@ void CEntityManager::Update(const double dElapsedTime)
 			// If the game is not in menu mode, update game entites only
 			else
 			{
+				if (((*it)->GetType() == CEntity3D::TYPE::OTHERS) || ((*it_other)->GetType() == CEntity3D::TYPE::OTHERS))
+				{
+					continue;
+				}
 				// Check for collisions between the 2 entities
 				if ((*it)->CheckForCollision(*it_other) == true)
 				{
@@ -335,7 +366,7 @@ void CEntityManager::Update(const double dElapsedTime)
 						CEnemy3D* enemy = dynamic_cast<CEnemy3D*>(*it);
 						if (enemy->GetHealth() > 0)
 						{
-							enemy->SetHealth(enemy->GetHealth() - cPlayer3D->GetWeapon()->GetDamageOutput());
+							enemy->SetHealth(enemy->GetHealth() - (cPlayer3D->GetWeapon()->GetDamageOutput() * cPlayer3D->GetDmageMultiplier()));
 							cSoundController->PlaySoundByID(5);
 						}
 						else
@@ -355,7 +386,7 @@ void CEntityManager::Update(const double dElapsedTime)
 						CEnemy3D* enemy = dynamic_cast<CEnemy3D*>(*it_other);
 						if (enemy->GetHealth() > 0)
 						{
-							enemy->SetHealth(enemy->GetHealth() - cPlayer3D->GetWeapon()->GetDamageOutput());
+							enemy->SetHealth(enemy->GetHealth() - (cPlayer3D->GetWeapon()->GetDamageOutput() * cPlayer3D->GetDmageMultiplier()));
 							cSoundController->PlaySoundByID(5);
 						}
 						else
@@ -377,7 +408,7 @@ void CEntityManager::Update(const double dElapsedTime)
 						{
 							if (boss->GetHealth() > 0)
 							{
-								boss->SetHealth(boss->GetHealth() - cPlayer3D->GetWeapon()->GetDamageOutput());
+								boss->SetHealth(boss->GetHealth() - (cPlayer3D->GetWeapon()->GetDamageOutput() * cPlayer3D->GetDmageMultiplier()));
 								cSoundController->PlaySoundByID(5);
 							}
 							else
@@ -396,7 +427,7 @@ void CEntityManager::Update(const double dElapsedTime)
 						{
 							if (boss->GetHealth() > 0)
 							{
-								boss->SetHealth(boss->GetHealth() - cPlayer3D->GetWeapon()->GetDamageOutput());
+								boss->SetHealth(boss->GetHealth() - (cPlayer3D->GetWeapon()->GetDamageOutput() * cPlayer3D->GetDmageMultiplier()));
 								cSoundController->PlaySoundByID(5);
 							}
 							else
@@ -419,7 +450,7 @@ void CEntityManager::Update(const double dElapsedTime)
 						{
 							if (boss->GetHealth() > 0)
 							{
-								boss->SetHealth(boss->GetHealth() - cPlayer3D->GetWeapon()->GetDamageOutput());
+								boss->SetHealth(boss->GetHealth() - (cPlayer3D->GetWeapon()->GetDamageOutput() * cPlayer3D->GetDmageMultiplier()));
 								cSoundController->PlaySoundByID(5);
 							}
 							else
@@ -438,7 +469,7 @@ void CEntityManager::Update(const double dElapsedTime)
 						{			
 							if (boss->GetHealth() > 0)
 							{
-								boss->SetHealth(boss->GetHealth() - cPlayer3D->GetWeapon()->GetDamageOutput());
+								boss->SetHealth(boss->GetHealth() - (cPlayer3D->GetWeapon()->GetDamageOutput() * cPlayer3D->GetDmageMultiplier()));
 								cSoundController->PlaySoundByID(5);
 							}
 							else
@@ -546,7 +577,7 @@ void CEntityManager::Update(const double dElapsedTime)
 						CStructure3D* cBarricade = dynamic_cast<CStructure3D*>(*it_other);
 						if (cBarricade->GetHealth() > 0)
 						{
-							cBarricade->SetHealth(cBarricade->GetHealth() - 10);
+							cBarricade->SetHealth(cBarricade->GetHealth() - (cPlayer3D->GetWeapon()->GetDamageOutput() * cPlayer3D->GetDmageMultiplier()));
 							cSoundController->PlaySoundByID(5);
 						}
 						else if (cBarricade->GetDespawnQueue() == false)
@@ -564,7 +595,7 @@ void CEntityManager::Update(const double dElapsedTime)
 						CStructure3D* cBarricade = static_cast<CStructure3D*>(*it);
 						if (cBarricade->GetHealth() > 0)
 						{
-							cBarricade->SetHealth(cBarricade->GetHealth() - 10);
+							cBarricade->SetHealth(cBarricade->GetHealth() - (cPlayer3D->GetWeapon()->GetDamageOutput() * cPlayer3D->GetDmageMultiplier()));
 							cSoundController->PlaySoundByID(5);
 						}
 						else if (cBarricade->GetDespawnQueue() == false)

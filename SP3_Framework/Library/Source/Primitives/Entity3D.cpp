@@ -206,7 +206,20 @@ void CEntity3D::ActivateCollider(Shader* cLineShader)
 {
 	cCollider = new CCollider();
 	cCollider->Init();
+
+	//cCollider->vec3BottomLeft = glm::vec4(-1.0f, -1.0f, -1.0f, 1.0f);
+	//cCollider->vec3TopRight = glm::vec4(1.0f, 1.0f, 1.0f, 1.0f);
+
 	cCollider->SetLineShader(cLineShader);
+}
+
+int CEntity3D::GetHealth()
+{
+	return 0;
+}
+
+void CEntity3D::SetHealth()
+{
 }
 
 void CEntity3D::SetColliderScale(glm::vec3 vec3ColliderScale)
@@ -246,8 +259,8 @@ const bool CEntity3D::GetCollisionState() const
 */
 bool CEntity3D::CheckForCollision(const CEntity3D* cEntity3D)
 {
-	tempVec3A_BottomLeft = vec3Position + vec3ColliderTranslate + vec3ColliderScale * cCollider->vec3BottomLeft;
-	tempVec3A_TopRight = vec3Position + vec3ColliderTranslate + vec3ColliderScale * cCollider->vec3TopRight;
+	tempVec3A_BottomLeft = (vec3Position/* - dimension*/) + vec3ColliderTranslate + vec3ColliderScale * cCollider->vec3BottomLeft;
+	tempVec3A_TopRight = (vec3Position /*+ dimension*/) + vec3ColliderTranslate + vec3ColliderScale * cCollider->vec3TopRight;
 	tempVec3B_BottomLeft = cEntity3D->vec3Position + cEntity3D->vec3ColliderTranslate + vec3ColliderScale * cEntity3D->cCollider->vec3BottomLeft;
 	tempVec3B_TopRight = cEntity3D->vec3Position + cEntity3D->vec3ColliderTranslate + vec3ColliderScale * cEntity3D->cCollider->vec3TopRight;
 

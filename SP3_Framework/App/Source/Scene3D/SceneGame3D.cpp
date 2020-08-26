@@ -25,6 +25,8 @@ using namespace std;
 // Include MyMath.h
 #include "../Library/Source/System/MyMath.h"
 
+#include "CVirus.h"
+
 /**
  @brief Constructor This constructor has protected access modifier as this class will be a Singleton
  */
@@ -327,18 +329,40 @@ bool CSceneGame3D::Init(void)
 
 	}
 
-	CStructure3D* cExplosiveBarrel = new CStructure3D(glm::vec3(0.f, 0.5f, 0.f), CEntity3D::TYPE::EXPLOSIVE_BARREL);
-	cExplosiveBarrel->SetShader(cShader);
-	cExplosiveBarrel->Init();
-	cExplosiveBarrel->ActivateCollider(cSimpleShader);
-	cEntityManager->Add(cExplosiveBarrel);
-
-
-	CBoss3D* cEnemy3D = new CBoss3D(glm::vec3(Math::RandFloatMinMax(-10.0f, 10.0f), 0.5f, Math::RandFloatMinMax(-10.0f, 10.0f)), 1);
+	CEnemy3D* cEnemy3D = new CEnemy3D(glm::vec3(Math::RandFloatMinMax(-10.0f, 10.0f), 0.5f, Math::RandFloatMinMax(-10.0f, 10.0f)), 2);
 	cEnemy3D->SetShader(cShader);
 	cEnemy3D->Init();
 	cEnemy3D->ActivateCollider(cSimpleShader);
 	cEntityManager->Add(cEnemy3D);
+
+	CPoison3D* cPoison3D = new CPoison3D(cEnemy3D->GetPosition(), glm::uvec2(0,0), cEnemy3D);
+	cPoison3D->SetShader(cShader);
+	cPoison3D->Init();
+	cPoison3D->ActivateCollider(cSimpleShader);
+	cEntityManager->Add(cPoison3D);
+
+	/*CStructure3D* cExplosiveBarrel = new CStructure3D(glm::vec3(0.f, 0.5f, 0.f), CEntity3D::TYPE::EXPLOSIVE_BARREL);
+	cExplosiveBarrel->SetShader(cShader);
+	cExplosiveBarrel->Init();
+	cExplosiveBarrel->ActivateCollider(cSimpleShader);
+	cEntityManager->Add(cExplosiveBarrel);*/
+
+	/*CVirus* cVirus = new CVirus();
+	cVirus->SetShader(cGUIShader);
+	cVirus->Init();
+	cPlayer3D->AddVirus(cVirus);
+
+	CVirus* cVirus1 = new CVirus();
+	cVirus1->SetShader(cGUIShader);
+	cVirus1->Init();
+	cVirus1->SetPosition(glm::vec3(cVirus->GetPosition().x + (2 * cVirus->GetScale().x + 0.02), cVirus->GetPosition().y, cVirus->GetPosition().z));
+	cPlayer3D->AddVirus(cVirus1);*/
+
+	/*CBoss3D* cEnemy3D = new CBoss3D(glm::vec3(Math::RandFloatMinMax(-10.0f, 10.0f), 0.5f, Math::RandFloatMinMax(-10.0f, 10.0f)), 1);
+	cEnemy3D->SetShader(cShader);
+	cEnemy3D->Init();
+	cEnemy3D->ActivateCollider(cSimpleShader);
+	cEntityManager->Add(cEnemy3D);*/
 
 	/*CStructure3D* cBarricade = new CStructure3D(glm::vec3(10.f, 0.5f, 10.f), CEntity3D::TYPE::BARRICADE);
 	cBarricade->SetShader(cShader);
@@ -356,7 +380,7 @@ bool CSceneGame3D::Init(void)
 void CSceneGame3D::Update(const double dElapsedTime)
 {
 
-	cout << dElapsedTime << endl;
+	//cout << dElapsedTime << endl;
 
 	// respawn player
 	if (cPlayer3D->GetCurrHealth() < 1)
@@ -643,14 +667,21 @@ void CSceneGame3D::Update(const double dElapsedTime)
 		cEntityManager->UpdateScore();
 		//Timer for wave
 		dMainWaveTimer += dElapsedTime;
-	}
 
+		if (cPlayer3D->GetCurrHealth() < 1)
+		{
+			cPlayer3D->SetCurrHealth(cPlayer3D->GetMaxHealth());
+
+
+		}
+	}
 	else if (cEntityManager->CheckWave() == true)
 	{
 		cWave->SpawnBoss();
-		cout << "Boss Spawned" << endl;
+		//cout << "Boss Spawned" << endl;
 
 	}
+
 
 	if (cEntityManager->CheckBoss() == true)
 	{
@@ -661,6 +692,13 @@ void CSceneGame3D::Update(const double dElapsedTime)
 
 		cScore->AddScoreFromWave(cWave->GetWaveNumber(), dMainWaveTimer);
 		cScore->AddScoreFromWave(cWave->GetWaveNumber(), dBossTimer);
+
+		cPlayer3D->SetNumOfVirus(cPlayer3D->GetNumOfVirus() + 1);
+
+		CVirus* cVirus = new CVirus(glm::uvec2(0, Math::RandIntMinMax(0,4)), cPlayer3D->GetNumOfVirus());
+		cVirus->SetShader(cGUIShader);
+		cVirus->Init();
+		cPlayer3D->AddVirus(cVirus);
 
 		cout << "Total score is: " << cScore->GetScore() << endl;
 
@@ -685,11 +723,50 @@ void CSceneGame3D::Update(const double dElapsedTime)
 		dBossTimer = 0.0f;
 
 	}
-
-	else if (cEntityManager->CheckBoss() == false)
+	else
 	{
 		dBossTimer += dElapsedTime;
-		cout << dBossTimer << endl;
+	//	cout << dBossTimer << endl;
+
+		if (cPlayer3D->GetCurrHealth() < 1)
+		{
+			cout << "Wave over" << endl;
+			cout << "Time taken for main wave: " << dMainWaveTimer << endl;
+			cout << "Time taken for boss: " << dBossTimer << endl;
+			//Calculate Score from completing wave
+
+			cScore->AddScoreFromWave(cWave->GetWaveNumber(), dMainWaveTimer);
+			cScore->AddScoreFromWave(cWave->GetWaveNumber(), dBossTimer);
+
+			cPlayer3D->SetNumOfVirus(cPlayer3D->GetNumOfVirus() + 1);
+
+			CVirus* cVirus = new CVirus(glm::uvec2(1, Math::RandIntMinMax(5, 9)), cPlayer3D->GetNumOfVirus());
+			cVirus->SetShader(cGUIShader);
+			cVirus->Init();
+			cPlayer3D->AddVirus(cVirus);
+
+			cout << "Total score is: " << cScore->GetScore() << endl;
+
+			//Set the wave number for next wave
+			cWave->SetWaveNumber(cWave->GetWaveNumber() + 1);
+
+			//If game ended update high scores
+			if (cWave->GetWaveNumber() == 2)
+			{
+				cScore->UpdateHighScores();
+				cScore->PrintHighScores();
+			}
+
+			//Set the score player will get from killing each enemy
+			cScore->SetScoreToAdd(cWave->GetWaveNumber() * 100);
+
+			cout << "Next wave is wave: " << cWave->GetWaveNumber() << endl;
+			cout << "Score per enemy is: " << cScore->GetScoreToAdd() << endl;
+
+			//Reset timers
+			dMainWaveTimer = 0.0f;
+			dBossTimer = 0.0f;
+		}
 	}
 
 	// collision between player and entity
@@ -842,6 +919,8 @@ void CSceneGame3D::Render(void)
 	cPlayer3D->PreRender();
 	cPlayer3D->Render();
 	cPlayer3D->PostRender();
+	cPlayer3D->RenderVirusHUD();
+
 
 	// Render cEntityManager
 	cEntityManager->SetView(view);
@@ -921,7 +1000,8 @@ void CSceneGame3D::Render(void)
 		if (cPlayer3D->GetWeapon()->GetIsReloadStatus())
 		{
 			cTextRenderer->Render("Reloading :", 10, 150.0f, 0.5f, glm::vec3(1.0f, 0.0f, 0.0f));
-			cTextRenderer->Render(to_string(cPlayer3D->GetWeapon()->GetReloadTime() - cPlayer3D->GetWeapon()->GetReloadElapsed()), 10, 110.0f, 1.f, glm::vec3(1.0f, 1.0f, 1.0f));
+			cTextRenderer->Render(to_string((cPlayer3D->GetWeapon()->GetReloadTime() * cPlayer3D->GetReloadSpeedMultiplier()) - cPlayer3D->GetWeapon()->GetReloadElapsed()), 10, 110.0f, 1.f, glm::vec3(1.0f, 1.0f, 1.0f));
+			cout << cPlayer3D->GetWeapon()->GetReloadTime() * cPlayer3D->GetReloadSpeedMultiplier() << endl;
 		}
 	}
 

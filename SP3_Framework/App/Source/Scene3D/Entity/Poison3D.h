@@ -26,6 +26,7 @@
 #include "../../Meshes/MatrixStack.h"
 
 #include "Enemy3D.h"
+#include "CBoss3D.h"
 
 
 class CPoison3D : public CEntity3D
@@ -35,7 +36,7 @@ public:
 	CPoison3D(void);
 
 	// Constructor with vectors
-	CPoison3D(const glm::vec3 vec3Position, int enemy_type, CEnemy3D* currenemy);
+	CPoison3D(const glm::vec3 vec3Position, glm::uvec2 entity_type, CEntity3D* currenemy);
 
 	// Destructor
 	virtual ~CPoison3D(void);
@@ -63,15 +64,17 @@ public:
 	// PostRender
 	virtual void PostRender(void);
 
-	CEnemy3D* GetCurrEnemy(void);
+	CEntity3D* GetCurrEnemy(void);
 
 protected:
 	
 	
 	// curr enemy
-	CEnemy3D* currEnemy;
+	CEntity3D* currEnemy;
 
-	int type;
+	glm::uvec2 type;
+
+	//int type;
 
 };
 

@@ -142,7 +142,7 @@ bool CEnemy3D::Init(void)
 	{
 		health = 70;
 		speed = Math::RandFloatMinMax(0.7f, 0.9f);
-		rangeOfSight = 8.0f;
+		rangeOfSight = 10.0f;
 
 		vec3Scale = glm::vec3(1, 1, 1);
 		vec3ColliderScale = glm::vec3(0.45, 1.6, 0.45);
@@ -153,7 +153,7 @@ bool CEnemy3D::Init(void)
 	{
 		health = 100;
 		speed = Math::RandFloatMinMax(0.7f, 0.9f);
-		rangeOfSight = 6.0f;
+		rangeOfSight = 8.0f;
 
 		vec3Scale = glm::vec3(1, 1, 1);
 		vec3ColliderScale = glm::vec3(0.45, 1.6, 0.45);
@@ -325,7 +325,7 @@ void CEnemy3D::Update(const double dElapsedTime)
 	{
 		soundDelay = 0.f;
 		cSoundController->PlaySoundByID(4);
-		cout << "yes" << endl;
+		//cout << "yes" << endl;
 	}
 
 	float fDistanceToPlayer = glm::length(cPlayer3D->GetPosition() - vec3Position);

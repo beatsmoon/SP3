@@ -139,13 +139,13 @@ bool CBoss3D::Init(void)
 	{
 	case T_BOSS1:
 	{
-		health = 10;
+		health = 400;
 		speed = Math::RandFloatMinMax(0.8f, 1.3f);
 		rangeOfSight = 6.f;
 		splitting = 0;
 
 		vec3Scale = glm::vec3(1.5, 1.5, 1.5);
-		vec3ColliderScale = glm::vec3(0.675, 2.4, 0.675);
+		vec3ColliderScale = glm::vec3(0.675, 2.6, 0.675);
 
 		std::string file_path = "OBJ/creeper.obj";
 		bool success = LoadOBJ(file_path.c_str(), vertices, uvs, normals);
@@ -158,7 +158,7 @@ bool CBoss3D::Init(void)
 	}
 	case T_BOSS2:
 	{
-		health = 10;
+		health = 400;
 		speed = Math::RandFloatMinMax(1.0f, 1.2f);
 		rangeOfSight = 6.f;
 		splitting = 0;
@@ -177,7 +177,7 @@ bool CBoss3D::Init(void)
 	}
 	case T_BOSS3:
 	{
-		health = 10;
+		health = 400;
 		speed = Math::RandFloatMinMax(0.1f, 0.7f);
 		rangeOfSight = 6.f;
 		splitting = 3;
@@ -603,7 +603,6 @@ int CBoss3D::GetSplit()
 void CBoss3D::SplitIntoSmallerBoss()
 {
 	splitting--;
-	health = 10;
 
 	CBoss3D* cboss = new CBoss3D(vec3Position, T_BOSS3);
 	cboss->SetShader(cShader);
@@ -611,6 +610,7 @@ void CBoss3D::SplitIntoSmallerBoss()
 	cboss->ActivateCollider(cShader);
 	cboss->SetSplit(splitting);
 	cboss->ScaleBossBasedOnSplit(splitting);
+	cboss->SetHealth(cboss->GetHealth() * (1.0f / (4 - splitting)));
 	CEntityManager::GetInstance()->Add(cboss);
 }
 

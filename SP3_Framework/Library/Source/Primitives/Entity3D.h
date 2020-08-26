@@ -126,6 +126,10 @@ public:
 	// PostRender
 	virtual void PostRender(void) = 0;
 
+	virtual int GetHealth();
+	virtual void SetHealth();
+
+
 	virtual void SetColliderScale(const glm::vec3 vec3Scale);
 	virtual const glm::vec3 GetColliderScale() const;
 

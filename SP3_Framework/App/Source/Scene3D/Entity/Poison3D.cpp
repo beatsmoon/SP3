@@ -9,13 +9,13 @@ using namespace std;
 CPoison3D::CPoison3D(void)
 {
 	this->vec3Position = glm::vec3(1, 1, 1);
-	this->type = Enemy_Type::T_ENEMY1;
+	this->type = glm::uvec2(0,2);
 }
 
-CPoison3D::CPoison3D(const glm::vec3 vec3Position, int enemy_type, CEnemy3D* currenemy)
+CPoison3D::CPoison3D(const glm::vec3 vec3Position, glm::uvec2 entity_type, CEntity3D* currenemy)
 {
 	this->vec3Position = vec3Position;
-	this->type = enemy_type;
+	this->type = entity_type;
 	this->currEnemy = currenemy;
 }
 
@@ -45,31 +45,52 @@ bool CPoison3D::Init(void)
 	std::vector<glm::vec2> uvs;
 	std::vector<glm::vec3> normals;
 
+
+	switch (type.x)
+	{
+	case 0: // enemy
+	{
+		switch (type.y)
+		{
+		case Enemy_Type::T_ENEMY1:
+		{
+			vec3Scale = glm::vec3(2, 2, 2);
+			vec3ColliderScale = glm::vec3(4, 0.1, 4);
+			break;
+		}
+		case Enemy_Type::T_ENEMY2:
+		{
+			vec3Scale = glm::vec3(1, 1, 1);
+			vec3ColliderScale = glm::vec3(2, 0.1, 2);
+
+			break;
+		}
+		case Enemy_Type::T_ENEMY3:
+		{
+			vec3Scale = glm::vec3(0, 0, 0);
+			vec3ColliderScale = glm::vec3(0, 0, 0);
+
+			break;
+		}
+		}
+		break;
+	}
+	case 1: // boss
+	{
+		switch (type.y)
+		{
+		case Boss_Type::T_BOSS1:
+		{
+			vec3Scale = glm::vec3(2, 2, 2);
+			vec3ColliderScale = glm::vec3(4, 0.1, 4);
+			break;
+		}
+		}
+	}
+	}
+
 	
-	switch (type)
-	{
-	case T_ENEMY1:
-	{
-		vec3Scale = glm::vec3(2, 2, 2);
-		vec3ColliderScale = glm::vec3(4, 0.1, 4);
-		
-		break;
-	}
-	case T_ENEMY2:
-	{
-		vec3Scale = glm::vec3(1, 1, 1);
-		vec3ColliderScale = glm::vec3(2, 0.2, 2);
-
-		break;
-	}
-	case T_ENEMY3:
-	{
-		vec3Scale = glm::vec3(0, 0, 0);
-		vec3ColliderScale = glm::vec3(0, 0, 0);
-
-		break;
-	}
-	}
+	
 
 	std::string file_path = "OBJ/range.obj";
 	bool success = LoadOBJ(file_path.c_str(), vertices, uvs, normals);
@@ -220,7 +241,7 @@ void CPoison3D::PostRender(void)
 	glDepthFunc(GL_LESS); // set depth function back to default
 }
 
-CEnemy3D* CPoison3D::GetCurrEnemy(void)
+CEntity3D* CPoison3D::GetCurrEnemy(void)
 {
 	return currEnemy;
 }

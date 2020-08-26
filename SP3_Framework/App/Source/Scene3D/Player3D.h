@@ -37,6 +37,8 @@
 
 #include "WeaponInfo/Weapon.h"
 
+#include "CVirus.h"
+
 // An abstract camera class that processes input and calculates the corresponding Euler Angles, Vectors and Matrices for use in OpenGL
 class CPlayer3D : public CSingletonTemplate<CPlayer3D>, public CEntity3D
 {
@@ -115,13 +117,22 @@ public:
 	void SetScopeMode(bool scopeMode);
 	void SetShootingMode(bool shootingMode);
 	void SetCurrHealth(int currhealth);
+	void SetMaxHealth(int maxhealth);
+	void SetSpeed(float _speed);
+	void SetDmageMultiplier(float multiplier);
+	void SetReloadSpeedMultiplier(float multiplier);
+	void SetNumOfVirus(int num);
+	void AddVirus(CVirus* _virus);
 
 	// Getter
 	bool GetScopeMode();
 	bool GetShootingMode();
 	int GetMaxHealth();
 	int GetCurrHealth();
-
+	float GetSpeed();
+	float GetDmageMultiplier();
+	float GetReloadSpeedMultiplier();
+	int GetNumOfVirus();
 	// jump 
 	void SetToJump(void);
 
@@ -135,6 +146,8 @@ public:
 	virtual void Render(void);
 	// PostRender
 	virtual void PostRender(void);
+
+	void RenderVirusHUD();
 
 protected:
 	// The handle to the CCamera class instance
@@ -178,6 +191,13 @@ protected:
 
 	int maxHealth;
 	int currHealth;
+	float speed;
+	int numOfVirus;
+
+	float realoadSpeedMultiplier;
+	float damageMultiplier;
+
+	std::vector<CVirus *> virus;
 
 	// Handler to to physic3d
 	CPhysics3D cPhysics3D;
