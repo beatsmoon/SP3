@@ -183,13 +183,13 @@ float CWeapon::CalculateGravityMultiplier()
 	switch (type)
 	{
 	case W_PISTOL:
-		return 0.2f;
+		return 0.1f;
 	case W_SHOTGUN:
-		return 0.4f; //0.175
+		return 0.2f; //0.175
 	case W_AK47:
-		return 0.075f;
+		return 0.037f;
 	case W_SNIPER:
-		return 0.04f;
+		return 0.02f;
 	default:
 		return -1.0f;
 	}

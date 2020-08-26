@@ -9,6 +9,8 @@ CShop::CShop(void)
 	, cPlayer3D(NULL)
 	, bShopActive(false)
 	, cMouseController(NULL)
+	, cScore(NULL)
+	, sItemBought("")
 {
 }
 
@@ -21,13 +23,26 @@ CShop::~CShop(void)
 	// We set this to NULL, since it was created elsewhere so we don't delete it here
 	cShader = NULL;
 
+
 	cPlayer3D = NULL;
+
+	textShader = NULL;
 
 	if (cMouseController)
 	{
 		cMouseController->Destroy();
 		cMouseController = NULL;
 	}
+
+	if (cScore)
+	{
+		cScore->Destroy();
+		cScore = NULL;
+	}
+
+	
+	
+	
 }
 
 bool CShop::Init(void)
@@ -37,6 +52,11 @@ bool CShop::Init(void)
 		cout << "HUD::Init(): The shader is not available for this class instance." << endl;
 		return false;
 	}
+
+	// Setup the shaders
+	cSimpleShader = new Shader("Shader//SimpleShader.vs", "Shader//SimpleShader.fs");
+
+	textShader = new Shader("Shader//text.vs", "Shader//text.fs");
 
 	// Call the parent's Init()
 	CEntity3D::Init();
@@ -50,8 +70,10 @@ bool CShop::Init(void)
 
 	cSettings = CSettings::GetInstance();
 
-	// Setup the shaders
-	cSimpleShader = new Shader("Shader//SimpleShader.vs", "Shader//SimpleShader.fs");
+	cScore = CScore::GetInstance();
+
+
+	
 
 	transform = glm::mat4(1.0f); // make sure to initialize matrix to identity matrix first
 
@@ -145,14 +167,23 @@ void CShop::Update(const double dElapsedTime)
 			{
 				cout << "Top Left Box" << endl;
 
-				//Player buys Sniper
-				delete cPlayer3D->GetInventoryWeapon(0);
+				//If player does not already have sniper
+				if (cPlayer3D->GetInventoryWeapon(0)->GetWeaponName() != Weapon_Type::W_SNIPER)
+				{	
+					sItemBought = "Bought Sniper Rifle";
+					//Player buys Sniper
+					delete cPlayer3D->GetInventoryWeapon(0);
 
-				CWeapon* Sniper = new CWeapon(Weapon_Type::W_SNIPER);
-				Sniper->Init();
-				Sniper->SetShader(cSimpleShader);
-				cPlayer3D->SetWeapon(0, Sniper);
+					CWeapon* Sniper = new CWeapon(Weapon_Type::W_SNIPER);
+					Sniper->Init();
+					Sniper->SetShader(cSimpleShader);
+					cPlayer3D->SetWeapon(0, Sniper);
+				}
 
+				else
+				{
+					sItemBought = "You already have a Sniper Rifle";
+				}
 			}
 
 
@@ -162,15 +193,22 @@ void CShop::Update(const double dElapsedTime)
 			{
 				cout << "Top Right Box" << endl;
 
+				if (cPlayer3D->GetInventoryWeapon(0)->GetWeaponName() != Weapon_Type::W_AK47)
+				{
+					sItemBought = "Bought AK47";
+					//Player buys AK47
+					delete cPlayer3D->GetInventoryWeapon(0);
 
-				//Player buys AK47
-				delete cPlayer3D->GetInventoryWeapon(0);
+					CWeapon* AK47 = new CWeapon(Weapon_Type::W_AK47);
+					AK47->Init();
+					AK47->SetShader(cSimpleShader);
+					cPlayer3D->SetWeapon(0, AK47);
+				}
 
-				CWeapon* AK47 = new CWeapon(Weapon_Type::W_AK47);
-				AK47->Init();
-				AK47->SetShader(cSimpleShader);
-				cPlayer3D->SetWeapon(0, AK47);
-
+				else
+				{
+					sItemBought = "You already have an AK47";
+				}
 			}
 
 			//Top Middle Box
@@ -179,13 +217,22 @@ void CShop::Update(const double dElapsedTime)
 			{
 				cout << "Middle Box" << endl;
 
-				//Player buys shotgun
-				delete cPlayer3D->GetInventoryWeapon(0);
+				if (cPlayer3D->GetInventoryWeapon(0)->GetWeaponName() != Weapon_Type::W_SHOTGUN)
+				{
+					sItemBought = "Bought Shotgun";
+					//Player buys shotgun
+					delete cPlayer3D->GetInventoryWeapon(0);
 
-				CWeapon* Shotgun = new CWeapon(Weapon_Type::W_SHOTGUN);
-				Shotgun->Init();
-				Shotgun->SetShader(cSimpleShader);
-				cPlayer3D->SetWeapon(0, Shotgun);
+					CWeapon* Shotgun = new CWeapon(Weapon_Type::W_SHOTGUN);
+					Shotgun->Init();
+					Shotgun->SetShader(cSimpleShader);
+					cPlayer3D->SetWeapon(0, Shotgun);
+				}
+
+				else
+				{
+					sItemBought = "You already have a Shotgun";
+				}
 			}
 
 
@@ -236,22 +283,22 @@ void CShop::Update(const double dElapsedTime)
 				cPlayer3D->GetInventoryWeapon(0)->SetBarrel(cGunBarrel);
 			}
 
-
-			
-
 			//Bottom Left Box
 			if ((cMouseController->GetMousePositionX() >= m_windowWidth * 0.076562 && cMouseController->GetMousePositionX() <= m_windowWidth * 0.1625)
 				&& (cMouseController->GetMousePositionY() >= m_windowHeight * 0.76973 && cMouseController->GetMousePositionY() <= m_windowHeight * 0.92105))
 			{
 				cout << "Ammo Bought" << endl;
 				//Player buys Ammo
-				cPlayer3D->GetInventoryWeapon(0)->AddRounds(30);
+				cPlayer3D->GetInventoryWeapon(0)->AddRounds(cPlayer3D->GetWeapon()->GetMaxMagRound());
 			}
 
 			bouncetime = GetTickCount64() + 500;
 
 		}
 	}
+
+	
+
 }
 
 //Activate Shop UI
@@ -264,6 +311,16 @@ void CShop::ActivateShop(void)
 void CShop::DeactivateShop(void)
 {
 	bShopActive = false;
+}
+
+std::string CShop::GetItemBought(void)
+{
+	return sItemBought;
+}
+
+void CShop::SetItemBought(std::string sItemBought)
+{
+	this->sItemBought = sItemBought;
 }
 
 void CShop::PreRender(void)
@@ -320,6 +377,7 @@ void CShop::Render(void)
 	glBindVertexArray(0);
 	glBindTexture(GL_TEXTURE_2D, 0);
 }
+
 
 void CShop::PostRender(void)
 {

@@ -334,7 +334,7 @@ bool CSceneGame3D::Init(void)
 	cEntityManager->Add(cExplosiveBarrel);
 
 
-	CBoss3D* cEnemy3D = new CBoss3D(glm::vec3(Math::RandFloatMinMax(-10.0f, 10.0f), 0.5f, Math::RandFloatMinMax(-10.0f, 10.0f)), 1);
+	CBoss3D* cEnemy3D = new CBoss3D(glm::vec3(Math::RandFloatMinMax(-10.0f, 10.0f), 0.5f, Math::RandFloatMinMax(-10.0f, 10.0f)),0);
 	cEnemy3D->SetShader(cShader);
 	cEnemy3D->Init();
 	cEnemy3D->ActivateCollider(cSimpleShader);
@@ -346,7 +346,6 @@ bool CSceneGame3D::Init(void)
 	cBarricade->ActivateCollider(cSimpleShader);
 	cEntityManager->Add(cBarricade);*/
 
-
 	return true;
 }
 
@@ -355,8 +354,6 @@ bool CSceneGame3D::Init(void)
 */
 void CSceneGame3D::Update(const double dElapsedTime)
 {
-
-	cout << dElapsedTime << endl;
 
 	// respawn player
 	if (cPlayer3D->GetCurrHealth() < 1)
@@ -639,7 +636,7 @@ void CSceneGame3D::Update(const double dElapsedTime)
 	//While wave is ongoing
 	if (cEntityManager->CheckWave() == false)
 	{
-		//Update score while wave is ongoing
+		//Update score while wave is ongoing	
 		cEntityManager->UpdateScore();
 		//Timer for wave
 		dMainWaveTimer += dElapsedTime;
@@ -671,7 +668,7 @@ void CSceneGame3D::Update(const double dElapsedTime)
 		if (cWave->GetWaveNumber() == 2)
 		{
 			cScore->UpdateHighScores();
-			cScore->PrintHighScores();
+			//cScore->PrintHighScores();
 		}
 
 		//Set the score player will get from killing each enemy
