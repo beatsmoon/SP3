@@ -269,7 +269,7 @@ void Application::Run(void)
 
 	// Enable the starting scene
 	// TODO: Change to Scenes::MENU once development is done
-	cSceneManager->EnableScene(SCENES::MENU);
+	cSceneManager->EnableScene(SCENES::GAME_END);
 	CEntityManager::GetInstance()->SetToMenu();
 	//cSceneManager->EnableScene(1);
 

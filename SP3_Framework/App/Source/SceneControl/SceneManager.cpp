@@ -3,6 +3,7 @@
 CSceneManager::CSceneManager()
 {
 	iSceneIndex = 0;
+	iPrevSceneIndex = 0;
 	bApplicationShouldEnd = false;
 }
 
@@ -48,8 +49,34 @@ void CSceneManager::ChangeScene(int sceneID)
 
 void CSceneManager::EnableScene(const int iSceneID)
 {
+	if (iSceneID == SCENES::MENU)
+	{
+		CSceneMenu3D::GetInstance()->SetMenuType(CSceneMenu3D::MENU_TYPE::M_MAIN_MENU);
+		if (vScenes.at(iSceneID)->GetSceneStatus() == false)
+			vScenes.at(iSceneID)->EnableScene();
+
+		iPrevSceneIndex = iSceneIndex;
+		iSceneIndex = SCENES::MENU;
+		return;
+	}
+	else if (iSceneID == SCENES::GAME_END)
+	{
+		CSceneMenu3D::GetInstance()->SetMenuType(CSceneMenu3D::MENU_TYPE::M_END_MENU);
+		if (vScenes.at(SCENES::MENU)->GetSceneStatus() == false)
+			vScenes.at(SCENES::MENU)->EnableScene();
+
+		iPrevSceneIndex = iSceneIndex;
+		iSceneIndex = SCENES::MENU;
+		return;
+	}
+
 	if (vScenes.at(iSceneID)->GetSceneStatus() == false)
 		vScenes.at(iSceneID)->EnableScene();
+
+	iPrevSceneIndex = iSceneIndex;
+	iSceneIndex = iSceneID;
+
+	
 }
 
 void CSceneManager::DisableScene(const int iSceneID)
@@ -66,6 +93,11 @@ bool CSceneManager::CheckForApplicationEnd()
 void CSceneManager::SetApplicationToEnd()
 {
 	bApplicationShouldEnd = true;
+}
+
+int CSceneManager::GetPreviousScene() const
+{
+	return iPrevSceneIndex;
 }
 
 int CSceneManager::GetCurrentScene() const

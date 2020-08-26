@@ -94,9 +94,17 @@ public:
 		M_QUIT,
 		M_END,
 	};
+	enum MENU_TYPE
+	{
+		M_MAIN_MENU,
+		M_END_MENU,
+	};
 
 	bool GetHighscoreStatus() const;
 	void SetHighscoreStatus(bool bStatus);
+
+	MENU_TYPE GetMenuType();
+	void SetMenuType(const MENU_TYPE type);
 
 protected:
 	// Constructor
@@ -113,6 +121,7 @@ protected:
 	CSkyBox* cSkybox;
 
 	MENU_CHOICES e_MenuChoice = M_END;
+	MENU_TYPE e_MenuType = M_MAIN_MENU;
 
 	bool bHighscoreEnabled;
 

@@ -13,6 +13,7 @@ namespace SCENES
 	const unsigned int MENU = 0;
 	const unsigned int GAME = 1;
 	const unsigned int SHOP = 2;
+	const unsigned int GAME_END = 3;
 }
 
 class CSceneManager : public CSingletonTemplate<CSceneManager>
@@ -21,6 +22,7 @@ class CSceneManager : public CSingletonTemplate<CSceneManager>
 
 	std::vector<CScene3D*> vScenes;
 	int iSceneIndex;
+	int iPrevSceneIndex;
 
 	// Used to handle quitting of application from anywhere in the code
 	bool bApplicationShouldEnd;
@@ -42,6 +44,7 @@ public:
 	bool CheckForApplicationEnd();
 	void SetApplicationToEnd();
 
+	int GetPreviousScene() const;
 	int GetCurrentScene() const;
 
 	CScene3D* GetScene();
