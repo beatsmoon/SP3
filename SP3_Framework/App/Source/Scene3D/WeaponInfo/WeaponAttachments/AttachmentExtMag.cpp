@@ -299,3 +299,7 @@ CGunExtMag::TIERLEVEL CGunExtMag::GetTierLevel(void) const
 {
 	return eTierLevel;
 }
+void CGunExtMag::UpgradeExtMag()
+{
+	eTierLevel = static_cast<TIERLEVEL>(static_cast<int>(eTierLevel) + 1);
+}

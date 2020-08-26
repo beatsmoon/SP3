@@ -273,8 +273,10 @@ void CGunBarrel::PostRender(void)
 {
 	glDepthFunc(GL_LESS); // set depth function back to default
 }
-
-
+void CGunBarrel::UpgradeBarrel()
+{
+	eTierLevel = static_cast<TIERLEVEL>(static_cast<int>(eTierLevel) + 1);
+}
 float CGunBarrel::GetRecoilReduction(void)
 {
 	switch (eTierLevel)

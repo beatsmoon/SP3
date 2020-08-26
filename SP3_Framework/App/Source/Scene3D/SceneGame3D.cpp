@@ -180,11 +180,15 @@ bool CSceneGame3D::Init(void)
 	CGunScope* cGunScope = new CGunScope();
 	cGunScope->SetShader(cShader);
 	cGunScope->Init();
-	cGunScope->SetTierLevel(CGunScope::TIERLEVEL::TIER1);
+	cGunScope->SetTierLevel(CGunScope::TIERLEVEL::NOTIER);
 	CGunBarrel* cGunBarrel = new CGunBarrel();
 	cGunBarrel->SetShader(cShader);
 	cGunBarrel->Init();
-	cGunBarrel->SetTierLevel(CGunBarrel::TIERLEVEL::TIER1);
+	cGunBarrel->SetTierLevel(CGunBarrel::TIERLEVEL::NOTIER);
+	CGunExtMag* cGunExtMag = new CGunExtMag();
+	cGunExtMag->SetShader(cShader);
+	cGunExtMag->Init();
+	cGunExtMag->SetTierLevel(CGunExtMag::TIERLEVEL::NOTIER);
 
 	// add weapon to player
 	CWeapon* cPistol = new CWeapon(Weapon_Type::W_PISTOL);
@@ -194,30 +198,27 @@ bool CSceneGame3D::Init(void)
 	cPlayer3D->SetCurrentWeapon(1);
 	cPlayer3D->GetWeapon()->SetScope(cGunScope);
 	cPlayer3D->GetWeapon()->SetBarrel(cGunBarrel);
+	cPlayer3D->GetWeapon()->SetExtMag(cGunExtMag);
 
 	//Creating Attachment
 	cGunBarrel = new CGunBarrel();
 	cGunBarrel->SetShader(cShader);
 	cGunBarrel->Init();
-	cGunBarrel->SetTierLevel(CGunBarrel::TIERLEVEL::TIER3);
-
-	CGunExtMag* cGunExtMag = new CGunExtMag();
+	cGunBarrel->SetTierLevel(CGunBarrel::TIERLEVEL::NOTIER);
+	cGunExtMag = new CGunExtMag();
 	cGunExtMag->SetShader(cShader);
 	cGunExtMag->Init();
-	cGunExtMag->SetTierLevel(CGunExtMag::TIERLEVEL::TIER3);
-
+	cGunExtMag->SetTierLevel(CGunExtMag::TIERLEVEL::NOTIER);
 	cGunScope = new CGunScope();
 	cGunScope->SetShader(cShader);
 	cGunScope->Init();
-	cGunScope->SetTierLevel(CGunScope::TIERLEVEL::TIER3);
+	cGunScope->SetTierLevel(CGunScope::TIERLEVEL::NOTIER);
 
 	CWeapon* rifle = new CWeapon(Weapon_Type::W_AK47);
 	rifle->Init();
 	rifle->SetShader(cSimpleShader);
 	cPlayer3D->SetWeapon(0, rifle);
 	cPlayer3D->SetCurrentWeapon(0);
-
-
 	cPlayer3D->GetWeapon()->SetBarrel(cGunBarrel);
 	cPlayer3D->GetWeapon()->SetExtMag(cGunExtMag);
 	cPlayer3D->GetWeapon()->SetScope(cGunScope);
@@ -527,7 +528,7 @@ void CSceneGame3D::Update(const double dElapsedTime)
 
 		cCamera->ProcessMouseScroll((float)cMouseController->GetMouseScrollStatus(CMouseController::SCROLL_TYPE::SCROLL_TYPE_YOFFSET));
 
-		if (cPlayer3D->GetWeapon()->GetScope() != NULL)
+		if (cPlayer3D->GetWeapon()->GetScope()->GetTierLevel() != CGunScope::NOTIER)
 		{
 			if (CMouseController::GetInstance()->IsButtonReleased(CMouseController::BUTTON_TYPE::RMB))
 			{
@@ -901,29 +902,35 @@ void CSceneGame3D::Render(void)
 	textShader->use();
 	//cTextRenderer->Render("DM2231 GDEV 2D", 10.0f, 10.0f, 0.5f, glm::vec3(1.0f, 1.0f, 0.0f));
 	// Render FPS info
-	cTextRenderer->Render(cFPSCounter->GetFrameRateString(), 10.0f, 50.0f, 0.5f, glm::vec3(1.0f, 1.0f, 0.0f));
+	//cTextRenderer->Render(cFPSCounter->GetFrameRateString(), 10.0f, 50.0f, 0.5f, glm::vec3(1.0f, 1.0f, 0.0f));
 	// Render Camera Position
 	//cTextRenderer->Render(glm::to_string(cPlayer3D->GetPosition()), 10.0f, 30.0f, 0.5f, glm::vec3(1.0f, 1.0f, 0.0f));
 	
 	// Render Player Position
-	cTextRenderer->Render(glm::to_string(cPlayer3D->GetPosition()),
-						  10.0f, 30.0f, 0.5f,
-					  	  glm::vec3(1.0f, 1.0f, 1.0f));
+	//cTextRenderer->Render(glm::to_string(cPlayer3D->GetPosition()),
+						//  10.0f, 30.0f, 0.5f,
+					  	  //glm::vec3(1.0f, 1.0f, 1.0f));
 	   
 	// Render Camera Position
-	cTextRenderer->Render(glm::to_string(cCamera->vec3Position), 10.0f, 10.0f, 0.5f, glm::vec3(1.0f, 1.0f, 0.0f));
+	//cTextRenderer->Render(glm::to_string(cCamera->vec3Position), 10.0f, 10.0f, 0.5f, glm::vec3(1.0f, 1.0f, 0.0f));
 
 	if (cPlayer3D->GetWeapon() != NULL)
 	{
-		cTextRenderer->Render(to_string(cPlayer3D->GetWeapon()->GetMagRound()), 10, 60.0f, 1.5f, glm::vec3(1.0f, 1.0f, 1.0f));
-		cTextRenderer->Render("/", 60, 60.0f, 1.5f, glm::vec3(1.0f, 1.0f, 1.0f));
-		cTextRenderer->Render(to_string(cPlayer3D->GetWeapon()->GetTotalRound()), 100, 60.0f, 1.5f, glm::vec3(1.0f, 1.0f, 1.0f));
+		cTextRenderer->Render(to_string(cPlayer3D->GetWeapon()->GetMagRound()), cSettings->iWindowWidth - 190, 60.0f, 1.5f, glm::vec3(1.0f, 1.0f, 1.0f));
+		cTextRenderer->Render("/", cSettings->iWindowWidth - 120, 60.0f, 1.5f, glm::vec3(1.0f, 1.0f, 1.0f));
+		cTextRenderer->Render(to_string(cPlayer3D->GetWeapon()->GetTotalRound()), cSettings->iWindowWidth - 100, 60.0f, 1.f, glm::vec3(1.0f, 1.0f, 1.0f));
 		if (cPlayer3D->GetWeapon()->GetIsReloadStatus())
 		{
 			cTextRenderer->Render("Reloading :", 10, 150.0f, 0.5f, glm::vec3(1.0f, 0.0f, 0.0f));
 			cTextRenderer->Render(to_string(cPlayer3D->GetWeapon()->GetReloadTime() - cPlayer3D->GetWeapon()->GetReloadElapsed()), 10, 110.0f, 1.f, glm::vec3(1.0f, 1.0f, 1.0f));
 		}
 	}
+	// Render Tier Level For Barrel
+	cTextRenderer->Render(to_string(static_cast<int>(cPlayer3D->GetWeapon()->GetBarrel()->GetTierLevel())), 7.0f, 5.0f, 0.5f, glm::vec3(1.0f, 1.0f, 1.0f));
+	// Render Tier Level For ExtMag
+	cTextRenderer->Render(to_string(static_cast<int>(cPlayer3D->GetWeapon()->GetExtMag()->GetTierLevel())), 40.0f, 5.0f, 0.5f, glm::vec3(1.0f, 1.0f, 1.0f));
+	// Render Tier Level For Scope
+	cTextRenderer->Render(to_string(static_cast<int>(cPlayer3D->GetWeapon()->GetScope()->GetTierLevel())), 71.0f, 5.0f, 0.5f, glm::vec3(1.0f, 1.0f, 1.0f));
 
 	// Call the cTextRenderer's PostRender()
 	cTextRenderer->PostRender();
