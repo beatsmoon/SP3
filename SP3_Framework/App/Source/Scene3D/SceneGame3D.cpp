@@ -1,6 +1,5 @@
 #include "SceneGame3D.h"
 #include <iostream>
-using namespace std;
 
 // Include GLEW
 #define GLEW_STATIC
@@ -26,6 +25,8 @@ using namespace std;
 #include "../Library/Source/System/MyMath.h"
 
 #include "CVirus.h"
+
+using namespace std;
 
 /**
  @brief Constructor This constructor has protected access modifier as this class will be a Singleton
@@ -329,6 +330,7 @@ bool CSceneGame3D::Init(void)
 
 
 	}
+
 	CBoss3D* cEnemy3D = new CBoss3D(glm::vec3(Math::RandFloatMinMax(-10.0f, 10.0f), 0.5f, Math::RandFloatMinMax(-10.0f, 10.0f)), 0);
 	cEnemy3D->SetShader(cShader);
 	cEnemy3D->Init();
@@ -356,7 +358,6 @@ bool CSceneGame3D::Init(void)
 void CSceneGame3D::Update(const double dElapsedTime)
 {
 	cPlayer3D->StorePositionForRollback();
-	//cout << dElapsedTime << endl;
 
 	// respawn player
 	if (cPlayer3D->GetCurrHealth() < 1)
@@ -416,12 +417,11 @@ void CSceneGame3D::Update(const double dElapsedTime)
 				{
 					cPlayer3D->GetWeapon()->SetTotalRound(cPlayer3D->GetWeapon()->GetMaxTotalRound());
 				}
-				//cPlayer3D->GetWeapon()->SetCanFire(false);
-				
+
 			}
 			else
 			{
-				cout << "there is no weapon to reload" << endl;
+				//cout << "there is no weapon to reload" << endl;
 			}
 		}
 
@@ -640,7 +640,7 @@ void CSceneGame3D::Update(const double dElapsedTime)
 	//While wave is ongoing
 	if (cEntityManager->CheckWave() == false)
 	{
-		//Update score while wave is ongoing
+		//Update score while wave is ongoing	
 		cEntityManager->UpdateScore();
 		//Timer for wave
 		dMainWaveTimer += dElapsedTime;
@@ -658,7 +658,6 @@ void CSceneGame3D::Update(const double dElapsedTime)
 		//cout << "Boss Spawned" << endl;
 
 	}
-
 
 	if (cEntityManager->CheckBoss() == true)
 	{
@@ -683,7 +682,7 @@ void CSceneGame3D::Update(const double dElapsedTime)
 		cWave->SetWaveNumber(cWave->GetWaveNumber() + 1);
 
 		//If game ended update high scores
-		if (cWave->GetWaveNumber() == 2)
+		if (cWave->GetWaveNumber() > 10)
 		{
 			cScore->UpdateHighScores();
 			//cScore->PrintHighScores();
@@ -988,6 +987,9 @@ void CSceneGame3D::Render(void)
 	cTextRenderer->Render(to_string(static_cast<int>(cPlayer3D->GetWeapon()->GetExtMag()->GetTierLevel())), 40.0f, 5.0f, 0.5f, glm::vec3(1.0f, 1.0f, 1.0f));
 	// Render Tier Level For Scope
 	cTextRenderer->Render(to_string(static_cast<int>(cPlayer3D->GetWeapon()->GetScope()->GetTierLevel())), 71.0f, 5.0f, 0.5f, glm::vec3(1.0f, 1.0f, 1.0f));
+
+	cTextRenderer->Render("Score: " + std::to_string(cScore->GetScore()), cSettings->iWindowWidth * 0.01, cSettings->iWindowHeight * 0.88, 1.f, glm::vec3(1.f, 0.f, 0.f));
+
 
 	cTextRenderer->Render("Score: " + std::to_string(cScore->GetScore()), cSettings->iWindowWidth * 0.01, cSettings->iWindowHeight * 0.88, 1.f, glm::vec3(1.f, 0.f, 0.f));
 

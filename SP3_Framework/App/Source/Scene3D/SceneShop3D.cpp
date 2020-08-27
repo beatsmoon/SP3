@@ -56,6 +56,8 @@ bool CSceneShop3D::Init(void)
 		return false;
 
 	cMouseController->PostUpdate();
+
+	cScore = CScore::GetInstance();
 	
 
 	return true;
@@ -67,7 +69,6 @@ bool CSceneShop3D::Init(void)
 void CSceneShop3D::Update(const double dElapsedTime)
 {
 	cShop->Update(dElapsedTime);
-
 
 	//if (CKeyboardController::GetInstance()->IsKeyPressed(GLFW_KEY_P))
 	//{
@@ -115,8 +116,11 @@ void CSceneShop3D::Render(void)
 	cTextRenderer->PreRender();
 	cTextRenderer->Render(to_string(cMouseController->GetMousePositionY()), 10.0f, 50.0f, 0.5f, glm::vec3(1.0f, 1.0f, 1.0f));
 
-	
 	cTextRenderer->Render(to_string(cMouseController->GetMousePositionX()), 10.0f, 70.0f, 0.5f, glm::vec3(1.0f, 1.0f, 1.0f));
+
+	cTextRenderer->Render(std::to_string(cScore->GetScore()), cSettings->iWindowWidth * 0.55, cSettings->iWindowHeight * 0.165, 2.f, glm::vec3(1.f, 1.f, 1.f));
+
+	cTextRenderer->Render(cShop->GetItemBought(), cSettings->iWindowWidth * 0.2, cSettings->iWindowHeight * 0.1, 1.f, glm::vec3(1.f, 1.f, 1.f));
 
 	cTextRenderer->PostRender();
 }

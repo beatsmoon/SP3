@@ -24,6 +24,8 @@
 //Include shaders for weapons 
 #include "RenderControl/shader.h"
 
+#include "../App/Source/Scene3D/Score.h"
+
 //Include Attachment Classes
 #include "../App/Source/Scene3D/WeaponInfo/WeaponAttachments/AttachmentBarrel.h"
 #include "../App/Source/Scene3D/WeaponInfo/WeaponAttachments/AttachmentExtMag.h"
@@ -37,6 +39,8 @@ public:
 
 	// Handler to the LineShader Program instance
 	Shader* cSimpleShader;
+
+	Shader* textShader;
 
 	// Initialise this class instance
 	bool Init(void);
@@ -67,6 +71,13 @@ public:
 	//Changes flag to deactivate shop UI
 	void DeactivateShop(void);
 
+	std::string GetItemBought(void);
+
+	void SetItemBought(std::string);
+
+
+
+
 protected:
 	// A transformation matrix for controlling where to render the entities
 	glm::mat4 transform;
@@ -75,8 +86,14 @@ protected:
 
 	CMouseController* cMouseController;
 
+	CScore* cScore;
+
+	std::string sItemBought;
+	
+	
 	bool bActive;
 	bool bShopActive;
+	
 
 	// Constructor
 	CShop(void);

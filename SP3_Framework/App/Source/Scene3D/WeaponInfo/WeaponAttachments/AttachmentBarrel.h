@@ -66,6 +66,8 @@ public:
 	// PostRender
 	virtual void PostRender(void);
 
+	void UpgradeBarrel();
+
 	enum TIERLEVEL
 	{
 		NOTIER = 0,

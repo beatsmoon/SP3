@@ -51,7 +51,6 @@ public:
 
 	std::vector<int>& GetScoreboard();
 
-
 protected:
 
 	CScore();

@@ -88,11 +88,11 @@ void CWave::SpawnBoss(void)
 		cBoss3D->ActivateCollider(cSimpleShader);
 		cEntityManager->Add(cBoss3D);
 
-		/*CPoison3D* cPoison3D = new CPoison3D(cBoss3D->GetPosition(), glm::uvec2(1, 0), cBoss3D);
+		CPoison3D* cPoison3D = new CPoison3D(cBoss3D->GetPosition(), glm::uvec2(1, 0), cBoss3D);
 		cPoison3D->SetShader(cShader);
 		cPoison3D->Init();
 		cPoison3D->ActivateCollider(cSimpleShader);
-		cEntityManager->Add(cPoison3D);*/
+		cEntityManager->Add(cPoison3D);
 
 		cEntityManager->SetBossStatus(true);
 
@@ -132,16 +132,26 @@ void CWave::SpawnBoss(void)
 	}
 	default: // last boss 
 	{
-		int rand = Math::RandIntMinMax(0, 2);
+		for (int i = 0; i < 3; i++)
+		{
+			CBoss3D* cBoss3D = new CBoss3D(glm::vec3(Math::RandFloatMinMax(-10.0f, 10.0f), 0.5f, Math::RandFloatMinMax(-10.0f, 10.0f)), i);
+			cBoss3D->SetShader(cShader);
+			cBoss3D->Init();
+			cBoss3D->SetHealth(cBoss3D->GetHealth() + ((wave - 1) * 300));
+			cBoss3D->ActivateCollider(cSimpleShader);
+			cEntityManager->Add(cBoss3D);
 
-		CBoss3D* cBoss3D = new CBoss3D(glm::vec3(Math::RandFloatMinMax(-10.0f, 10.0f), 0.5f, Math::RandFloatMinMax(-10.0f, 10.0f)), rand);
-		cBoss3D->SetShader(cShader);
-		cBoss3D->Init();
-		cBoss3D->SetHealth(cBoss3D->GetHealth() + ((wave - 1) * 300));
-		cBoss3D->ActivateCollider(cSimpleShader);
-		cEntityManager->Add(cBoss3D);
+			if (i == 0)
+			{
+				CPoison3D* cPoison3D = new CPoison3D(cBoss3D->GetPosition(), glm::uvec2(1, 0), cBoss3D);
+				cPoison3D->SetShader(cShader);
+				cPoison3D->Init();
+				cPoison3D->ActivateCollider(cSimpleShader);
+				cEntityManager->Add(cPoison3D);
+			}
 
-		cEntityManager->SetBossStatus(true);
+			cEntityManager->SetBossStatus(true);
+		}
 
 		wave += 1;
 

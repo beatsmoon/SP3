@@ -28,13 +28,13 @@ void CWeapon::Init(void)
 	case W_PISTOL:
 
 		// The number of ammunition in a magazine for this weapon
-		iMagRounds = 8;
+		iMagRounds = 12;
 		// The maximum number of ammunition for this magazine for this weapon
-		iMaxMagRounds = 8;
+		iMaxMagRounds = 12;
 		// The current total number of rounds currently carried by this player
-		iTotalRounds = 40;
+		iTotalRounds = 96;
 		// The max total number of rounds currently carried by this player
-		iMaxTotalRounds = 40;
+		iMaxTotalRounds = 96;
 
 		// The time between shots
 		dTimeBetweenShots = 0.3333;
@@ -183,13 +183,13 @@ float CWeapon::CalculateGravityMultiplier()
 	switch (type)
 	{
 	case W_PISTOL:
-		return 0.2f;
+		return 0.1f;
 	case W_SHOTGUN:
-		return 0.4f; //0.175
+		return 0.2f; //0.175
 	case W_AK47:
-		return 0.075f;
+		return 0.037f;
 	case W_SNIPER:
-		return 0.04f;
+		return 0.02f;
 	default:
 		return -1.0f;
 	}

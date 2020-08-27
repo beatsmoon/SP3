@@ -65,6 +65,8 @@ public:
 
 	virtual float GetAdditionMag(void);
 
+	void UpgradeScope();
+
 	enum TIERLEVEL
 	{
 		NOTIER = 0,
