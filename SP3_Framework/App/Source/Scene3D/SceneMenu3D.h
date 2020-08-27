@@ -107,6 +107,8 @@ protected:
 
 	CEntityManager* cEntityManager;
 
+	CCrossHair* cCrossHair;
+
 	CSkyBox* cSkybox;
 
 	MENU_CHOICES e_MenuChoice = M_END;

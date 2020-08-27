@@ -273,9 +273,9 @@ bool CSceneGame3D::Init(void)
 	cTotalBulletsBar->Init();
 
 	// Initialise cCrossHair
-	//cCrossHair = CCrossHair::GetInstance();
-	//cCrossHair->SetShader(cGUIShader);
-	//cCrossHair->Init();
+	cCrossHair = CCrossHair::GetInstance();
+	cCrossHair->SetShader(cGUIShader);
+	cCrossHair->Init();
 
 	// Initialise cScope
 	cScope = CScope::GetInstance();
@@ -411,7 +411,12 @@ void CSceneGame3D::Update(const double dElapsedTime)
 			InputDelay = 0.f;
 			if (cPlayer3D->GetWeapon() != NULL)
 			{
+
 				cPlayer3D->GetWeapon()->Reload();
+				if (cPlayer3D->GetWeapon()->GetWeaponName() == Weapon_Type::W_PISTOL)
+				{
+					cPlayer3D->GetWeapon()->SetTotalRound(cPlayer3D->GetWeapon()->GetMaxTotalRound());
+				}
 				//cPlayer3D->GetWeapon()->SetCanFire(false);
 				
 			}
@@ -421,10 +426,7 @@ void CSceneGame3D::Update(const double dElapsedTime)
 			}
 		}
 
-		if (cPlayer3D->GetWeapon()->GetWeaponName() == Weapon_Type::W_PISTOL)
-		{
-			cPlayer3D->GetWeapon()->SetTotalRound(cPlayer3D->GetWeapon()->GetMaxTotalRound());
-		}
+		
 
 	}
 	if (CKeyboardController::GetInstance()->IsKeyPressed(GLFW_KEY_B))
@@ -533,20 +535,21 @@ void CSceneGame3D::Update(const double dElapsedTime)
 			if (CMouseController::GetInstance()->IsButtonReleased(CMouseController::BUTTON_TYPE::RMB))
 			{
 				cPlayer3D->SetScopeMode(false);
+				cCrossHair->SetStatus(true);
 				cCamera->fZoom = 45.0f;
 			}
 			else if (CMouseController::GetInstance()->IsButtonPressed(CMouseController::BUTTON_TYPE::RMB))
 			{
 
 				cPlayer3D->SetScopeMode(true);
-
+				cCrossHair->SetStatus(false);
 				if (cPlayer3D->GetWeapon()->GetScope()->GetTierLevel() == CGunScope::TIERLEVEL::TIER1)
 				{
-					cCamera->fZoom = 35.0f;
+					cCamera->fZoom = 15.0f;
 				}
 				if (cPlayer3D->GetWeapon()->GetScope()->GetTierLevel() == CGunScope::TIERLEVEL::TIER2)
 				{
-					cCamera->fZoom = 15.0f;
+					cCamera->fZoom = 10.0f;
 				}
 				if (cPlayer3D->GetWeapon()->GetScope()->GetTierLevel() == CGunScope::TIERLEVEL::TIER3)
 				{
@@ -885,9 +888,10 @@ void CSceneGame3D::Render(void)
 	}
 	
 
-	//cCrossHair->PreRender();
-	//cCrossHair->Render();
-	//cCrossHair->PostRender();
+	cCrossHair->PreRender();
+	cCrossHair->Render();
+	cCrossHair->PostRender();
+	cCrossHair->PostRender();
 
 	if (cPlayer3D->GetWeapon()->GetScope() != NULL && cPlayer3D->GetScopeMode() == true)
 	{

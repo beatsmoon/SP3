@@ -162,14 +162,14 @@ void CScope::Update(const double dElapsedTime)
 		break;
 	case CGunScope::TIERLEVEL::TIER1:
 		{
-			vec3Position = glm::vec3(0, 0.0, 1);
+			vec3Position = glm::vec3(0, -0.1, 1);
 			vec3Scale = glm::vec3(2, 1.5, 1);
 			iTextureID = LoadTexture("Images/GUI/Scene3D_ScopeMode_Tier1.tga");
 		}
 		break;
 	case CGunScope::TIERLEVEL::TIER2:
 		{
-			vec3Position = glm::vec3(0, 0.08, 1);
+			vec3Position = glm::vec3(0, 0.0f, 1);
 			vec3Scale = glm::vec3(2, 1.5, 1);
 			iTextureID = LoadTexture("Images/GUI/Scene3D_ScopeMode_Tier2.tga");
 		}

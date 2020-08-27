@@ -89,8 +89,10 @@ bool CCrossHair::Init(void)
 		return false;
 	}
 
-	bActive = false;
+	bActive = true;
 
+	vec3Position = glm::vec3(0, -0.05, 1);
+	vec3Scale = glm::vec3(0.1, 0.1, 1);
 
 	return true;
 }
@@ -182,6 +184,14 @@ void CCrossHair::Render(void)
 	unsigned int transformLoc;
 	// get matrix's uniform location and set matrix
 	transformLoc = glGetUniformLocation(cShader->ID, "transform");
+
+	transform = glm::mat4(1.0f);
+	// Translate to the position to render. Note that the centrepoint of the progressbar will be at this position
+	// So we need to offset to the right by the vec3Scale.x * fWidth
+	transform = glm::translate(transform, glm::vec3(vec3Position.x, vec3Position.y, vec3Position.z));
+	// Scale the size of the progressbar by vec3Scale. 
+	// Note that .y and .z should be 1.0f if you are not scaling them at all
+	transform = glm::scale(transform, vec3Scale);
 
 	// Update the shaders with the latest transform
 	glUniformMatrix4fv(transformLoc, 1, GL_FALSE, glm::value_ptr(transform));

@@ -270,6 +270,12 @@ void CShop::Update(const double dElapsedTime)
 				//Check if ExtMag is max tier 
 				if (cPlayer3D->GetInventoryWeapon(0)->GetExtMag()->GetTierLevel() != cPlayer3D->GetInventoryWeapon(0)->GetExtMag()->TIER3)
 				{
+					//start minus when its tier 1
+					if (cPlayer3D->GetInventoryWeapon(0)->GetExtMag()->GetTierLevel() != CGunExtMag::TIERLEVEL::NOTIER)
+					{
+						cPlayer3D->GetInventoryWeapon(0)->SetMaxMagRound(cPlayer3D->GetInventoryWeapon(0)->GetMaxMagRound()
+							- cPlayer3D->GetInventoryWeapon(0)->GetExtMag()->GetAdditionMag());
+					}
 					cPlayer3D->GetInventoryWeapon(0)->GetExtMag()->UpgradeExtMag();
 					cPlayer3D->GetInventoryWeapon(0)->SetMaxMagRound(cPlayer3D->GetInventoryWeapon(0)->GetMaxMagRound() 
 						+ cPlayer3D->GetInventoryWeapon(0)->GetExtMag()->GetAdditionMag());
