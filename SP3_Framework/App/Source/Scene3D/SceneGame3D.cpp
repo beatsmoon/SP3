@@ -744,7 +744,7 @@ void CSceneGame3D::Update(const double dElapsedTime)
 	else
 	{
 		dBossTimer += dElapsedTime;
-	//	cout << dBossTimer << endl;
+		//cout << dBossTimer << endl;
 
 		if (cPlayer3D->GetCurrHealth() < 1)
 		{
@@ -752,9 +752,6 @@ void CSceneGame3D::Update(const double dElapsedTime)
 			cout << "Time taken for main wave: " << dMainWaveTimer << endl;
 			cout << "Time taken for boss: " << dBossTimer << endl;
 			//Calculate Score from completing wave
-
-			cScore->AddScoreFromWave(cWave->GetWaveNumber(), dMainWaveTimer);
-			cScore->AddScoreFromWave(cWave->GetWaveNumber(), dBossTimer);
 
 			cPlayer3D->SetNumOfVirus(cPlayer3D->GetNumOfVirus() + 1);
 

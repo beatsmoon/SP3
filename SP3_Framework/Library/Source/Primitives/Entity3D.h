@@ -129,6 +129,9 @@ public:
 	virtual int GetHealth();
 	virtual void SetHealth();
 
+	virtual int GetMaxHealth();
+	virtual void SetMaxHealth();
+
 
 	virtual void SetColliderScale(const glm::vec3 vec3Scale);
 	virtual const glm::vec3 GetColliderScale() const;

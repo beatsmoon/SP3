@@ -220,6 +220,15 @@ void CEntity3D::SetHealth()
 {
 }
 
+int CEntity3D::GetMaxHealth()
+{
+	return 0;
+}
+
+void CEntity3D::SetMaxHealth()
+{
+}
+
 void CEntity3D::SetColliderScale(glm::vec3 vec3ColliderScale)
 {
 	this->vec3ColliderScale = vec3ColliderScale;
