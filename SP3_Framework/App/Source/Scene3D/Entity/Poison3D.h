@@ -74,6 +74,8 @@ protected:
 
 	glm::uvec2 type;
 
+	float colliderSize;
+
 	//int type;
 
 };

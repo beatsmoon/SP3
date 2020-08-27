@@ -54,22 +54,18 @@ bool CPoison3D::Init(void)
 		{
 		case Enemy_Type::T_ENEMY1:
 		{
-			vec3Scale = glm::vec3(2, 2, 2);
-			//vec3ColliderScale = glm::vec3(1.f, 1.f, 1.f);
-			vec3ColliderScale = glm::vec3(4, 0.1, 4);
+			colliderSize = 2.0f;
 			break;
 		}
 		case Enemy_Type::T_ENEMY2:
 		{
-			vec3Scale = glm::vec3(1, 1, 1);
-			vec3ColliderScale = glm::vec3(2, 0.1, 2);
+			colliderSize = 1.0f;
 
 			break;
 		}
 		case Enemy_Type::T_ENEMY3:
 		{
-			vec3Scale = glm::vec3(0, 0, 0);
-			vec3ColliderScale = glm::vec3(0, 0, 0);
+			colliderSize = 0.0f;
 
 			break;
 		}
@@ -82,8 +78,7 @@ bool CPoison3D::Init(void)
 		{
 		case Boss_Type::T_BOSS1:
 		{
-			vec3Scale = glm::vec3(2, 2, 2);
-			vec3ColliderScale = glm::vec3(4, 0.1, 4);
+			colliderSize = 4.0f;
 			break;
 		}
 		}
@@ -91,7 +86,8 @@ bool CPoison3D::Init(void)
 	}
 
 	
-	
+	vec3Scale = glm::vec3(colliderSize, colliderSize, colliderSize);
+	vec3ColliderScale = glm::vec3(1.f, 1.f, 1.f);
 
 	std::string file_path = "OBJ/range.obj";
 	bool success = LoadOBJ(file_path.c_str(), vertices, uvs, normals);
@@ -166,11 +162,12 @@ void CPoison3D::ActivateCollider(Shader* cLineShader)
 	cCollider = new CCollider();
 	// Set the colour of the CCollider to Blue
 	cCollider->vec4Colour = glm::vec4(0.0f, 0.0f, 1.0f, 1.0f);
+	// scale the collider
+	cCollider->vec3BottomLeft = glm::vec3(-colliderSize, -colliderSize, -colliderSize);
+	cCollider->vec3TopRight = glm::vec3(colliderSize, colliderSize, colliderSize);
+
 	// Initialise the cCollider
 	cCollider->Init();
-
-	/*cCollider->vec3BottomLeft = glm::vec3(-4.0f, -4.0f, -4.0f);
-	cCollider->vec3TopRight = glm::vec3(4.0f, 4.0f, 4.0f);*/
 
 	// Set a shader to it
 	cCollider->SetLineShader(cLineShader);
