@@ -344,13 +344,16 @@ bool CSceneGame3D::Init(void)
 	cBarricade->ActivateCollider(cSimpleShader);
 	cEntityManager->Add(cBarricade);
 
-	cBarricade = new CStructure3D(glm::vec3(10.f, 0.5f, 10.f), CEntity3D::TYPE::BARRICADE);
-	cBarricade->SetShader(cShader);
-	cBarricade->Init();
-	cBarricade->ActivateCollider(cSimpleShader);
-	cEntityManager->Add(cBarricade);
-
-	return true;
+	float pos = 0.f;
+	for (unsigned int i = 0; i < 5; ++i)
+	{
+		CStructure3D* cExplosiveBarrel = new CStructure3D(glm::vec3(pos, 0.5f, 10.f), CEntity3D::TYPE::EXPLOSIVE_BARREL);
+		cExplosiveBarrel->SetShader(cShader);
+		cExplosiveBarrel->Init();
+		cExplosiveBarrel->ActivateCollider(cSimpleShader);
+		cEntityManager->Add(cExplosiveBarrel);
+		pos += 5.f;
+	}
 }
 
 /**

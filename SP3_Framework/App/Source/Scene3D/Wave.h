@@ -49,8 +49,11 @@ public:
 
 	virtual void SetWriteStatus(bool bWriteScore);
 
+	std::vector<CEntity3D*>& GetEnemies();
+
 protected:
 	
+	std::vector<CEntity3D*> vEnemies;
 	CEntityManager* cEntityManager;
 
 	CScore* cScore;

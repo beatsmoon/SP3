@@ -61,6 +61,8 @@ void CWave::StartWave(int waveNumber)
 		cEnemy3DType1->ActivateCollider(cSimpleShader);
 		cEntityManager->Add(cEnemy3DType1);
 
+		vEnemies.push_back(cEnemy3DType1);
+
 		CPoison3D* cPoison3D = new CPoison3D(cEnemy3DType1->GetPosition(),glm::uvec2(0, k), cEnemy3DType1);
 		cPoison3D->SetShader(cShader);
 		cPoison3D->Init();
@@ -76,12 +78,13 @@ void CWave::StartWave(int waveNumber)
 void CWave::SpawnBoss(void)
 {
 	static int wave = 1;
+	CBoss3D* cBoss3D = NULL;
 
 	switch (wave % 3)
 	{
 	case 1: // boss 1
 	{
-		CBoss3D* cBoss3D = new CBoss3D(glm::vec3(Math::RandFloatMinMax(-10.0f, 10.0f), 0.5f, Math::RandFloatMinMax(-10.0f, 10.0f)), 0);
+		cBoss3D = new CBoss3D(glm::vec3(Math::RandFloatMinMax(-10.0f, 10.0f), 0.5f, Math::RandFloatMinMax(-10.0f, 10.0f)), 0);
 		cBoss3D->SetShader(cShader);
 		cBoss3D->Init();
 		cBoss3D->SetHealth(cBoss3D->GetHealth() + ((wave - 1) * 200));
@@ -102,7 +105,7 @@ void CWave::SpawnBoss(void)
 	}
 	case 2:  // boss 2
 	{
-		CBoss3D* cBoss3D = new CBoss3D(glm::vec3(Math::RandFloatMinMax(-10.0f, 10.0f), 0.5f, Math::RandFloatMinMax(-10.0f, 10.0f)), 1);
+		cBoss3D = new CBoss3D(glm::vec3(Math::RandFloatMinMax(-10.0f, 10.0f), 0.5f, Math::RandFloatMinMax(-10.0f, 10.0f)), 1);
 		cBoss3D->SetShader(cShader);
 		cBoss3D->Init();
 		cBoss3D->SetHealth(cBoss3D->GetHealth() + ((wave - 1) * 200));
@@ -117,7 +120,7 @@ void CWave::SpawnBoss(void)
 	}
 	case 0:  // boss 3
 	{
-		CBoss3D* cBoss3D = new CBoss3D(glm::vec3(Math::RandFloatMinMax(-10.0f, 10.0f), 0.5f, Math::RandFloatMinMax(-10.0f, 10.0f)), 2);
+		cBoss3D = new CBoss3D(glm::vec3(Math::RandFloatMinMax(-10.0f, 10.0f), 0.5f, Math::RandFloatMinMax(-10.0f, 10.0f)), 2);
 		cBoss3D->SetShader(cShader);
 		cBoss3D->Init();
 		cBoss3D->SetHealth(cBoss3D->GetHealth() + ((wave - 1) * 200));
@@ -152,13 +155,17 @@ void CWave::SpawnBoss(void)
 
 			cEntityManager->SetBossStatus(true);
 		}
-
 		wave += 1;
 
 		break;
 	}
 	}
 	
+	if (cBoss3D)
+	{
+		vEnemies.clear();
+		vEnemies.push_back(cBoss3D);
+	}
 }
 
 
@@ -177,4 +184,9 @@ void  CWave::SetWaveNumber(int waveNumber)
 void CWave::SetWriteStatus(bool bWriteScore)
 {
 	this->bWriteScore = bWriteScore;
+}
+
+std::vector<CEntity3D*>& CWave::GetEnemies()
+{
+	return vEnemies;
 }
