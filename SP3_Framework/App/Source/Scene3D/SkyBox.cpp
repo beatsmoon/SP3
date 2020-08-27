@@ -114,12 +114,21 @@ bool CSkyBox::Init(void)
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
 
 	// Create the vector of skybox textures
-	skyboxTexture.push_back("Images/Skybox/skybox_right.jpg");
-	skyboxTexture.push_back("Images/Skybox/skybox_left.jpg");
-	skyboxTexture.push_back("Images/Skybox/skybox_top.jpg");
-	skyboxTexture.push_back("Images/Skybox/skybox_bottom.jpg");
-	skyboxTexture.push_back("Images/Skybox/skybox_front.jpg");
-	skyboxTexture.push_back("Images/Skybox/skybox_back.jpg");
+	skyboxTexture.push_back("Images/Skybox/v2/skybox_right.jpg");
+	skyboxTexture.push_back("Images/Skybox/v2/skybox_left.jpg");
+	//skyboxTexture.push_back("Images/Skybox/v2/skybox_left.jpg");
+	skyboxTexture.push_back("Images/Skybox/v2/skybox_top.jpg");
+	skyboxTexture.push_back("Images/Skybox/v2/skybox_bottom.jpg");
+	skyboxTexture.push_back("Images/Skybox/v2/skybox_front.jpg");
+	skyboxTexture.push_back("Images/Skybox/v2/skybox_back.jpg");
+
+	//skyboxTexture.push_back("Images/Skybox/skybox_right.jpg");
+	//skyboxTexture.push_back("Images/Skybox/skybox_left.jpg");
+	//skyboxTexture.push_back("Images/Skybox/skybox_top.jpg");
+	//skyboxTexture.push_back("Images/Skybox/skybox_bottom.jpg");
+	//skyboxTexture.push_back("Images/Skybox/skybox_front.jpg");
+	//skyboxTexture.push_back("Images/Skybox/skybox_back.jpg");
+
 
 	// Load the skybox textures into the Graphics Card
 	iTextureID = LoadSkyBoxTextures();

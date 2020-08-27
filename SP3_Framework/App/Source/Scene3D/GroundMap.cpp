@@ -54,18 +54,20 @@ bool CGroundMap::Init(glm::vec3 vec3MapSize, glm::i32vec3 i32vec3NumTiles)
 	cSettings = CSettings::GetInstance();
 
 	// Load texture for dark green grass
-	if (LoadTexture("Images/ground.tga", iTextureID_01) == false)
+	//if (LoadTexture("Images/Skybox/v2/skybox_bottom.jpg", iTextureID_01) == false)
+	if (LoadTexture("Images/ground2.tga", iTextureID_01) == false)
 	{
 		std::cout << "Failed to load Scene3D_Grass_DarkGreen.tga" << std::endl;
 		return false;
 	}
 	// Load texture for light green grass
-	if (LoadTexture("Images/ground.tga", iTextureID_02) == false)
+	//if (LoadTexture("Images/Skybox/v2/skybox_bottom.jpg", iTextureID_02) == false)
+	if (LoadTexture("Images/ground2.tga", iTextureID_02) == false)
 	{
 		std::cout << "Failed to load Scene3D_Grass_LightGreen.tga" << std::endl;
 		return false;
 	}
-
+	
 	// Set the map size
 	SetMapSize(vec3MapSize);
 	// Set the number of tiles

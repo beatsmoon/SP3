@@ -617,7 +617,6 @@ void CSceneGame3D::Update(const double dElapsedTime)
 			if (cProjectile)
 			{
 				cProjectile->SetGravityMultiplier(cPlayer3D->GetWeapon()->CalculateGravityMultiplier());
-				
 				cEntityManager->Add(cProjectile);
 
 				cPlayer3D->TriggerRecoil();
@@ -630,7 +629,7 @@ void CSceneGame3D::Update(const double dElapsedTime)
 		}
 	}
 	else if (cMouseController->IsButtonReleased(CMouseController::BUTTON_TYPE::LMB) && cPlayer3D->GetWeapon()->GetMagRound() > 0
-		&& cPlayer3D->GetWeapon()->GetFiringType() == CWeaponInfo::FIRINGTYPE::SINGLE)
+		&& cPlayer3D->GetWeapon()->GetFiringType() == CWeaponInfo::FIRINGTYPE::SINGLE && cPlayer3D->GetWeapon()->GetCanFire())
 	{
 
 		switch (cPlayer3D->GetWeapon()->GetWeaponName())
@@ -651,9 +650,8 @@ void CSceneGame3D::Update(const double dElapsedTime)
 
 		int BulletPerShot = 1;
 		if (cPlayer3D->GetWeapon()->GetWeaponName() == Weapon_Type::W_SHOTGUN)
-		{
 			BulletPerShot = 8;
-		}
+
 		for (int i = 0; i < BulletPerShot; ++i)
 		{
 			CProjectile* cProjectile = cPlayer3D->DischargeWeapon();
