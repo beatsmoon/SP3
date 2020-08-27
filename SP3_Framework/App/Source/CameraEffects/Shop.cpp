@@ -167,18 +167,12 @@ void CShop::Update(const double dElapsedTime)
 				if (cScore->GetScore() < 1500)
 				{
 					sItemBought = "Not enough money";
-
 					return;
 				}
 
-				else if (cScore->GetScore() * 0.15 > 1500)
+				else
 				{
-					cScore->SetScore(cScore->GetScore() * 0.85);
-				}
-
-				else if (cScore->GetScore() * 0.15 <= 1500)
-				{
-					cScore->SetScore(cScore->GetScore() - 1500);
+					cScore->SetScore(cScore->GetScore() - iSniper);
 				}
 
 				// If player does not already have sniper
@@ -234,16 +228,10 @@ void CShop::Update(const double dElapsedTime)
 						return;
 					}
 
-					else if (cScore->GetScore() * 0.2 > 2500)
+					else
 					{
-						cScore->SetScore(cScore->GetScore() * 0.8);
+						cScore->SetScore(cScore->GetScore() - iAK);
 					}
-
-					else if (cScore->GetScore() * 0.2 <= 2500)
-					{
-						cScore->SetScore(cScore->GetScore() - 2500);
-					}
-
 					
 						sItemBought = "Bought AK47";
 						//Player buys AK47
@@ -289,18 +277,12 @@ void CShop::Update(const double dElapsedTime)
 				if (cScore->GetScore() < 1000)
 				{
 					sItemBought = "Not enough money";
-
 					return;
 				}
 
-				else if (cScore->GetScore() * 0.1 > 1000)
+				else 
 				{
-					cScore->SetScore(cScore->GetScore() * 0.9);
-				}
-
-				else if (cScore->GetScore() * 0.1 <= 1500)
-				{
-					cScore->SetScore(cScore->GetScore() - 1000);
+					cScore->SetScore(cScore->GetScore() - iShotgun);
 				}
 
 				if (cPlayer3D->GetInventoryWeapon(0)->GetWeaponName() != Weapon_Type::W_SHOTGUN)
@@ -352,9 +334,9 @@ void CShop::Update(const double dElapsedTime)
 					return;
 				}
 
-				else if (cScore->GetScore() >= 750)
+				else
 				{
-					cScore->SetScore(cScore->GetScore() - 750);
+					cScore->SetScore(cScore->GetScore() - iExtMag);
 				}
 
 				if (cPlayer3D->GetInventoryWeapon(0)->GetExtMag()->GetTierLevel() != cPlayer3D->GetInventoryWeapon(0)->GetExtMag()->TIER3)
@@ -380,13 +362,12 @@ void CShop::Update(const double dElapsedTime)
 				if (cScore->GetScore() < 900)
 				{
 					sItemBought = "Not enough money";
-
 					return;
 				}
 
-				else if (cScore->GetScore() >= 900)
+				else 
 				{
-					cScore->SetScore(cScore->GetScore() - 900);
+					cScore->SetScore(cScore->GetScore() - iScope);
 				}
 
 				if (cPlayer3D->GetInventoryWeapon(0)->GetScope()->GetTierLevel() != cPlayer3D->GetInventoryWeapon(0)->GetScope()->TIER3)
@@ -409,13 +390,12 @@ void CShop::Update(const double dElapsedTime)
 				if (cScore->GetScore() < 1200)
 				{
 					sItemBought = "Not enough money";
-
 					return;
 				}
 
-				else if (cScore->GetScore() >= 1200)
+				else 
 				{
-					cScore->SetScore(cScore->GetScore() - 1200);
+					cScore->SetScore(cScore->GetScore() - iBarrel);
 				}
 
 				//Player buys barrel attachment;
@@ -445,10 +425,9 @@ void CShop::Update(const double dElapsedTime)
 					sItemBought = "Not enough money";
 					return;
 				}
-
-				else if (cScore->GetScore() >= 500)
+				else
 				{
-					cScore->SetScore(cScore->GetScore() - 500);
+					cScore->SetScore(cScore->GetScore() - iAmmo);
 				}
 
 				if (cPlayer3D->GetWeapon()->GetTotalRound() != cPlayer3D->GetWeapon()->GetMaxTotalRound())
@@ -490,6 +469,91 @@ std::string CShop::GetItemBought(void)
 void CShop::SetItemBought(std::string sItemBought)
 {
 	this->sItemBought = sItemBought;
+}
+
+//Set prices for items
+void CShop::SetPrices(void)
+{
+	//Sniper
+	if (cScore->GetScore() * 0.15 > 1500)
+	{
+		iSniper = cScore->GetScore() * 0.15;	
+	}
+	else if (cScore->GetScore() * 0.15 <= 1500 || cScore->GetScore() < 1500)
+	{
+		iSniper = 1500;		
+	}
+
+	//AK47
+	if (cScore->GetScore() * 0.2 > 2500)
+	{
+		iAK = cScore->GetScore() * 0.2;		
+	}
+	else if (cScore->GetScore() * 0.2 <= 2500 || cScore->GetScore() < 2500)
+	{
+		iAK = 2500;
+	}
+	
+	//Shotgun
+	if (cScore->GetScore() * 0.1 > 1000)
+	{
+		iShotgun = cScore->GetScore() * 0.1;
+	}
+
+	else if (cScore->GetScore() * 0.1 <= 1000 || cScore->GetScore() < 1000)
+	{
+		iShotgun = 1000;
+	}
+
+	iExtMag = 750;
+	iScope = 900;
+	iBarrel = 1200;
+	iAmmo = 500;
+
+}
+
+int CShop::GetPrice(ITEM eItem)
+{
+	switch(eItem)
+	{
+	case SNIPER:
+	{
+		return iSniper;
+		break;
+	}
+	case AK47:
+	{
+		return iAK;
+		break;
+	}
+	case SHOTGUN:
+	{
+		return iShotgun;
+		break;
+	}
+	case EXTMAG:
+	{
+		return iExtMag;
+		break;
+	}
+	case SCOPE:
+	{
+		return iScope;
+		break;
+	}
+	case BARREL:
+	{
+		return iBarrel;
+		break;
+	}
+	case AMMOITEM:
+	{
+		return iAmmo;
+		break;
+	}
+
+	}
+
 }
 
 

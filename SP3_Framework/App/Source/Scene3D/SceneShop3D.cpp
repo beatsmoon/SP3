@@ -69,6 +69,7 @@ bool CSceneShop3D::Init(void)
 void CSceneShop3D::Update(const double dElapsedTime)
 {
 	cShop->Update(dElapsedTime);
+	cShop->SetPrices();
 
 	//if (CKeyboardController::GetInstance()->IsKeyPressed(GLFW_KEY_P))
 	//{
@@ -118,9 +119,28 @@ void CSceneShop3D::Render(void)
 
 	cTextRenderer->Render(to_string(cMouseController->GetMousePositionX()), 10.0f, 70.0f, 0.5f, glm::vec3(1.0f, 1.0f, 1.0f));
 
+	//Shows player how much score they have
 	cTextRenderer->Render(std::to_string(cScore->GetScore()), cSettings->iWindowWidth * 0.55, cSettings->iWindowHeight * 0.165, 2.f, glm::vec3(1.f, 1.f, 1.f));
 
+	//Show what item the player is trying to buy
 	cTextRenderer->Render(cShop->GetItemBought(), cSettings->iWindowWidth * 0.2, cSettings->iWindowHeight * 0.1, 1.f, glm::vec3(1.f, 1.f, 1.f));
+
+	//Show player prices of items
+	//First Row
+	cTextRenderer->Render(std::to_string(cShop->GetPrice(SNIPER)), cSettings->iWindowWidth * 0.13156, cSettings->iWindowHeight * 0.89, 1.f, glm::vec3(1.f, 1.f, 1.f));
+
+	cTextRenderer->Render(std::to_string(cShop->GetPrice(SHOTGUN)), cSettings->iWindowWidth * 0.45187, cSettings->iWindowHeight * 0.89, 1.f, glm::vec3(1.f, 1.f, 1.f));
+
+	cTextRenderer->Render(std::to_string(cShop->GetPrice(AK47)), cSettings->iWindowWidth * 0.77218, cSettings->iWindowHeight * 0.89, 1.f, glm::vec3(1.f, 1.f, 1.f));
+
+	//Second Row
+	cTextRenderer->Render(std::to_string(cShop->GetPrice(EXTMAG)), cSettings->iWindowWidth * 0.14375, cSettings->iWindowHeight * 0.49, 0.6f, glm::vec3(1.f, 1.f, 1.f));
+
+	cTextRenderer->Render(std::to_string(cShop->GetPrice(SCOPE)), cSettings->iWindowWidth * 0.36640, cSettings->iWindowHeight * 0.49, 0.6f, glm::vec3(1.f, 1.f, 1.f));
+
+	cTextRenderer->Render(std::to_string(cShop->GetPrice(BARREL)), cSettings->iWindowWidth * 0.59296, cSettings->iWindowHeight * 0.49, 0.6f, glm::vec3(1.f, 1.f, 1.f));
+
+	//Third Row
 
 	cTextRenderer->PostRender();
 }

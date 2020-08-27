@@ -32,6 +32,18 @@
 #include "../App/Source/Scene3D/WeaponInfo/WeaponAttachments/AttachmentScope.h"
 
 
+enum ITEM
+{
+	SNIPER,
+	AK47,
+	SHOTGUN,
+	EXTMAG,
+	SCOPE,
+	BARREL,
+	AMMOITEM,
+	NUM_ITEMS
+};
+
 class CShop : public CEntity3D, public CSingletonTemplate<CShop>
 {
 	friend class CSingletonTemplate<CShop>;
@@ -75,7 +87,9 @@ public:
 
 	void SetItemBought(std::string);
 
+	void SetPrices(void);
 
+	int GetPrice(ITEM eItem);
 
 
 protected:
@@ -93,7 +107,7 @@ protected:
 	
 	bool bActive;
 	bool bShopActive;
-	
+	int iSniper, iAK, iShotgun, iBarrel, iScope, iExtMag, iAmmo;
 
 	// Constructor
 	CShop(void);
