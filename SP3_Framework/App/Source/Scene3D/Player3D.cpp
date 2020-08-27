@@ -468,18 +468,50 @@ CProjectile* CPlayer3D::DischargeWeapon(void)
 {
 	if ((iCurrentWeapon == 0) && (cPrimaryWeapon))
 	{
-		if (cPrimaryWeapon->GetWeaponName() == Weapon_Type::W_SHOTGUN)
+		switch (cPrimaryWeapon->GetWeaponName())
+		{
+		case Weapon_Type::W_SHOTGUN:
+			//cSoundController->PlaySoundByID(11);
+			return cPrimaryWeapon->Discharge(vec3Position, CalculateBulletDir(), (CEntity3D*)this);
+		case Weapon_Type::W_PISTOL:
+			//cSoundController->PlaySoundByID(10);
+			return cPrimaryWeapon->Discharge(vec3Position, vec3Front, (CEntity3D*)this);
+		case Weapon_Type::W_AK47:
+			//cSoundController->PlaySoundByID(9);
+			return cPrimaryWeapon->Discharge(vec3Position, vec3Front, (CEntity3D*)this);
+		case Weapon_Type::W_SNIPER:
+			//cSoundController->PlaySoundByID(12);
+			return cPrimaryWeapon->Discharge(vec3Position, vec3Front, (CEntity3D*)this);
+		}
+
+	/*	if (cPrimaryWeapon->GetWeaponName() == Weapon_Type::W_SHOTGUN)
 			return cPrimaryWeapon->Discharge(vec3Position, CalculateBulletDir(), (CEntity3D*)this);
 		else
-			return cPrimaryWeapon->Discharge(vec3Position, vec3Front, (CEntity3D*)this);
+			return cPrimaryWeapon->Discharge(vec3Position, vec3Front, (CEntity3D*)this);*/
 
 	}
 	else if ((iCurrentWeapon == 1) && (cSecondaryWeapon))
 	{
-		if (cSecondaryWeapon->GetWeaponName() == Weapon_Type::W_SHOTGUN)
+		switch (cSecondaryWeapon->GetWeaponName())
+		{
+		case Weapon_Type::W_SHOTGUN:
+			//cSoundController->PlaySoundByID(11);
+			return cSecondaryWeapon->Discharge(vec3Position, CalculateBulletDir(), (CEntity3D*)this);
+		case Weapon_Type::W_PISTOL:
+			//cSoundController->PlaySoundByID(10);
+			return cSecondaryWeapon->Discharge(vec3Position, vec3Front, (CEntity3D*)this);
+		case Weapon_Type::W_AK47:
+			//cSoundController->PlaySoundByID(9);
+			return cSecondaryWeapon->Discharge(vec3Position, vec3Front, (CEntity3D*)this);
+		case Weapon_Type::W_SNIPER:
+			//cSoundController->PlaySoundByID(12);
+			return cSecondaryWeapon->Discharge(vec3Position, vec3Front, (CEntity3D*)this);
+		}
+
+		/*if (cSecondaryWeapon->GetWeaponName() == Weapon_Type::W_SHOTGUN)
 			return cSecondaryWeapon->Discharge(vec3Position, CalculateBulletDir(), (CEntity3D*)this);
 		else
-			return cSecondaryWeapon->Discharge(vec3Position, vec3Front, (CEntity3D*)this);
+			return cSecondaryWeapon->Discharge(vec3Position, vec3Front, (CEntity3D*)this);*/
 	}
 	return NULL;
 

@@ -93,8 +93,16 @@ bool CScene3D::Init(void)
 	cSoundController->LoadSound(FileSystem::getPath("Sounds\\enemy_hit.ogg"), 5, true);
 	cSoundController->LoadSound(FileSystem::getPath("Sounds\\gunshot.ogg"), 6, true);
 	cSoundController->LoadSound(FileSystem::getPath("Sounds\\gunreload.ogg"), 7, true);
-	cSoundController->LoadSound(FileSystem::getPath("Sounds\\switchgun.ogg"), 8, true);
-	cSoundController->LoadSound(FileSystem::getPath("Sounds\\click.ogg"), 9, true);
+	cSoundController->LoadSound(FileSystem::getPath("Sounds\\switch_weapon.ogg"), 8, true);
+	cSoundController->LoadSound(FileSystem::getPath("Sounds\\ak_47.ogg"), 9, true);
+	cSoundController->LoadSound(FileSystem::getPath("Sounds\\pistol.ogg"), 10, true);
+	cSoundController->LoadSound(FileSystem::getPath("Sounds\\shotgun.ogg"), 11, true);
+	cSoundController->LoadSound(FileSystem::getPath("Sounds\\sniper.ogg"), 12, true);
+	cSoundController->LoadSound(FileSystem::getPath("Sounds\\boss.ogg"), 13, true);
+	cSoundController->LoadSound(FileSystem::getPath("Sounds\\menu.ogg"), 14, true);
+	cSoundController->LoadSound(FileSystem::getPath("Sounds\\hurt.ogg"), 15, true);
+	
+
 
 	for (int i = 0; i < 9; ++i)
 	{

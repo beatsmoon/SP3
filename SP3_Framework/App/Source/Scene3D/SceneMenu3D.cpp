@@ -143,6 +143,7 @@ bool CSceneMenu3D::Init(void)
 */
 void CSceneMenu3D::Update(const double dElapsedTime)
 {
+	
 	if (cPlayer3D->IsCameraAttached())
 	{
 		// Get Mouse updates

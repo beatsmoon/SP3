@@ -181,7 +181,7 @@ bool CSoundController::VolumeIncrease(const int ID)
 {
 	// Get the ISoundSource
 	ISoundSource* pISoundSource = GetSound(ID)->GetSound();
-	if (pISoundSource != nullptr)
+	if (pISoundSource == nullptr)
 	{
 		return false;
 	}
@@ -211,7 +211,7 @@ bool CSoundController::VolumeDecrease(const int ID)
 {
 	// Get the ISoundSource
 	ISoundSource* pISoundSource = GetSound(ID)->GetSound();
-	if (pISoundSource != nullptr)
+	if (pISoundSource == nullptr)
 	{
 		return false;
 	}

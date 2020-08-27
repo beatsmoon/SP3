@@ -3,6 +3,8 @@
 
 #include "../App/Source/Scene3D/Player3D.h"
 
+#include "../App/Source/SoundController/SoundController.h"
+
 #include <iostream>
 using namespace std;
 
@@ -295,7 +297,7 @@ CProjectile* CWeaponInfo::Discharge(glm::vec3 vec3Position, glm::vec3 vec3Front,
 			// It will last for 2.0 seconds and travel at 20 units per frame
 			//vec3Front.x += 10;
 
-			//iMagRounds--;
+			//CSoundController::GetInstance()->PlaySoundByID(9);
 
 			CProjectile* aProjectile = new CProjectile();
 			aProjectile->SetShader(cShader);
@@ -305,12 +307,7 @@ CProjectile* CWeaponInfo::Discharge(glm::vec3 vec3Position, glm::vec3 vec3Front,
 			aProjectile->SetStatus(true);
 			aProjectile->SetSource(pSource);
 			
-			
 			aProjectile->SetCollisionDamage(fDamage);
-			// Lock the weapon after this discharge
-			//bFire = false;
-			// Reduce the rounds by 1
-			
 
 			return aProjectile;
 		}

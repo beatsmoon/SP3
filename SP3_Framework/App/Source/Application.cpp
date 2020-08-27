@@ -28,6 +28,8 @@
 
 #include "../Library/Source/System/ConfigFile.h"
 
+#include "SoundController/SoundController.h"
+
 using namespace std;
 
 /**
@@ -269,7 +271,7 @@ void Application::Run(void)
 
 	// Enable the starting scene
 	// TODO: Change to Scenes::MENU once development is done
-	cSceneManager->EnableScene(SCENES::GAME_END);
+	cSceneManager->EnableScene(SCENES::MENU);
 	CEntityManager::GetInstance()->SetToMenu();
 	//cSceneManager->EnableScene(1);
 

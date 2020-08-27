@@ -152,7 +152,10 @@ bool CEntityManager::CollisionCheck(CEntity3D* cEntity3D)
 					// Rollback the NPC's position
 					(*it)->RollbackPosition();
 					cout << "** Collision between Player and poison ***" << endl;
+					
 					cCameraEffects->Activate_BloodScreen();
+					cSoundController->PlaySoundByID(15);
+
 					cPlayer3D->SetCurrHealth(cPlayer3D->GetCurrHealth() - 2);
 					bResult = true;
 				}
@@ -176,7 +179,10 @@ bool CEntityManager::CollisionCheck(CEntity3D* cEntity3D)
 					// Rollback the NPC's position
 					(*it)->RollbackPosition();
 					cout << "** Collision between Player and NPC ***" << endl;
+
 					cCameraEffects->Activate_BloodScreen();
+					cSoundController->PlaySoundByID(15);
+
 					cPlayer3D->SetCurrHealth(cPlayer3D->GetCurrHealth() - 10);
 					bResult = true;
 				}
@@ -190,7 +196,10 @@ bool CEntityManager::CollisionCheck(CEntity3D* cEntity3D)
 				cout << "** Collision between Player and Projectile ***" << endl;
 				bResult = true;
 				cSoundController->PlaySoundByID(2);
+
 				cCameraEffects->Activate_BloodScreen();
+				cSoundController->PlaySoundByID(15);
+
 				cPlayer3D->SetCurrHealth(cPlayer3D->GetCurrHealth() - 10);
 				// Quit this loop since a collision has been found
 				break;

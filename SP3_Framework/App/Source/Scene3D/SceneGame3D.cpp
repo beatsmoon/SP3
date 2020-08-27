@@ -359,6 +359,15 @@ void CSceneGame3D::Update(const double dElapsedTime)
 {
 	cPlayer3D->StorePositionForRollback();
 
+	static float dCountdown = 500;
+	dCountdown += dElapsedTime;
+	if (dCountdown > 500)
+	{
+		cout << dCountdown << endl;
+		CSoundController::GetInstance()->PlaySoundByID(14);
+		dCountdown = 0.0f;
+	}
+
 	// respawn player
 	if (cPlayer3D->GetCurrHealth() < 1)
 	{
@@ -411,7 +420,7 @@ void CSceneGame3D::Update(const double dElapsedTime)
 			InputDelay = 0.f;
 			if (cPlayer3D->GetWeapon() != NULL)
 			{
-
+				cSoundController->PlaySoundByID(7);
 				cPlayer3D->GetWeapon()->Reload();
 				if (cPlayer3D->GetWeapon()->GetWeaponName() == Weapon_Type::W_PISTOL)
 				{
@@ -567,6 +576,23 @@ void CSceneGame3D::Update(const double dElapsedTime)
 	if (cMouseController->IsButtonDown(CMouseController::BUTTON_TYPE::LMB) && cPlayer3D->GetWeapon()->GetMagRound() > 0
 		&& cPlayer3D->GetWeapon()->GetFiringType() == CWeaponInfo::FIRINGTYPE::AUTO && cPlayer3D->GetWeapon()->GetCanFire()) 
 	{
+
+		switch (cPlayer3D->GetWeapon()->GetWeaponName())
+		{
+		case Weapon_Type::W_SHOTGUN:
+			cSoundController->PlaySoundByID(11);
+			break;
+		case Weapon_Type::W_PISTOL:
+			cSoundController->PlaySoundByID(10);
+			break;
+		case Weapon_Type::W_AK47:
+			cSoundController->PlaySoundByID(9);
+			break;
+		case Weapon_Type::W_SNIPER:
+			cSoundController->PlaySoundByID(12);
+			break;
+		}
+
 		int BulletPerShot = 1;
 		if (cPlayer3D->GetWeapon()->GetWeaponName() == Weapon_Type::W_SHOTGUN)
 		{
@@ -577,10 +603,10 @@ void CSceneGame3D::Update(const double dElapsedTime)
 			CProjectile* cProjectile = cPlayer3D->DischargeWeapon();
 			if (cProjectile)
 			{
-
 				cProjectile->SetGravityMultiplier(cPlayer3D->GetWeapon()->CalculateGravityMultiplier());
 				
 				cEntityManager->Add(cProjectile);
+
 				cPlayer3D->TriggerRecoil();
 			}
 			if (i == BulletPerShot - 1)
@@ -593,11 +619,23 @@ void CSceneGame3D::Update(const double dElapsedTime)
 	else if (cMouseController->IsButtonReleased(CMouseController::BUTTON_TYPE::LMB) && cPlayer3D->GetWeapon()->GetMagRound() > 0
 		&& cPlayer3D->GetWeapon()->GetFiringType() == CWeaponInfo::FIRINGTYPE::SINGLE)
 	{
-		//CProjectile* cProjectile = cPlayer3D->DischargeWeapon();
-		//if (cProjectile)
-		//{
-		//	cEntityManager->Add(cProjectile);
-		//}
+
+		switch (cPlayer3D->GetWeapon()->GetWeaponName())
+		{
+		case Weapon_Type::W_SHOTGUN:
+			cSoundController->PlaySoundByID(11);
+			break;
+		case Weapon_Type::W_PISTOL:
+			cSoundController->PlaySoundByID(10);
+			break;
+		case Weapon_Type::W_AK47:
+			cSoundController->PlaySoundByID(9);
+			break;
+		case Weapon_Type::W_SNIPER:
+			cSoundController->PlaySoundByID(12);
+			break;
+		}
+
 		int BulletPerShot = 1;
 		if (cPlayer3D->GetWeapon()->GetWeaponName() == Weapon_Type::W_SHOTGUN)
 		{
