@@ -97,10 +97,10 @@ bool CStructure3D::Init(void)
 	{
 	case EXPLOSIVE_BARREL:
 	{
-		vec3Scale = glm::vec3(0.02, 0.02, 0.02); // OBJ scale
+		vec3Scale = glm::vec3(0.5,0.5,0.5); // OBJ scale
 		vec3ColliderScale = glm::vec3(1.0, 1.0, 1.0); // collider scale
 
-		std::string file_path = "OBJ/TrainingBot.obj";
+		std::string file_path = "OBJ/explosivebarrel.obj";
 		bool success = LoadOBJ(file_path.c_str(), vertices, uvs, normals);
 		if (!success)
 		{
@@ -108,7 +108,19 @@ bool CStructure3D::Init(void)
 		}
 		break;
 	}
-		
+	case BARRICADE:
+	{
+		vec3Scale = glm::vec3(0.25,0.25,0.25); // OBJ scale
+		vec3ColliderScale = glm::vec3(1.0, 1.0, 1.0); // collider scale
+
+		std::string file_path = "OBJ/barricade.obj";
+		bool success = LoadOBJ(file_path.c_str(), vertices, uvs, normals);
+		if (!success)
+		{
+			return NULL;
+		}
+		break;
+	}
 	case PLAY_BUTTON:
 	case HIGHSCORE_BUTTON:
 	case QUIT_BUTTON:
@@ -130,7 +142,7 @@ bool CStructure3D::Init(void)
 
 	default:
 	{
-		vec3Scale = glm::vec3(0.02, 0.02, 0.02); // OBJ scale
+		vec3Scale = glm::vec3(1.0,1.0,1.0); // OBJ scale
 		vec3ColliderScale = glm::vec3(1.0, 1.0, 1.0); // collider scale
 
 		std::string file_path = "OBJ/TrainingBot.obj";
@@ -163,7 +175,10 @@ bool CStructure3D::Init(void)
 	switch (eType)
 	{
 	case EXPLOSIVE_BARREL:
-		iTextureID = LoadTexture("Images/TrainingBot.tga");
+		iTextureID = LoadTexture("Images/explosivebarrel.tga");
+		break;
+	case BARRICADE: 
+		iTextureID = LoadTexture("Images/barricade.tga");
 		break;
 	case PLAY_BUTTON:
 		iTextureID = LoadTexture("Images/playbutton.tga");
