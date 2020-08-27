@@ -328,25 +328,23 @@ bool CSceneGame3D::Init(void)
 
 
 	}
-//	CEnemy3D* cEnemy3D = new CEnemy3D(glm::vec3(Math::RandFloatMinMax(-10.0f, 10.0f), 0.5f, Math::RandFloatMinMax(-10.0f, 10.0f)), 2);
-//	cEnemy3D->SetShader(cShader);
-//	cEnemy3D->Init();
-//	cEnemy3D->ActivateCollider(cSimpleShader);
-//	cEntityManager->Add(cEnemy3D);
-//
-//	CPoison3D* cPoison3D = new CPoison3D(cEnemy3D->GetPosition(), glm::uvec2(0,0), cEnemy3D);
-//	cPoison3D->SetShader(cShader);
-//	cPoison3D->Init();
-//	cPoison3D->ActivateCollider(cSimpleShader);
-//	cEntityManager->Add(cPoison3D);
+	CEnemy3D* cEnemy3D = new CEnemy3D(glm::vec3(Math::RandFloatMinMax(-10.0f, 10.0f), 0.5f, Math::RandFloatMinMax(-10.0f, 10.0f)), 0);
+	cEnemy3D->SetShader(cShader);
+	cEnemy3D->Init();
+	cEnemy3D->ActivateCollider(cSimpleShader);
+	cEntityManager->Add(cEnemy3D);
 
-	
+	CPoison3D* cPoison3D = new CPoison3D(cEnemy3D->GetPosition(), glm::uvec2(0,0), cEnemy3D);
+	cPoison3D->SetShader(cShader);
+	cPoison3D->Init();
+	cPoison3D->ActivateCollider(cSimpleShader);
+	cEntityManager->Add(cPoison3D);
 
-	CStructure3D* cBarricade = new CStructure3D(glm::vec3(0.f, 0.5f, 10.f), CEntity3D::TYPE::EXPLOSIVE_BARREL);
+	/*CStructure3D* cBarricade = new CStructure3D(glm::vec3(0.f, 0.5f, 10.f), CEntity3D::TYPE::EXPLOSIVE_BARREL);
 	cBarricade->SetShader(cShader);
 	cBarricade->Init();
 	cBarricade->ActivateCollider(cSimpleShader);
-	cEntityManager->Add(cBarricade);
+	cEntityManager->Add(cBarricade);*/
 
 	return true;
 }

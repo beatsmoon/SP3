@@ -55,7 +55,8 @@ bool CPoison3D::Init(void)
 		case Enemy_Type::T_ENEMY1:
 		{
 			vec3Scale = glm::vec3(2, 2, 2);
-			vec3ColliderScale = glm::vec3(4, 0.1, 4);
+			vec3ColliderScale = glm::vec3(1.f, 1.f, 1.f);
+			//vec3ColliderScale = glm::vec3(4, 0.1, 4);
 			break;
 		}
 		case Enemy_Type::T_ENEMY2:
@@ -167,6 +168,10 @@ void CPoison3D::ActivateCollider(Shader* cLineShader)
 	cCollider->vec4Colour = glm::vec4(0.0f, 0.0f, 1.0f, 1.0f);
 	// Initialise the cCollider
 	cCollider->Init();
+
+	cCollider->vec3BottomLeft = glm::vec3(-4.0f, -4.0f, -4.0f);
+	cCollider->vec3TopRight = glm::vec3(4.0f, 4.0f, 4.0f);
+
 	// Set a shader to it
 	cCollider->SetLineShader(cLineShader);
 }
