@@ -338,7 +338,7 @@ bool CSceneGame3D::Init(void)
 	//cPoison3D->ActivateCollider(cSimpleShader);
 	//cEntityManager->Add(cPoison3D);
 
-	CStructure3D* cBarricade = new CStructure3D(glm::vec3(0.f, 0.5f, 10.f), CEntity3D::TYPE::EXPLOSIVE_BARREL);
+	CStructure3D* cBarricade = new CStructure3D(glm::vec3(0.f, 0.5f, 20.f), CEntity3D::TYPE::BARRICADE);
 	cBarricade->SetShader(cShader);
 	cBarricade->Init();
 	cBarricade->ActivateCollider(cSimpleShader);
