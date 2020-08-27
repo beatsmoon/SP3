@@ -747,26 +747,6 @@ void CEntityManager::Render(void)
 	}
 }
 
-void CEntityManager::FindAndDeletePoison(CEntity3D* cEntity3D)
-{
-	std::list<CEntity3D*>::iterator it, end;
-	end = lEntity3D.end();
-	for (it = lEntity3D.begin(); it != end; ++it)
-	{
-		if ((*it)->GetType() == CEntity3D::TYPE::POISON)
-		{
-			CPoison3D* poison = dynamic_cast<CPoison3D*>(*it);
-
-			if (poison->GetCurrEnemy() == cEntity3D)
-			{
-				poison->SetToDelete(true);
-			}
-
-		}
-	}
-
-}
-
 void CEntityManager::SetWaveStarted(bool bIsWaveStarted )
 {
 	this->bIsWaveStarted = bIsWaveStarted;

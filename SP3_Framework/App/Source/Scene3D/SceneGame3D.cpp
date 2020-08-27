@@ -326,7 +326,7 @@ bool CSceneGame3D::Init(void)
 
 	}
 
-	CBoss3D* cEnemy3D = new CBoss3D(glm::vec3(Math::RandFloatMinMax(-100.0f, 100.0f), 0.5f, Math::RandFloatMinMax(-100.0f, 100.0f)), 0);
+	/*CBoss3D* cEnemy3D = new CBoss3D(glm::vec3(Math::RandFloatMinMax(-100.0f, 100.0f), 0.5f, Math::RandFloatMinMax(-100.0f, 100.0f)), 0);
 	cEnemy3D->SetShader(cShader);
 	cEnemy3D->Init();
 	cEnemy3D->ActivateCollider(cSimpleShader);
@@ -336,24 +336,24 @@ bool CSceneGame3D::Init(void)
 	cPoison3D->SetShader(cShader);
 	cPoison3D->Init();
 	cPoison3D->ActivateCollider(cSimpleShader);
-	cEntityManager->Add(cPoison3D);
+	cEntityManager->Add(cPoison3D);*/
 
-	//CStructure3D* cBarricade = new CStructure3D(glm::vec3(0.f, 0.5f, 10.f), CEntity3D::TYPE::EXPLOSIVE_BARREL);
-	//cBarricade->SetShader(cShader);
-	//cBarricade->Init();
-	//cBarricade->ActivateCollider(cSimpleShader);
-	//cEntityManager->Add(cBarricade);
+	CStructure3D* cBarricade = new CStructure3D(glm::vec3(0.f, 0.5f, 20.f), CEntity3D::TYPE::BARRICADE);
+	cBarricade->SetShader(cShader);
+	cBarricade->Init();
+	cBarricade->ActivateCollider(cSimpleShader);
+	cEntityManager->Add(cBarricade);
 
-	//float pos = 0.f;
-	//for (unsigned int i = 0; i < 5; ++i)
-	//{
-	//	CStructure3D* cExplosiveBarrel = new CStructure3D(glm::vec3(pos, 0.5f, 10.f), CEntity3D::TYPE::EXPLOSIVE_BARREL);
-	//	cExplosiveBarrel->SetShader(cShader);
-	//	cExplosiveBarrel->Init();
-	//	cExplosiveBarrel->ActivateCollider(cSimpleShader);
-	//	cEntityManager->Add(cExplosiveBarrel);
-	//	pos += 5.f;
-	//}
+	float pos = 0.f;
+	for (unsigned int i = 0; i < 5; ++i)
+	{
+		CStructure3D* cExplosiveBarrel = new CStructure3D(glm::vec3(pos, 0.5f, 10.f), CEntity3D::TYPE::EXPLOSIVE_BARREL);
+		cExplosiveBarrel->SetShader(cShader);
+		cExplosiveBarrel->Init();
+		cExplosiveBarrel->ActivateCollider(cSimpleShader);
+		cEntityManager->Add(cExplosiveBarrel);
+		pos += 5.f;
+	}
 }
 
 /**
@@ -362,6 +362,15 @@ bool CSceneGame3D::Init(void)
 void CSceneGame3D::Update(const double dElapsedTime)
 {
 	cPlayer3D->StorePositionForRollback();
+
+	if (!cEntityManager->GetWaveStarted())
+	{
+		if (cPlayer3D->GetCurrHealth() < 1)
+		{
+			cPlayer3D->SetPosition(glm::vec3(0.0f, 0.5f, 0.0f));
+			cPlayer3D->SetCurrHealth(100);
+		}
+	}
 
 	static float dCountdown = 500;
 	dCountdown += dElapsedTime;
@@ -740,8 +749,9 @@ void CSceneGame3D::Update(const double dElapsedTime)
 		dMainWaveTimer = 0.0f;
 		dBossTimer = 0.0f;
 
+
 	}
-	else
+	else if (cEntityManager->CheckBoss() == false)
 	{
 		dBossTimer += dElapsedTime;
 		//cout << dBossTimer << endl;
