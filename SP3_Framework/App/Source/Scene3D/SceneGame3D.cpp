@@ -111,11 +111,8 @@ CSceneGame3D::~CSceneGame3D(void)
 		cTotalBulletsBar = NULL;
 	}
 
-	if (cCrossHair)
-	{
-		cCrossHair->Destroy();
-		cCrossHair = NULL;
-	}
+	// set to null, was created in scene menu
+	cCrossHair = NULL;
 
 	// Destroy the cGroundMap
 	if (cGroundMap)
@@ -275,10 +272,8 @@ bool CSceneGame3D::Init(void)
 	cTotalBulletsBar->SetShader(cGUISimpleShader);
 	cTotalBulletsBar->Init();
 
-	// Initialise cCrossHair
+	// Get cCrossHair
 	cCrossHair = CCrossHair::GetInstance();
-	cCrossHair->SetShader(cGUIShader);
-	cCrossHair->Init();
 
 	// Initialise cScope
 	cScope = CScope::GetInstance();

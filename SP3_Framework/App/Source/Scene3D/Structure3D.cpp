@@ -112,12 +112,10 @@ bool CStructure3D::Init(void)
 	case PLAY_BUTTON:
 	case HIGHSCORE_BUTTON:
 	case QUIT_BUTTON:
-	case BACK_TO_MENU_BUTTON:
 	{
 		// init structureMesh
 		vec3Scale = glm::vec3(0.1f, 0.1f, 0.1f); // OBJ scale
 		vec3ColliderScale = glm::vec3(0.5, 0.5, 0.5); // collider scale
-		vec3ColliderTranslate = glm::vec3(0, 0.5, 0);
 		// load structureMesh OBJ
 		std::string file_path = "OBJ/button.obj";
 		bool success = LoadOBJ(file_path.c_str(), vertices, uvs, normals);
@@ -174,9 +172,6 @@ bool CStructure3D::Init(void)
 		iTextureID = LoadTexture("Images/highscorebutton.tga");
 		break;
 	case QUIT_BUTTON:
-		iTextureID = LoadTexture("Images/quitbutton.tga");
-		break;
-	case BACK_TO_MENU_BUTTON:
 		iTextureID = LoadTexture("Images/quitbutton.tga");
 		break;
 

@@ -269,7 +269,7 @@ void Application::Run(void)
 
 	// Enable the starting scene
 	// TODO: Change to Scenes::MENU once development is done
-	cSceneManager->EnableScene(SCENES::GAME_END);
+	cSceneManager->EnableScene(SCENES::MENU);
 	CEntityManager::GetInstance()->SetToMenu();
 	//cSceneManager->EnableScene(1);
 
@@ -324,11 +324,14 @@ void Application::Run(void)
 
 		if (CKeyboardController::GetInstance()->IsKeyPressed(GLFW_KEY_ESCAPE))
 		{
-			cSceneManager->DisableScene(SCENES::GAME);
-			cSceneManager->EnableScene(SCENES::MENU);
-			CSceneMenu3D* cSceneMenu3D = CSceneMenu3D::GetInstance();
-			cSceneMenu3D->RecalculateButtonPosition();
-			CEntityManager::GetInstance()->SetToMenu();
+			if (cSceneManager->GetCurrentScene() != SCENES::SHOP)
+			{
+				cSceneManager->DisableScene(SCENES::GAME);
+				cSceneManager->EnableScene(SCENES::MENU);
+				CSceneMenu3D* cSceneMenu3D = CSceneMenu3D::GetInstance();
+				cSceneMenu3D->RecalculateButtonPosition();
+				CEntityManager::GetInstance()->SetToMenu();
+			}
 		}
 
 		for (size_t i = 0; i < vActiveScenes.size(); ++i)
