@@ -341,11 +341,11 @@ bool CSceneGame3D::Init(void)
 	cPoison3D->ActivateCollider(cSimpleShader);
 	cEntityManager->Add(cPoison3D);
 
-	/*CStructure3D* cBarricade = new CStructure3D(glm::vec3(0.f, 0.5f, 10.f), CEntity3D::TYPE::EXPLOSIVE_BARREL);
-	cBarricade->SetShader(cShader);
-	cBarricade->Init();
-	cBarricade->ActivateCollider(cSimpleShader);
-	cEntityManager->Add(cBarricade);*/
+	//CStructure3D* cBarricade = new CStructure3D(glm::vec3(0.f, 0.5f, 10.f), CEntity3D::TYPE::EXPLOSIVE_BARREL);
+	//cBarricade->SetShader(cShader);
+	//cBarricade->Init();
+	//cBarricade->ActivateCollider(cSimpleShader);
+	//cEntityManager->Add(cBarricade);
 
 	return true;
 }
@@ -577,9 +577,7 @@ void CSceneGame3D::Update(const double dElapsedTime)
 			CProjectile* cProjectile = cPlayer3D->DischargeWeapon();
 			if (cProjectile)
 			{
-
 				cProjectile->SetGravityMultiplier(cPlayer3D->GetWeapon()->CalculateGravityMultiplier());
-				
 				cEntityManager->Add(cProjectile);
 				cPlayer3D->TriggerRecoil();
 			}
@@ -591,7 +589,7 @@ void CSceneGame3D::Update(const double dElapsedTime)
 		}
 	}
 	else if (cMouseController->IsButtonReleased(CMouseController::BUTTON_TYPE::LMB) && cPlayer3D->GetWeapon()->GetMagRound() > 0
-		&& cPlayer3D->GetWeapon()->GetFiringType() == CWeaponInfo::FIRINGTYPE::SINGLE)
+		&& cPlayer3D->GetWeapon()->GetFiringType() == CWeaponInfo::FIRINGTYPE::SINGLE && cPlayer3D->GetWeapon()->GetCanFire())
 	{
 		//CProjectile* cProjectile = cPlayer3D->DischargeWeapon();
 		//if (cProjectile)
@@ -600,9 +598,8 @@ void CSceneGame3D::Update(const double dElapsedTime)
 		//}
 		int BulletPerShot = 1;
 		if (cPlayer3D->GetWeapon()->GetWeaponName() == Weapon_Type::W_SHOTGUN)
-		{
 			BulletPerShot = 8;
-		}
+
 		for (int i = 0; i < BulletPerShot; ++i)
 		{
 			CProjectile* cProjectile = cPlayer3D->DischargeWeapon();

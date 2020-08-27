@@ -81,10 +81,10 @@ bool CCameraEffects::Init(void)
 	}
 
 	// load and create a texture 
-	iTextureID = LoadTexture("ImageS/GUI/CameraEffects_Blood.tga");
+	iTextureID = LoadTexture("ImageS/GUI/CameraEffects_Blood2.tga");
 	if (iTextureID == 0)
 	{
-		cout << "Unable to load ImageS/GUI/CameraEffects_Blood.tga" << endl;
+		cout << "Unable to load ImageS/GUI/CameraEffects_Blood2.tga" << endl;
 		return false;
 	}
 
