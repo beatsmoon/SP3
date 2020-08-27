@@ -5,6 +5,7 @@
 #include "Structure3D.h"
 #include "../SceneControl/SceneManager.h"
 #include "SceneMenu3D.h"
+#include "Wave.h"
 
 #include <iostream>
 using namespace std;
@@ -258,7 +259,9 @@ void CEntityManager::Update(const double dElapsedTime)
 			{
 				continue;
 			}
+
 			(*it)->Update(dElapsedTime);
+
 			if ((*it)->GetDespawnQueue())
 			{
 				(*it)->AddDespawnTime(dElapsedTime);
@@ -564,14 +567,14 @@ void CEntityManager::Update(const double dElapsedTime)
 					{
 						(*it)->RollbackPosition();
 						//(*it_other)->SetToDelete(true);
-						cout << "** Collision between zombie and Barricade ***" << endl;
+						cout << "** Collision between zombie and explosive barrel***" << endl;
 					}
 					else if (((*it)->GetType() == CEntity3D::TYPE::EXPLOSIVE_BARREL) &&
 					((*it_other)->GetType() == CEntity3D::TYPE::ZOMBIE))
 					{
 						(*it_other)->RollbackPosition();
 						//(*it)->SetToDelete(true);
-						cout << "** Collision between Barricade and zombie ***" << endl;
+						cout << "** Collision between explosive barrel and zombie ***" << endl;
 					}
 					else if (((*it)->GetType() == CEntity3D::TYPE::PROJECTILE) &&
 						((*it_other)->GetType() == CEntity3D::TYPE::EXPLOSIVE_BARREL))
@@ -589,10 +592,20 @@ void CEntityManager::Update(const double dElapsedTime)
 						{
 							cExplosiveBarrel->SetColliderScale(cExplosiveBarrel->GetColliderScale() * 3.f);
 							cExplosiveBarrel->SetDespawnQueue(true);
-							if (cPlayer3D->CheckForCollision(cExplosiveBarrel))
+							if (cExplosiveBarrel->CheckForCollision(cPlayer3D))
 							{
 								std::cout << "Player hit by Explosive Barrel explosion" << std::endl;
-								cPlayer3D->SetCurrHealth(cPlayer3D->GetCurrHealth() - 30);
+								cPlayer3D->SetCurrHealth(cPlayer3D->GetCurrHealth() - 50);
+							}
+							std::vector<CEntity3D*> tempEntity = CWave::GetInstance()->GetEnemies();
+							for (size_t i = 0; i < tempEntity.size(); ++i)
+							{
+								CEnemy3D* tempEnemy = static_cast<CEnemy3D*>(tempEntity.at(i));
+								if (tempEnemy != nullptr && cExplosiveBarrel->CheckForCollision(tempEnemy))
+								{
+									std::cout << "Enemy hit by explosive barrel explosion" << std::endl;
+									tempEnemy->SetHealth(tempEnemy->GetHealth() - 50);
+								}
 							}
 							cExplosiveBarrel->SetCollisionState(false);
 
@@ -616,10 +629,20 @@ void CEntityManager::Update(const double dElapsedTime)
 						{
 							cExplosiveBarrel->SetColliderScale(cExplosiveBarrel->GetColliderScale() * 3.f);
 							cExplosiveBarrel->SetDespawnQueue(true);
-							if (cPlayer3D->CheckForCollision(cExplosiveBarrel))
+							if (cExplosiveBarrel->CheckForCollision(cPlayer3D))
 							{
 								std::cout << "Player hit by Explosive Barrel explosion" << std::endl;
-								cPlayer3D->SetCurrHealth(cPlayer3D->GetCurrHealth() - 30);
+								cPlayer3D->SetCurrHealth(cPlayer3D->GetCurrHealth() - 50);
+							}
+							std::vector<CEntity3D*> tempEntity = CWave::GetInstance()->GetEnemies();
+							for (size_t i = 0; i < tempEntity.size(); ++i)
+							{
+								CEnemy3D* tempEnemy = static_cast<CEnemy3D*>(tempEntity.at(i));
+								if (tempEnemy != nullptr && cExplosiveBarrel->CheckForCollision(tempEnemy))
+								{
+									std::cout << "Enemy hit by explosive barrel explosion" << std::endl;
+									tempEnemy->SetHealth(tempEnemy->GetHealth() - 50);
+								}
 							}
 							cExplosiveBarrel->SetCollisionState(false);
 
@@ -683,10 +706,22 @@ void CEntityManager::CleanUp(void)
 	{
 		if ((*it)->IsToDelete())
 		{
+			if ((*it)->GetType() == CEntity3D::TYPE::ZOMBIE || (*it)->GetType() == CEntity3D::TYPE::BOSS)
+			{
+				std::vector<CEntity3D*> tempEntity = CWave::GetInstance()->GetEnemies();
+				for (size_t i = 0; i < tempEntity.size(); ++i)
+				{
+					if ((*it) == tempEntity.at(i))
+					{
+						tempEntity.erase(tempEntity.begin() + i);
+					}
+				}
+			}
 			// Delete the CEntity3D
 			delete *it;
 			// Go to the next iteration after erasing from the list
 			it = lEntity3D.erase(it);
+
 		}
 		else
 		{

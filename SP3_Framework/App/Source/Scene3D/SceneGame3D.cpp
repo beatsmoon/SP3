@@ -341,7 +341,18 @@ bool CSceneGame3D::Init(void)
 	cPoison3D->ActivateCollider(cSimpleShader);
 	cEntityManager->Add(cPoison3D);
 
-	/*CStructure3D* cBarricade = new CStructure3D(glm::vec3(0.f, 0.5f, 10.f), CEntity3D::TYPE::EXPLOSIVE_BARREL);
+	float pos = 0.f;
+	for (unsigned int i = 0; i < 5; ++i)
+	{
+		CStructure3D* cExplosiveBarrel = new CStructure3D(glm::vec3(pos, 0.5f, 10.f), CEntity3D::TYPE::EXPLOSIVE_BARREL);
+		cExplosiveBarrel->SetShader(cShader);
+		cExplosiveBarrel->Init();
+		cExplosiveBarrel->ActivateCollider(cSimpleShader);
+		cEntityManager->Add(cExplosiveBarrel);
+		pos += 5.f;
+	}
+
+	/*CStructure3D* cBarricade = new CStructure3D(glm::vec3(10.f, 0.5f, 10.f), CEntity3D::TYPE::BARRICADE);
 	cBarricade->SetShader(cShader);
 	cBarricade->Init();
 	cBarricade->ActivateCollider(cSimpleShader);
