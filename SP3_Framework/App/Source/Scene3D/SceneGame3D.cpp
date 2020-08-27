@@ -326,34 +326,34 @@ bool CSceneGame3D::Init(void)
 
 	}
 
-	//CBoss3D* cEnemy3D = new CBoss3D(glm::vec3(Math::RandFloatMinMax(-10.0f, 10.0f), 0.5f, Math::RandFloatMinMax(-10.0f, 10.0f)), 0);
-	//cEnemy3D->SetShader(cShader);
-	//cEnemy3D->Init();
-	//cEnemy3D->ActivateCollider(cSimpleShader);
-	//cEntityManager->Add(cEnemy3D);
+	CBoss3D* cEnemy3D = new CBoss3D(glm::vec3(Math::RandFloatMinMax(-100.0f, 100.0f), 0.5f, Math::RandFloatMinMax(-100.0f, 100.0f)), 0);
+	cEnemy3D->SetShader(cShader);
+	cEnemy3D->Init();
+	cEnemy3D->ActivateCollider(cSimpleShader);
+	cEntityManager->Add(cEnemy3D);
 
-	//CPoison3D* cPoison3D = new CPoison3D(cEnemy3D->GetPosition(), glm::uvec2(1,0), cEnemy3D);
-	//cPoison3D->SetShader(cShader);
-	//cPoison3D->Init();
-	//cPoison3D->ActivateCollider(cSimpleShader);
-	//cEntityManager->Add(cPoison3D);
+	CPoison3D* cPoison3D = new CPoison3D(cEnemy3D->GetPosition(), glm::uvec2(1,0), cEnemy3D);
+	cPoison3D->SetShader(cShader);
+	cPoison3D->Init();
+	cPoison3D->ActivateCollider(cSimpleShader);
+	cEntityManager->Add(cPoison3D);
 
-	CStructure3D* cBarricade = new CStructure3D(glm::vec3(0.f, 0.5f, 10.f), CEntity3D::TYPE::EXPLOSIVE_BARREL);
-	cBarricade->SetShader(cShader);
-	cBarricade->Init();
-	cBarricade->ActivateCollider(cSimpleShader);
-	cEntityManager->Add(cBarricade);
+	//CStructure3D* cBarricade = new CStructure3D(glm::vec3(0.f, 0.5f, 10.f), CEntity3D::TYPE::EXPLOSIVE_BARREL);
+	//cBarricade->SetShader(cShader);
+	//cBarricade->Init();
+	//cBarricade->ActivateCollider(cSimpleShader);
+	//cEntityManager->Add(cBarricade);
 
-	float pos = 0.f;
-	for (unsigned int i = 0; i < 5; ++i)
-	{
-		CStructure3D* cExplosiveBarrel = new CStructure3D(glm::vec3(pos, 0.5f, 10.f), CEntity3D::TYPE::EXPLOSIVE_BARREL);
-		cExplosiveBarrel->SetShader(cShader);
-		cExplosiveBarrel->Init();
-		cExplosiveBarrel->ActivateCollider(cSimpleShader);
-		cEntityManager->Add(cExplosiveBarrel);
-		pos += 5.f;
-	}
+	//float pos = 0.f;
+	//for (unsigned int i = 0; i < 5; ++i)
+	//{
+	//	CStructure3D* cExplosiveBarrel = new CStructure3D(glm::vec3(pos, 0.5f, 10.f), CEntity3D::TYPE::EXPLOSIVE_BARREL);
+	//	cExplosiveBarrel->SetShader(cShader);
+	//	cExplosiveBarrel->Init();
+	//	cExplosiveBarrel->ActivateCollider(cSimpleShader);
+	//	cEntityManager->Add(cExplosiveBarrel);
+	//	pos += 5.f;
+	//}
 }
 
 /**
@@ -373,11 +373,11 @@ void CSceneGame3D::Update(const double dElapsedTime)
 	}
 
 	// respawn player
-	if (cPlayer3D->GetCurrHealth() < 1)
+	/*if (cPlayer3D->GetCurrHealth() < 1)
 	{
 		cPlayer3D->SetPosition(glm::vec3(0.0f, 0.5f, 0.0f));
 		cPlayer3D->SetCurrHealth(100);
-	}
+	}*/
 
 	// Weapon interaction
 	if (CKeyboardController::GetInstance()->IsKeyPressed(GLFW_KEY_1))
@@ -784,6 +784,12 @@ void CSceneGame3D::Update(const double dElapsedTime)
 			//Reset timers
 			dMainWaveTimer = 0.0f;
 			dBossTimer = 0.0f;
+
+			if (cPlayer3D->GetCurrHealth() < 1)
+			{
+				cPlayer3D->SetPosition(glm::vec3(0.0f, 0.5f, 0.0f));
+				cPlayer3D->SetCurrHealth(100);
+			}
 		}
 	}
 

@@ -85,6 +85,8 @@ public:
 	void SetToMenu();
 	void SetToGame();
 
+	void FindAndDeletePoison(CEntity3D* cEntity3D);
+
 protected:
 	// Render Settings
 	glm::mat4 model;

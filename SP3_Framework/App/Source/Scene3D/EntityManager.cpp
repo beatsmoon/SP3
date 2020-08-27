@@ -6,6 +6,7 @@
 #include "../SceneControl/SceneManager.h"
 #include "SceneMenu3D.h"
 #include "Wave.h"
+#include "Entity/Poison3D.h"
 
 #include <iostream>
 using namespace std;
@@ -391,6 +392,7 @@ void CEntityManager::Update(const double dElapsedTime)
 						}
 						else
 						{
+							FindAndDeletePoison(enemy);
 							(*it)->SetToDelete(true);
 							//cScore->AddScore(cScore->GetScoreToAdd());
 							//cout << cScore->GetScore();
@@ -411,6 +413,7 @@ void CEntityManager::Update(const double dElapsedTime)
 						}
 						else
 						{
+							FindAndDeletePoison(enemy);
 							(*it_other)->SetToDelete(true);
 							//cScore->AddScore(cScore->GetScoreToAdd());
 							//cout << cScore->GetScore() << endl;
@@ -439,6 +442,7 @@ void CEntityManager::Update(const double dElapsedTime)
 								}
 								else
 								{
+
 									(*it)->SetToDelete(true);
 								}
 							}
@@ -452,6 +456,7 @@ void CEntityManager::Update(const double dElapsedTime)
 							}
 							else
 							{
+								FindAndDeletePoison(boss);
 								(*it)->SetToDelete(true);
 								//cScore->AddScore(cScore->GetScoreToAdd());
 								//cout << cScore->GetScore();
@@ -494,6 +499,7 @@ void CEntityManager::Update(const double dElapsedTime)
 							}
 							else
 							{
+								FindAndDeletePoison(boss);
 								(*it_other)->SetToDelete(true);
 								//cScore->AddScore(cScore->GetScoreToAdd());
 								//cout << cScore->GetScore();
@@ -845,6 +851,26 @@ void CEntityManager::SetToMenu()
 void CEntityManager::SetToGame()
 {
 	bMenuOnly = false;
+}
+
+void CEntityManager::FindAndDeletePoison(CEntity3D* cEntity3D)
+{
+	std::list<CEntity3D*>::iterator it, end;
+	end = lEntity3D.end();
+	for (it = lEntity3D.begin(); it != end; ++it)
+	{
+		if ((*it)->GetType() == CEntity3D::TYPE::POISON)
+		{
+			CPoison3D* poison = dynamic_cast<CPoison3D*>(*it);
+
+			if (poison->GetCurrEnemy() == cEntity3D)
+			{
+				poison->SetToDelete(true);
+			}
+
+		}
+	}
+
 }
 
 
