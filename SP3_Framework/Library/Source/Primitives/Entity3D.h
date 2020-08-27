@@ -36,7 +36,6 @@ public:
 		HIGHSCORE_BUTTON,
 		QUIT_BUTTON,
 		MENU_END,
-		BACK_TO_MENU_BUTTON,
 		OTHERS,		// Default value: Other entities such as ground and skybox
 		NUM_TYPES
 	};

@@ -97,6 +97,10 @@ bool CSceneMenu3D::Init(void)
 	cPlayer3D->AttachCamera();
 	cPlayer3D->ActivateCollider(cSimpleShader);
 
+	cCrossHair = CCrossHair::GetInstance();
+	cCrossHair->SetShader(cGUIShader);
+	cCrossHair->Init();
+
 	cEntityManager = CEntityManager::GetInstance();
 	cEntityManager->Init();
 
@@ -128,12 +132,6 @@ bool CSceneMenu3D::Init(void)
 	cSkybox = CSkyBox::GetInstance();
 	cSkybox->SetShader(skyBoxShader);
 	cSkybox->Init();
-
-
-	// Initialise cCrossHair
-	cCrossHair = CCrossHair::GetInstance();
-	cCrossHair->SetShader(cGUIShader);
-	cCrossHair->Init();
 
 	return true;
 }
@@ -331,6 +329,11 @@ void CSceneMenu3D::Render(void)
 	// now draw the mirror quad with screen texture
 	// --------------------------------------------
 	glDisable(GL_DEPTH_TEST); // disable depth test so screen-space quad isn't discarded due to depth test.
+
+	cCrossHair->PreRender();
+	cCrossHair->Render();
+	cCrossHair->PostRender();
+	cCrossHair->PostRender();
 
 	// Call the cTextRenderer's PreRender()
 	cTextRenderer->PreRender();
