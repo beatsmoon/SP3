@@ -76,7 +76,7 @@ public:
 
 	void SetTierLevel(const TIERLEVEL eStatus);
 	TIERLEVEL GetTierLevel(void) const;
-
+	void UpgradeExtMag();
 protected:
 	// The handle to the CGroundMap class instance
 	CGroundMap* cGroundMap;

@@ -55,6 +55,7 @@ CSceneMenu3D::CSceneMenu3D(void)
 	, cSkybox(NULL)
 	, cPistol(NULL)
 	, bHighscoreEnabled(false)
+	, cCrossHair(NULL) 
 {
 }
 
@@ -68,7 +69,14 @@ CSceneMenu3D::~CSceneMenu3D(void)
 		delete cPistol;
 		cPistol = NULL;
 	}
+
+	if (cCrossHair)
+	{
+		cCrossHair->Destroy();
+		cCrossHair = NULL;
+	}
 	
+
 }
 
 /**
@@ -120,6 +128,12 @@ bool CSceneMenu3D::Init(void)
 	cSkybox = CSkyBox::GetInstance();
 	cSkybox->SetShader(skyBoxShader);
 	cSkybox->Init();
+
+
+	// Initialise cCrossHair
+	cCrossHair = CCrossHair::GetInstance();
+	cCrossHair->SetShader(cGUIShader);
+	cCrossHair->Init();
 
 	return true;
 }
@@ -289,6 +303,9 @@ void CSceneMenu3D::Render(void)
 
 	glEnable(GL_DEPTH_TEST); // enable depth testing (is disabled for rendering screen-space quad)
 
+	cCrossHair->PreRender();
+	cCrossHair->Render();
+	cCrossHair->PostRender();
 	// Render cSkybox
 	cSkybox->SetView(view);
 	cSkybox->SetProjection(projection);

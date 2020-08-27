@@ -15,7 +15,7 @@ CHUD::CHUD(Weapon_Type etype)
 	: bActive(true)
 	, cPlayer3D(NULL)
 {
-	prevtype = type = etype;
+	prevType = currentType = etype;
 }
 
 CHUD::~CHUD(void)
@@ -114,9 +114,9 @@ bool CHUD::Init(void)
 	vec3Position = glm::vec3(0.5f, -0.9f, 0.0f);
 	vec3Scale.x = 0.5;
 	vec3Scale.y = 0.8;
-	type = prevtype = Weapon_Type::W_PISTOL;
-	tPrevBarrel = tBarrel = CGunBarrel::TIERLEVEL::NOTIER;
-	tPrevScope = tScope = CGunScope::TIERLEVEL::NOTIER;
+	currentType = prevType = Weapon_Type::W_PISTOL;
+	tPrevBarrel = tCurrentBarrel = CGunBarrel::TIERLEVEL::NOTIER;
+	tPrevScope = tCurrentScope = CGunScope::TIERLEVEL::NOTIER;
 	return true;
 }
 
@@ -146,20 +146,34 @@ bool CHUD::GetStatus(void) const
 }
 void CHUD::UpdateScopeVisualStatus()
 {
-	tScope = cPlayer3D->GetWeapon()->GetScope()->GetTierLevel();
+	//tScope = cPlayer3D->GetWeapon()->GetScope()->GetTierLevel();
+	//if (tScope == tPrevScope)
+	//{
+	//	return;
+	//}
+	//tPrevScope = tScope;
+
+	//type = cPlayer3D->GetWeapon()->GetWeaponName();
+	//if (type == prevtype)
+	//{
+	//	return;
+	//}
+	//prevtype = type;
+
+	/*tScope = cPlayer3D->GetWeapon()->GetScope()->GetTierLevel();
+	type = cPlayer3D->GetWeapon()->GetWeaponName();
 	if (tScope == tPrevScope)
 	{
-		return;
+		if (type == prevtype)
+			return;
+
 	}
 	tPrevScope = tScope;
+	prevtype = type;*/
 
-	type = cPlayer3D->GetWeapon()->GetWeaponName();
-	if (type == prevtype)
-	{
-		return;
-	}
-	prevtype = type;
-	switch (type)
+
+
+	switch (currentType)
 	{
 	case Weapon_Type::W_PISTOL:
 	{
@@ -183,27 +197,31 @@ void CHUD::UpdateScopeVisualStatus()
 	break;
 	case Weapon_Type::W_SNIPER:
 	{
-		iTextureID = LoadTexture("Images/GUI/ScopeAttachment/Scene3D_Holding_Sniper_Barreled.tga");
+		iTextureID = LoadTexture("Images/GUI/ScopeAttachment/Scene3D_Holding_Sniper.tga");
 	}
 	break;
 	}
 }
 void CHUD::UpdateFullStatus()
 {
-	tScope = cPlayer3D->GetWeapon()->GetScope()->GetTierLevel();
-	if (tScope == tPrevScope)
-	{
-		return;
-	}
-	tPrevScope = tScope;
+	//tScope = cPlayer3D->GetWeapon()->GetScope()->GetTierLevel();
+	//if (tScope == tPrevScope)
+	//{
+	//	return;
+	//}
+	//tPrevScope = tScope;
 
-	type = cPlayer3D->GetWeapon()->GetWeaponName();
-	if (type == prevtype)
-	{
-		return;
-	}
-	prevtype = type;
-	switch (type)
+	//type = cPlayer3D->GetWeapon()->GetWeaponName();
+	//if (type == prevtype)
+	//{
+	//	return;
+	//}
+	//prevtype = type;
+
+
+
+
+	switch (currentType)
 	{
 	case Weapon_Type::W_PISTOL:
 	{
@@ -220,34 +238,37 @@ void CHUD::UpdateFullStatus()
 		iTextureID = LoadTexture("Images/GUI/FullAttachment/Scene3D_Holding_AK47_Full.tga");
 	}
 	break;
-	case Weapon_Type::W_M4:
-	{
-		iTextureID = LoadTexture("Images/GUI/BarrelAttachment/Scene3D_Holding_M4.tga");
-	}
-	break;
+	//case Weapon_Type::W_M4:
+	//{
+	//	iTextureID = LoadTexture("Images/GUI/BarrelAttachment/Scene3D_Holding_M4.tga");
+	//}
+	//break;
 	case Weapon_Type::W_SNIPER:
 	{
-		iTextureID = LoadTexture("Images/GUI/ScopeAttachment/Scene3D_Holding_Sniper_Barreled.tga");
+		iTextureID = LoadTexture("Images/GUI/FullAttachment/Scene3D_Holding_Sniper.tga");
 	}
 	break;
 	}
 }
 void CHUD::UpdateBarrelVisualStatus()
 {
-	tBarrel = cPlayer3D->GetWeapon()->GetBarrel()->GetTierLevel();
-	if (tBarrel == tPrevBarrel)
-	{
-		return;
-	}
-	tPrevBarrel = tBarrel;
+	//tBarrel = cPlayer3D->GetWeapon()->GetBarrel()->GetTierLevel();
+	//type = cPlayer3D->GetWeapon()->GetWeaponName();
+	//if (tBarrel == tPrevBarrel)
+	//{
+	//	if (type == prevtype)
+	//		return;
 
-	type = cPlayer3D->GetWeapon()->GetWeaponName();
-	if (type == prevtype)
-	{
-		return;
-	}
-	prevtype = type;
-	switch (type)
+	//}
+	//prevtype = type;
+
+	//if (type == prevtype)
+	//{
+	//	return;
+	//}
+
+
+	switch (currentType)
 	{
 	case Weapon_Type::W_PISTOL:
 	{
@@ -278,56 +299,102 @@ void CHUD::UpdateBarrelVisualStatus()
 }
 void CHUD::Update(const double dElapsedTime)
 {
-	if (cPlayer3D->GetWeapon()->GetBarrel() != NULL && cPlayer3D->GetWeapon()->GetScope() == NULL)
+	currentType = cPlayer3D->GetWeapon()->GetWeaponName();
+	tCurrentBarrel = cPlayer3D->GetWeapon()->GetBarrel()->GetTierLevel();
+	tCurrentScope = cPlayer3D->GetWeapon()->GetScope()->GetTierLevel();
+	if (currentType == prevType)//did not change weapon
 	{
-		//if gun only have barrel 
-		UpdateBarrelVisualStatus();
-	}
-	else if (cPlayer3D->GetWeapon()->GetBarrel() == NULL && cPlayer3D->GetWeapon()->GetScope() != NULL)
-	{
-		//if gun only have scope
-		UpdateScopeVisualStatus();
-	}
-	else if (cPlayer3D->GetWeapon()->GetBarrel() != NULL && cPlayer3D->GetWeapon()->GetScope() != NULL)
-	{
-		//if gun only have scope
-		UpdateFullStatus();
-	}
-	else
-	{
-		type = cPlayer3D->GetWeapon()->GetWeaponName();
-		if (type == prevtype)
+		if (tCurrentBarrel != CGunBarrel::TIERLEVEL::NOTIER && tCurrentScope == CGunScope::TIERLEVEL::NOTIER)
 		{
+			//if gun only have barrel 
+			if (tCurrentBarrel == tPrevBarrel)
+			{
+				return;
+			}
+			tPrevBarrel = tCurrentBarrel;
+			UpdateBarrelVisualStatus();
+		}
+		else if (tCurrentBarrel == CGunBarrel::TIERLEVEL::NOTIER && tCurrentScope != CGunScope::TIERLEVEL::NOTIER)
+		{
+			//if gun only have scope
+			if (tCurrentScope == tPrevScope)
+			{
+				return;
+			}
+			tPrevScope = tCurrentScope;
+			UpdateScopeVisualStatus();
+		}
+		else if (tCurrentBarrel != CGunBarrel::TIERLEVEL::NOTIER && tCurrentScope != CGunScope::TIERLEVEL::NOTIER)
+		{
+			//if gun have both scope and barrel
+			if (tCurrentBarrel == tPrevBarrel && tCurrentScope == tPrevScope)
+			{
+				return;
+			}
+			tPrevBarrel = tCurrentBarrel;
+			tPrevScope = tCurrentScope;
+			UpdateFullStatus();
+		}
+		else
+		{
+			//if gun have no barrel and scope
 			return;
 		}
-		prevtype = type;
-		switch (type)
+	}
+	else //did change weapon
+	{
+		prevType = currentType;
+		if (tCurrentBarrel != CGunBarrel::TIERLEVEL::NOTIER && tCurrentScope == CGunScope::TIERLEVEL::NOTIER)
 		{
-		case Weapon_Type::W_PISTOL:
-		{
-			iTextureID = LoadTexture("Images/GUI/NoAttachment/Scene3D_Holding_Pistol.tga");
+			//if gun only have barrel
+			UpdateBarrelVisualStatus();
 		}
-		break;
-		case Weapon_Type::W_SHOTGUN:
+		else if (tCurrentBarrel == CGunBarrel::TIERLEVEL::NOTIER && tCurrentScope != CGunScope::TIERLEVEL::NOTIER)
 		{
-			iTextureID = LoadTexture("Images/GUI/NoAttachment/Scene3D_Holding_Shotgun.tga");
+			//if gun only have scope
+			UpdateScopeVisualStatus();
 		}
-		break;
-		case Weapon_Type::W_AK47:
+		else if (tCurrentBarrel != CGunBarrel::TIERLEVEL::NOTIER && tCurrentScope != CGunScope::TIERLEVEL::NOTIER)
 		{
-			iTextureID = LoadTexture("Images/GUI/NoAttachment/Scene3D_Holding_AK47.tga");
+			//if gun have both scope and barrel
+			UpdateFullStatus();
 		}
-		break;
-		case Weapon_Type::W_M4:
+		else
 		{
-			iTextureID = LoadTexture("Images/GUI/Scene3D_Holding_M4.tga");
-		}
-		break;
-		case Weapon_Type::W_SNIPER:
-		{
-			iTextureID = LoadTexture("Images/GUI/NoAttachment/Scene3D_Holding_Sniper.tga");
-		}
-		break;
+			//if gun have no barrel and scope
+			//if (currentType == prevType)
+			//{
+			//	return;
+			//}
+			//prevtype = type;
+			switch (currentType)
+			{
+			case Weapon_Type::W_PISTOL:
+			{
+				iTextureID = LoadTexture("Images/GUI/NoAttachment/Scene3D_Holding_Pistol.tga");
+			}
+			break;
+			case Weapon_Type::W_SHOTGUN:
+			{
+				iTextureID = LoadTexture("Images/GUI/NoAttachment/Scene3D_Holding_Shotgun.tga");
+			}
+			break;
+			case Weapon_Type::W_AK47:
+			{
+				iTextureID = LoadTexture("Images/GUI/NoAttachment/Scene3D_Holding_AK47.tga");
+			}
+			break;
+			case Weapon_Type::W_M4:
+			{
+				iTextureID = LoadTexture("Images/GUI/Scene3D_Holding_M4.tga");
+			}
+			break;
+			case Weapon_Type::W_SNIPER:
+			{
+				iTextureID = LoadTexture("Images/GUI/NoAttachment/Scene3D_Holding_Sniper.tga");
+			}
+			break;
+			}
 		}
 	}
 }

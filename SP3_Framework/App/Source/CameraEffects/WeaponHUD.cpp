@@ -111,7 +111,7 @@ bool CWEAPONHUD::Init(void)
 	//default:
 	//	break;
 	//}
-	vec3Position = glm::vec3(0.7f, 0.35f, 0.0f);
+	vec3Position = glm::vec3(-0.8f, -0.78f, 0.0f);
 	vec3Scale.x = 0.2;
 	vec3Scale.y = 0.3;
 	type = prevtype = Weapon_Type::W_PISTOL;
@@ -156,27 +156,27 @@ void CWEAPONHUD::Update(const double dElapsedTime)
 	{
 		case Weapon_Type::W_PISTOL:
 		{
-			iTextureID = LoadTexture("Images/GUI/HUD/Scene3D_GUI_PISTOL.tga");
+			iTextureID = LoadTexture("Images/GUI/HUD/NewV2/Scene3D_GUI_PISTOL.tga");
 		}
 		break;
 		case Weapon_Type::W_SHOTGUN:
 		{
-			iTextureID = LoadTexture("Images/GUI/HUD/Scene3D_GUI_Shotgun.tga");
+			iTextureID = LoadTexture("Images/GUI/HUD/NewV2/Scene3D_GUI_Shotgun.tga");
 		}
 		break;
 		case Weapon_Type::W_AK47:
 		{
-			iTextureID = LoadTexture("Images/GUI/HUD/Scene3D_GUI_AK47.tga");
+			iTextureID = LoadTexture("Images/GUI/HUD/NewV2/Scene3D_GUI_AK47.tga");
 		}
 		break;
-		case Weapon_Type::W_M4:
+		/*case Weapon_Type::W_M4:
 		{
 			iTextureID = LoadTexture("Images/GUI/HUD/Scene3D_GUI_M4.tga");
 		}
-		break;
+		break;*/
 		case Weapon_Type::W_SNIPER:
 		{
-			iTextureID = LoadTexture("Images/GUI/HUD/Scene3D_GUI_Sniper.tga");
+			iTextureID = LoadTexture("Images/GUI/HUD/NewV2/Scene3D_GUI_Sniper.tga");
 		}
 		break;
 	}

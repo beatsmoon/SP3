@@ -68,14 +68,14 @@ protected:
 
 	bool bActive;
 
-	Weapon_Type type;
-	Weapon_Type prevtype;
+	Weapon_Type currentType;
+	Weapon_Type prevType;
 
 	CGunBarrel::TIERLEVEL tPrevBarrel;
-	CGunBarrel::TIERLEVEL tBarrel;
+	CGunBarrel::TIERLEVEL tCurrentBarrel;
 
 	CGunScope::TIERLEVEL tPrevScope;
-	CGunScope::TIERLEVEL tScope;
+	CGunScope::TIERLEVEL tCurrentScope;
 	//float fHeight, fWidth;
 
 	

@@ -157,19 +157,19 @@ void CScope::Update(const double dElapsedTime)
 	{
 	case CGunScope::TIERLEVEL::NOTIER:
 		{
-			iTextureID = LoadTexture("Images/GUI/Scene3D_Holding_Pistol.tga");
+			//iTextureID = LoadTexture("Images/GUI/Scene3D_Holding_Pistol.tga");
 		}
 		break;
 	case CGunScope::TIERLEVEL::TIER1:
 		{
-			vec3Position = glm::vec3(0, 0.0, 1);
+			vec3Position = glm::vec3(0, -0.1, 1);
 			vec3Scale = glm::vec3(2, 1.5, 1);
 			iTextureID = LoadTexture("Images/GUI/Scene3D_ScopeMode_Tier1.tga");
 		}
 		break;
 	case CGunScope::TIERLEVEL::TIER2:
 		{
-			vec3Position = glm::vec3(0, 0.08, 1);
+			vec3Position = glm::vec3(0, 0.0f, 1);
 			vec3Scale = glm::vec3(2, 1.5, 1);
 			iTextureID = LoadTexture("Images/GUI/Scene3D_ScopeMode_Tier2.tga");
 		}
@@ -177,6 +177,7 @@ void CScope::Update(const double dElapsedTime)
 	case CGunScope::TIERLEVEL::TIER3:
 		{
 			vec3Scale = glm::vec3(2, 1.2, 1);
+			vec3Position = glm::vec3(0, -0.01, 1);
 			iTextureID = LoadTexture("Images/GUI/Scene3D_ScopedMode_Tier3.tga");
 		}
 		break;
