@@ -436,7 +436,6 @@ void CShop::Update(const double dElapsedTime)
 
 			}
 
-	
 			//Bottom Left Box
 			if ((cMouseController->GetMousePositionX() >= m_windowWidth * 0.076562 && cMouseController->GetMousePositionX() <= m_windowWidth * 0.1625)
 				&& (cMouseController->GetMousePositionY() >= m_windowHeight * 0.76973 && cMouseController->GetMousePositionY() <= m_windowHeight * 0.92105))
@@ -444,20 +443,21 @@ void CShop::Update(const double dElapsedTime)
 				if (cScore->GetScore() < 500)
 				{
 					sItemBought = "Not enough money";
-
 					return;
 				}
 
 				else if (cScore->GetScore() >= 500)
 				{
-					cScore->SetScore(cScore->GetScore() * 0.95);
+					cScore->SetScore(cScore->GetScore() - 500);
 				}
 
 				if (cPlayer3D->GetWeapon()->GetTotalRound() != cPlayer3D->GetWeapon()->GetMaxTotalRound())
 				{
-					sItemBought = "Ammo Bought";
+					
 					//Player buys Ammo
-					cPlayer3D->GetInventoryWeapon(0)->AddRounds(cPlayer3D->GetWeapon()->GetMaxMagRound());
+					cPlayer3D->GetInventoryWeapon(0)->AddRounds(cPlayer3D->GetInventoryWeapon(0)->GetMaxMagRound());
+					sItemBought = "Ammo Bought" + std::to_string(cPlayer3D->GetInventoryWeapon(0)->GetMagRound()) + " / " +
+						std::to_string(cPlayer3D->GetInventoryWeapon(0)->GetTotalRound());
 				}
 			}
 
