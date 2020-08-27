@@ -672,6 +672,7 @@ void CSceneGame3D::Update(const double dElapsedTime)
 	//If main wave ended, spawn boss
 
 	static double dMainWaveTimer = 0.0f, dBossTimer = 0.0f;
+	static int iPrevWaveScore = 0;
 
 	if (CKeyboardController::GetInstance()->IsKeyPressed(GLFW_KEY_O) && cEntityManager->GetWaveStarted() == false)
 	{
@@ -687,13 +688,17 @@ void CSceneGame3D::Update(const double dElapsedTime)
 		//Timer for wave
 		dMainWaveTimer += dElapsedTime;
 
+		//If player dies during main wave, reset wave and reset score
 		if (cPlayer3D->GetCurrHealth() < 1)
 		{
+			cPlayer3D->SetPosition(glm::vec3(0.0f, 0.5f, 0.0f));
 			cPlayer3D->SetCurrHealth(cPlayer3D->GetMaxHealth());
-
+			cEntityManager->DeleteEnemies();
+			cScore->SetScore(iPrevWaveScore);
 
 		}
 	}
+	//If player clears the wave
 	else if (cEntityManager->CheckWave() == true)
 	{
 		cWave->SpawnBoss();
@@ -701,9 +706,11 @@ void CSceneGame3D::Update(const double dElapsedTime)
 
 	}
 
+
+	//If Player kills the boss
 	if (cEntityManager->CheckBoss() == true)
 	{
-		cout << "Wave over" << endl;
+		cout << "Wave over boss died" << endl;
 		cout << "Time taken for main wave: " << dMainWaveTimer << endl;
 		cout << "Time taken for boss: " << dBossTimer << endl;
 		//Calculate Score from completing wave
@@ -713,12 +720,14 @@ void CSceneGame3D::Update(const double dElapsedTime)
 
 		cPlayer3D->SetNumOfVirus(cPlayer3D->GetNumOfVirus() + 1);
 
-		CVirus* cVirus = new CVirus(glm::uvec2(0, Math::RandIntMinMax(0,4)), cPlayer3D->GetNumOfVirus());
+		CVirus* cVirus = new CVirus(glm::uvec2(0, Math::RandIntMinMax(0, 4)), cPlayer3D->GetNumOfVirus());
 		cVirus->SetShader(cGUIShader);
 		cVirus->Init();
 		cPlayer3D->AddVirus(cVirus);
 
 		cout << "Total score is: " << cScore->GetScore() << endl;
+
+		iPrevWaveScore = cScore->GetScore();
 
 		//Set the wave number for next wave
 		cWave->SetWaveNumber(cWave->GetWaveNumber() + 1);
@@ -740,21 +749,23 @@ void CSceneGame3D::Update(const double dElapsedTime)
 		dMainWaveTimer = 0.0f;
 		dBossTimer = 0.0f;
 
-
 	}
-	else if (cEntityManager->CheckBoss() == false)
+	//If Player has not killed the boss
+	else
 	{
 		dBossTimer += dElapsedTime;
-		//cout << dBossTimer << endl;
-
+		
 		if (cPlayer3D->GetCurrHealth() < 1)
 		{
 			cEntityManager->DeleteBoss();
+			cPlayer3D->SetPosition(glm::vec3(0.0f, 0.5f, 0.0f));
+			cPlayer3D->SetCurrHealth(cPlayer3D->GetMaxHealth());
 
-			cout << "Wave over" << endl;
+			cout << "Wave over player died" << endl;
 			cout << "Time taken for main wave: " << dMainWaveTimer << endl;
-			cout << "Time taken for boss: " << dBossTimer << endl;
 			//Calculate Score from completing wave
+
+			cScore->AddScoreFromWave(cWave->GetWaveNumber(), dMainWaveTimer);
 
 			cPlayer3D->SetNumOfVirus(cPlayer3D->GetNumOfVirus() + 1);
 
@@ -769,7 +780,7 @@ void CSceneGame3D::Update(const double dElapsedTime)
 			cWave->SetWaveNumber(cWave->GetWaveNumber() + 1);
 
 			//If game ended update high scores
-			if (cWave->GetWaveNumber() == 2)
+			if (cWave->GetWaveNumber() > 10)
 			{
 				cScore->UpdateHighScores();
 				//cScore->PrintHighScores();
@@ -784,9 +795,6 @@ void CSceneGame3D::Update(const double dElapsedTime)
 			//Reset timers
 			dMainWaveTimer = 0.0f;
 			dBossTimer = 0.0f;
-
-			cPlayer3D->SetPosition(glm::vec3(0.0f, 0.5f, 0.0f));
-			cPlayer3D->SetCurrHealth(cPlayer3D->GetMaxHealth());
 		}
 	}
 
