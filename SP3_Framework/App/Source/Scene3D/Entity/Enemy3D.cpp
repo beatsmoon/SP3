@@ -141,6 +141,7 @@ bool CEnemy3D::Init(void)
 	case T_ENEMY1:
 	{
 		health = 70;
+		maxhealth = 70;
 		speed = Math::RandFloatMinMax(0.7f, 0.9f);
 		rangeOfSight = 10.0f;
 
@@ -152,6 +153,7 @@ bool CEnemy3D::Init(void)
 	case T_ENEMY2:
 	{
 		health = 100;
+		maxhealth = 100;
 		speed = Math::RandFloatMinMax(0.7f, 0.9f);
 		rangeOfSight = 8.0f;
 
@@ -163,6 +165,7 @@ bool CEnemy3D::Init(void)
 	case T_ENEMY3:
 	{
 		health = 140;
+		maxhealth = 140;
 		speed = Math::RandFloatMinMax(0.6f, 0.9f);
 		rangeOfSight = 5.0f;
 
@@ -485,6 +488,16 @@ void CEnemy3D::SetHealth(int health)
 int CEnemy3D::GetHealth()
 {
 	return health;
+}
+
+int CEnemy3D::GetMaxHealth(void)
+{
+	return maxhealth;
+}
+
+void CEnemy3D::SetMaxHealth(int maxhealth)
+{
+	this->maxhealth = maxhealth;
 }
 
 /**

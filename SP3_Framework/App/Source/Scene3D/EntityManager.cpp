@@ -419,7 +419,9 @@ void CEntityManager::Update(const double dElapsedTime)
 						}
 						else
 						{
+							FindAndDeletePoison(enemy);
 							(*it)->SetToDelete(true);
+							
 							//cScore->AddScore(cScore->GetScoreToAdd());
 							//cout << cScore->GetScore();
 						}
@@ -439,6 +441,7 @@ void CEntityManager::Update(const double dElapsedTime)
 						}
 						else
 						{
+							FindAndDeletePoison(enemy);
 							(*it_other)->SetToDelete(true);
 							//cScore->AddScore(cScore->GetScoreToAdd());
 							//cout << cScore->GetScore() << endl;
@@ -467,6 +470,7 @@ void CEntityManager::Update(const double dElapsedTime)
 								}
 								else
 								{
+									
 									(*it)->SetToDelete(true);
 								}
 							}
@@ -480,6 +484,7 @@ void CEntityManager::Update(const double dElapsedTime)
 							}
 							else
 							{
+								FindAndDeletePoison(boss);
 								(*it)->SetToDelete(true);
 								//cScore->AddScore(cScore->GetScoreToAdd());
 								//cout << cScore->GetScore();
@@ -509,6 +514,7 @@ void CEntityManager::Update(const double dElapsedTime)
 								}
 								else
 								{
+									
 									(*it)->SetToDelete(true);
 								}
 							}
@@ -522,6 +528,7 @@ void CEntityManager::Update(const double dElapsedTime)
 							}
 							else
 							{
+								FindAndDeletePoison(boss);
 								(*it_other)->SetToDelete(true);
 								//cScore->AddScore(cScore->GetScoreToAdd());
 								//cout << cScore->GetScore();
@@ -736,6 +743,26 @@ void CEntityManager::Render(void)
 	}
 }
 
+void CEntityManager::FindAndDeletePoison(CEntity3D* cEntity3D)
+{
+	std::list<CEntity3D*>::iterator it, end;
+	end = lEntity3D.end();
+	for (it = lEntity3D.begin(); it != end; ++it)
+	{
+		if ((*it)->GetType() == CEntity3D::TYPE::POISON)
+		{
+			CPoison3D* poison = dynamic_cast<CPoison3D*>(*it);
+
+			if (poison->GetCurrEnemy() == cEntity3D)
+			{
+				poison->SetToDelete(true);
+			}
+
+		}
+	}
+
+}
+
 void CEntityManager::SetWaveStarted(bool bIsWaveStarted )
 {
 	this->bIsWaveStarted = bIsWaveStarted;
@@ -812,6 +839,47 @@ bool CEntityManager::CheckBoss(void)
 
 }
 
+//Delete boss and set main wave status to false
+void CEntityManager::DeleteBoss(void)
+{
+	if (bIsBossAlive == true)
+	{
+		std::list<CEntity3D*>::iterator it, end;
+		end = lEntity3D.end();
+
+		for (it = lEntity3D.begin(); it != end; ++it)
+		{
+			if ((*it)->GetType() == CEntity3D::TYPE::BOSS || (*it)->GetType() == CEntity3D::TYPE::POISON)
+			{
+				(*it)->SetToDelete(true);
+			}
+
+		}
+
+		SetWaveStarted(false);
+		bIsBossAlive = false;
+
+	}
+}
+
+//Delete zombies and set main wave to false
+void CEntityManager::DeleteEnemies(void)
+{
+	std::list<CEntity3D*>::iterator it, end;
+	end = lEntity3D.end();
+
+	for (it = lEntity3D.begin(); it != end; ++it)
+	{
+		if ((*it)->GetType() == CEntity3D::TYPE::ZOMBIE || (*it)->GetType() == CEntity3D::TYPE::POISON)
+		{
+			(*it)->SetToDelete(true);
+		}
+	}
+
+	SetWaveStarted(false);
+}
+
+//Update the score whenever the player kils an enemy
 void CEntityManager::UpdateScore(void)
 {
 	std::list<CEntity3D*>::iterator it, end;

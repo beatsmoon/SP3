@@ -106,6 +106,9 @@ public:
 	void SetHealth(int health);
 	int GetHealth();
 
+	int GetMaxHealth(void);
+	void SetMaxHealth(int maxhealth);
+
 protected:
 	// Enemy Attributes
 	glm::vec3 vec3Up;
@@ -124,7 +127,7 @@ protected:
 
 	// enemy stats
 	int type;
-	int health;
+	int health, maxhealth;
 	float speed;
 	Eenemy_Status status;
 

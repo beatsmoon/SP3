@@ -63,22 +63,26 @@ public:
 	// Render this class instance
 	virtual void Render(void);
 
+	void FindAndDeletePoison(CEntity3D* cEntity3D);
 
 
 	//Wave related functions
 
-	virtual void SetWaveStarted(bool bIsWaveStarted);
+	void SetWaveStarted(bool bIsWaveStarted);
 
-	virtual bool GetWaveStarted(void);
+	bool GetWaveStarted(void);
 
-	virtual void SetBossStatus(bool bIsBossAlive);
+	void SetBossStatus(bool bIsBossAlive);
 
-	virtual bool GetBossStatus(void);
+	bool GetBossStatus(void);
 
-	virtual bool CheckWave(void);
+	bool CheckWave(void);
 
-	virtual bool CheckBoss(void);
+	bool CheckBoss(void);
 
+	void DeleteBoss(void);
+
+	void DeleteEnemies(void);
 	//Score related function
 	virtual void UpdateScore(void);
 
@@ -110,11 +114,11 @@ protected:
 	//Wave related members
 
 	bool bIsWaveStarted, bIsBossAlive;
-	
+
 
 	// This boolean will disable all entites except menu button and projectile
 	bool bMenuOnly;
 
-	
+
 
 };

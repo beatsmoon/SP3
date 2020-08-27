@@ -300,19 +300,9 @@ bool CSceneGame3D::Init(void)
 
 	for (int i = 0; i < 3; i++)
 	{
-		/*int k = Math::RandIntMinMax(0, 2);
+		int k = Math::RandIntMinMax(0, 2);
 
-		CEnemy3D* cEnemy3D = new CEnemy3D(glm::vec3(Math::RandFloatMinMax(-10.0f, 10.0f), 0.5f, Math::RandFloatMinMax(-10.0f, 10.0f)), 2);
-		cEnemy3D->SetShader(cShader);
-		cEnemy3D->Init();
-		cEnemy3D->ActivateCollider(cSimpleShader);
-		cEntityManager->Add(cEnemy3D);
-
-		CPoison3D* CPoison3D = new CPoison3D(cEnemy3D->GetPosition(), 2, cEnemy3D);
-		CPoison3D->SetShader(cShader);
-		CPoison3D->Init();
-		CPoison3D->ActivateCollider(cSimpleShader);
-		cEntityManager->Add(CPoison3D);*/
+		
 
 	/*	CStructure3D* rifleAmmo = new CStructure3D(glm::vec3(Math::RandFloatMinMax(-10.0f, 10.0f), 0.5f, Math::RandFloatMinMax(-10.0f, 10.0f))
 			, CEntity3D::TYPE::RIFLE_AMMO);
@@ -331,17 +321,19 @@ bool CSceneGame3D::Init(void)
 
 	}
 
+	/*
 	CBoss3D* cEnemy3D = new CBoss3D(glm::vec3(Math::RandFloatMinMax(-10.0f, 10.0f), 0.5f, Math::RandFloatMinMax(-10.0f, 10.0f)), 0);
 	cEnemy3D->SetShader(cShader);
 	cEnemy3D->Init();
 	cEnemy3D->ActivateCollider(cSimpleShader);
 	cEntityManager->Add(cEnemy3D);
 
-	CPoison3D* cPoison3D = new CPoison3D(cEnemy3D->GetPosition(), glm::uvec2(1,0), cEnemy3D);
+	CPoison3D* cPoison3D = new CPoison3D(cEnemy3D->GetPosition(),glm::uvec2(1,0), cEnemy3D);
 	cPoison3D->SetShader(cShader);
 	cPoison3D->Init();
 	cPoison3D->ActivateCollider(cSimpleShader);
 	cEntityManager->Add(cPoison3D);
+	*/
 
 	/*CStructure3D* cBarricade = new CStructure3D(glm::vec3(0.f, 0.5f, 10.f), CEntity3D::TYPE::EXPLOSIVE_BARREL);
 	cBarricade->SetShader(cShader);
@@ -360,11 +352,11 @@ void CSceneGame3D::Update(const double dElapsedTime)
 	cPlayer3D->StorePositionForRollback();
 
 	// respawn player
-	if (cPlayer3D->GetCurrHealth() < 1)
-	{
-		cPlayer3D->SetPosition(glm::vec3(0.0f, 0.5f, 0.0f));
-		cPlayer3D->SetCurrHealth(100);
-	}
+	//if (cPlayer3D->GetCurrHealth() < 1)
+	//{
+	//	cPlayer3D->SetPosition(glm::vec3(0.0f, 0.5f, 0.0f));
+	//	cPlayer3D->SetCurrHealth(100);
+	//}
 
 	// Weapon interaction
 	if (CKeyboardController::GetInstance()->IsKeyPressed(GLFW_KEY_1))
@@ -630,6 +622,7 @@ void CSceneGame3D::Update(const double dElapsedTime)
 	//If main wave ended, spawn boss
 
 	static double dMainWaveTimer = 0.0f, dBossTimer = 0.0f;
+	static int iPrevWaveScore = 0;
 
 	if (CKeyboardController::GetInstance()->IsKeyPressed(GLFW_KEY_O) && cEntityManager->GetWaveStarted() == false)
 	{
@@ -645,13 +638,16 @@ void CSceneGame3D::Update(const double dElapsedTime)
 		//Timer for wave
 		dMainWaveTimer += dElapsedTime;
 
+		//If player dies during main wave, reset wave and reset score
 		if (cPlayer3D->GetCurrHealth() < 1)
 		{
 			cPlayer3D->SetCurrHealth(cPlayer3D->GetMaxHealth());
-
+			cEntityManager->DeleteEnemies();
+			cScore->SetScore(iPrevWaveScore);
 
 		}
 	}
+	//If player clears the wave
 	else if (cEntityManager->CheckWave() == true)
 	{
 		cWave->SpawnBoss();
@@ -659,9 +655,11 @@ void CSceneGame3D::Update(const double dElapsedTime)
 
 	}
 
+
+	//If Player kills the boss
 	if (cEntityManager->CheckBoss() == true)
 	{
-		cout << "Wave over" << endl;
+		cout << "Wave over boss died" << endl;
 		cout << "Time taken for main wave: " << dMainWaveTimer << endl;
 		cout << "Time taken for boss: " << dBossTimer << endl;
 		//Calculate Score from completing wave
@@ -677,6 +675,8 @@ void CSceneGame3D::Update(const double dElapsedTime)
 		cPlayer3D->AddVirus(cVirus);
 
 		cout << "Total score is: " << cScore->GetScore() << endl;
+
+		iPrevWaveScore = cScore->GetScore();
 
 		//Set the wave number for next wave
 		cWave->SetWaveNumber(cWave->GetWaveNumber() + 1);
@@ -699,21 +699,24 @@ void CSceneGame3D::Update(const double dElapsedTime)
 		dBossTimer = 0.0f;
 
 	}
+	//If Player has not killed the boss
 	else
 	{
 		dBossTimer += dElapsedTime;
 	//	cout << dBossTimer << endl;
 
+		//If player dies to the boss, continue to next wave but do not add score for boss
 		if (cPlayer3D->GetCurrHealth() < 1)
 		{
-			cout << "Wave over" << endl;
+			cEntityManager->DeleteBoss();
+			cPlayer3D->SetCurrHealth(cPlayer3D->GetMaxHealth());
+
+			cout << "Wave over player died" << endl;
 			cout << "Time taken for main wave: " << dMainWaveTimer << endl;
-			cout << "Time taken for boss: " << dBossTimer << endl;
 			//Calculate Score from completing wave
 
 			cScore->AddScoreFromWave(cWave->GetWaveNumber(), dMainWaveTimer);
-			cScore->AddScoreFromWave(cWave->GetWaveNumber(), dBossTimer);
-
+		
 			cPlayer3D->SetNumOfVirus(cPlayer3D->GetNumOfVirus() + 1);
 
 			CVirus* cVirus = new CVirus(glm::uvec2(1, Math::RandIntMinMax(5, 9)), cPlayer3D->GetNumOfVirus());
@@ -727,7 +730,7 @@ void CSceneGame3D::Update(const double dElapsedTime)
 			cWave->SetWaveNumber(cWave->GetWaveNumber() + 1);
 
 			//If game ended update high scores
-			if (cWave->GetWaveNumber() == 2)
+			if (cWave->GetWaveNumber() > 10)
 			{
 				cScore->UpdateHighScores();
 				//cScore->PrintHighScores();
@@ -988,10 +991,13 @@ void CSceneGame3D::Render(void)
 	// Render Tier Level For Scope
 	cTextRenderer->Render(to_string(static_cast<int>(cPlayer3D->GetWeapon()->GetScope()->GetTierLevel())), 71.0f, 5.0f, 0.5f, glm::vec3(1.0f, 1.0f, 1.0f));
 
+	cTextRenderer->Render(std::to_string(cPlayer3D->GetCurrHealth()) + " / " + std::to_string(cPlayer3D->GetMaxHealth()), 
+		cSettings->iWindowWidth * 0.1, cSettings->iWindowHeight * 0.95, 0.75f, glm::vec3(1.f, 1.f, 1.f));
+
 	cTextRenderer->Render("Score: " + std::to_string(cScore->GetScore()), cSettings->iWindowWidth * 0.01, cSettings->iWindowHeight * 0.88, 1.f, glm::vec3(1.f, 0.f, 0.f));
 
 
-	cTextRenderer->Render("Score: " + std::to_string(cScore->GetScore()), cSettings->iWindowWidth * 0.01, cSettings->iWindowHeight * 0.88, 1.f, glm::vec3(1.f, 0.f, 0.f));
+	cTextRenderer->Render("Wave: " + std::to_string(cWave->GetWaveNumber()), cSettings->iWindowWidth * 0.01, cSettings->iWindowHeight * 0.84, 1.f, glm::vec3(0.f, 1.f, 0.f));
 
 	// Call the cTextRenderer's PostRender()
 	cTextRenderer->PostRender();
