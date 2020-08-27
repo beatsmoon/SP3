@@ -368,7 +368,7 @@ void CSceneGame3D::Update(const double dElapsedTime)
 		if (cPlayer3D->GetCurrHealth() < 1)
 		{
 			cPlayer3D->SetPosition(glm::vec3(0.0f, 0.5f, 0.0f));
-			cPlayer3D->SetCurrHealth(100);
+			cPlayer3D->SetCurrHealth(cPlayer3D->GetMaxHealth());
 		}
 	}
 
@@ -380,13 +380,6 @@ void CSceneGame3D::Update(const double dElapsedTime)
 		CSoundController::GetInstance()->PlaySoundByID(14);
 		dCountdown = 0.0f;
 	}
-
-	// respawn player
-	/*if (cPlayer3D->GetCurrHealth() < 1)
-	{
-		cPlayer3D->SetPosition(glm::vec3(0.0f, 0.5f, 0.0f));
-		cPlayer3D->SetCurrHealth(100);
-	}*/
 
 	// Weapon interaction
 	if (CKeyboardController::GetInstance()->IsKeyPressed(GLFW_KEY_1))
@@ -547,7 +540,7 @@ void CSceneGame3D::Update(const double dElapsedTime)
 		cPlayer3D->ProcessRotate(	(float)cMouseController->GetMouseDeltaX(),
 									(float)cMouseController->GetMouseDeltaY());
 
-		cCamera->ProcessMouseScroll((float)cMouseController->GetMouseScrollStatus(CMouseController::SCROLL_TYPE::SCROLL_TYPE_YOFFSET));
+		//cCamera->ProcessMouseScroll((float)cMouseController->GetMouseScrollStatus(CMouseController::SCROLL_TYPE::SCROLL_TYPE_YOFFSET));
 
 		if (cPlayer3D->GetWeapon()->GetScope()->GetTierLevel() != CGunScope::NOTIER)
 		{
@@ -756,6 +749,8 @@ void CSceneGame3D::Update(const double dElapsedTime)
 
 		if (cPlayer3D->GetCurrHealth() < 1)
 		{
+			cEntityManager->DeleteBoss();
+
 			cout << "Wave over" << endl;
 			cout << "Time taken for main wave: " << dMainWaveTimer << endl;
 			cout << "Time taken for boss: " << dBossTimer << endl;
@@ -790,11 +785,8 @@ void CSceneGame3D::Update(const double dElapsedTime)
 			dMainWaveTimer = 0.0f;
 			dBossTimer = 0.0f;
 
-			if (cPlayer3D->GetCurrHealth() < 1)
-			{
-				cPlayer3D->SetPosition(glm::vec3(0.0f, 0.5f, 0.0f));
-				cPlayer3D->SetCurrHealth(100);
-			}
+			cPlayer3D->SetPosition(glm::vec3(0.0f, 0.5f, 0.0f));
+			cPlayer3D->SetCurrHealth(cPlayer3D->GetMaxHealth());
 		}
 	}
 

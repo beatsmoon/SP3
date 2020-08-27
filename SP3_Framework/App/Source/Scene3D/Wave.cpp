@@ -55,7 +55,7 @@ void CWave::StartWave(int waveNumber)
 		}
 
 		//Initialise type of enemy
-		cEnemy3DType1 = new CEnemy3D(glm::vec3(Math::RandFloatMinMax(-10.0f, 10.0f), 0.5f, Math::RandFloatMinMax(-10.0f, 10.0f)), k);
+		cEnemy3DType1 = new CEnemy3D(glm::vec3(CPlayer3D::GetInstance()->GetPosition().x + 5 + Math::RandFloatMinMax(-10.0f, 10.0f), 0.5f, CPlayer3D::GetInstance()->GetPosition().z + 5 + Math::RandFloatMinMax(-10.0f, 10.0f)), k);
 		cEnemy3DType1->SetShader(cShader);
 		cEnemy3DType1->Init();
 		cEnemy3DType1->ActivateCollider(cSimpleShader);
@@ -84,7 +84,7 @@ void CWave::SpawnBoss(void)
 	{
 	case 1: // boss 1
 	{
-		cBoss3D = new CBoss3D(glm::vec3(Math::RandFloatMinMax(-10.0f, 10.0f), 0.5f, Math::RandFloatMinMax(-10.0f, 10.0f)), 0);
+		cBoss3D = new CBoss3D(glm::vec3(CPlayer3D::GetInstance()->GetPosition().x + 5 + Math::RandFloatMinMax(-10.0f, 10.0f), 0.5f, CPlayer3D::GetInstance()->GetPosition().z + 5 + Math::RandFloatMinMax(-10.0f, 10.0f)), 0);
 		cBoss3D->SetShader(cShader);
 		cBoss3D->Init();
 		cBoss3D->SetHealth(cBoss3D->GetHealth() + ((wave - 1) * 200));
@@ -105,7 +105,7 @@ void CWave::SpawnBoss(void)
 	}
 	case 2:  // boss 2
 	{
-		cBoss3D = new CBoss3D(glm::vec3(Math::RandFloatMinMax(-10.0f, 10.0f), 0.5f, Math::RandFloatMinMax(-10.0f, 10.0f)), 1);
+		cBoss3D = new CBoss3D(glm::vec3(CPlayer3D::GetInstance()->GetPosition().x + 5 + Math::RandFloatMinMax(-10.0f, 10.0f), 0.5f, CPlayer3D::GetInstance()->GetPosition().z + 5 + Math::RandFloatMinMax(-10.0f, 10.0f)), 1);
 		cBoss3D->SetShader(cShader);
 		cBoss3D->Init();
 		cBoss3D->SetHealth(cBoss3D->GetHealth() + ((wave - 1) * 200));
@@ -120,7 +120,7 @@ void CWave::SpawnBoss(void)
 	}
 	case 0:  // boss 3
 	{
-		cBoss3D = new CBoss3D(glm::vec3(Math::RandFloatMinMax(-10.0f, 10.0f), 0.5f, Math::RandFloatMinMax(-10.0f, 10.0f)), 2);
+		cBoss3D = new CBoss3D(glm::vec3(CPlayer3D::GetInstance()->GetPosition().x + 5 + Math::RandFloatMinMax(-10.0f, 10.0f), 0.5f, CPlayer3D::GetInstance()->GetPosition().z + 5 + Math::RandFloatMinMax(-10.0f, 10.0f)), 2);
 		cBoss3D->SetShader(cShader);
 		cBoss3D->Init();
 		cBoss3D->SetHealth(cBoss3D->GetHealth() + ((wave - 1) * 200));
@@ -137,7 +137,7 @@ void CWave::SpawnBoss(void)
 	{
 		for (int i = 0; i < 3; i++)
 		{
-			CBoss3D* cBoss3D = new CBoss3D(glm::vec3(Math::RandFloatMinMax(-10.0f, 10.0f), 0.5f, Math::RandFloatMinMax(-10.0f, 10.0f)), i);
+			CBoss3D* cBoss3D = new CBoss3D(glm::vec3(CPlayer3D::GetInstance()->GetPosition().x + 5 + Math::RandFloatMinMax(-10.0f, 10.0f), 0.5f, CPlayer3D::GetInstance()->GetPosition().z + 5 + Math::RandFloatMinMax(-10.0f, 10.0f)), i);
 			cBoss3D->SetShader(cShader);
 			cBoss3D->Init();
 			cBoss3D->SetHealth(cBoss3D->GetHealth() + ((wave - 1) * 300));

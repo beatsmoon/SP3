@@ -141,11 +141,10 @@ bool CEntityManager::CollisionCheck(CEntity3D* cEntity3D)
 			case CEntity3D::TYPE::POISON:
 			{
 				// Rollback the cEntity3D's position
-				static double damageDelay = 2.0f;
-				if (damageDelay < 2.0f)
+				static double damageDelay = 10.0f;
+				if (damageDelay < 10.0f)
 				{
 					damageDelay += 1.f;
-
 				}
 				else
 				{
@@ -562,7 +561,7 @@ void CEntityManager::Update(const double dElapsedTime)
 						if (cExplosiveBarrel->GetHealth() > 0)
 						{
 							cExplosiveBarrel->SetHealth(cExplosiveBarrel->GetHealth() - cPlayer3D->GetWeapon()->GetDamageOutput());
-							cSoundController->PlaySoundByID(5);
+							//cSoundController->PlaySoundByID(5);
 						}
 						else if (cExplosiveBarrel->GetDespawnQueue() == false)
 						{
@@ -571,6 +570,7 @@ void CEntityManager::Update(const double dElapsedTime)
 							if (cExplosiveBarrel->CheckForCollision(cPlayer3D))
 							{
 								std::cout << "Player hit by Explosive Barrel explosion" << std::endl;
+								cSoundController->PlaySoundByID(15);
 								cPlayer3D->SetCurrHealth(cPlayer3D->GetCurrHealth() - 50);
 							}
 							std::vector<CEntity3D*> tempEntity = CWave::GetInstance()->GetEnemies();
@@ -580,6 +580,7 @@ void CEntityManager::Update(const double dElapsedTime)
 								if (tempEnemy != nullptr && cExplosiveBarrel->CheckForCollision(tempEnemy))
 								{
 									std::cout << "Enemy hit by explosive barrel explosion" << std::endl;
+									cSoundController->PlaySoundByID(5);
 									tempEnemy->SetHealth(tempEnemy->GetHealth() - 50);
 								}
 							}
@@ -599,7 +600,7 @@ void CEntityManager::Update(const double dElapsedTime)
 						if (cExplosiveBarrel->GetHealth() > 0)
 						{
 							cExplosiveBarrel->SetHealth(cExplosiveBarrel->GetHealth() - cPlayer3D->GetWeapon()->GetDamageOutput());
-							cSoundController->PlaySoundByID(5);
+							//cSoundController->PlaySoundByID(5);
 						}
 						else if (cExplosiveBarrel->GetDespawnQueue() == false)
 						{
@@ -608,6 +609,7 @@ void CEntityManager::Update(const double dElapsedTime)
 							if (cExplosiveBarrel->CheckForCollision(cPlayer3D))
 							{
 								std::cout << "Player hit by Explosive Barrel explosion" << std::endl;
+								cSoundController->PlaySoundByID(15);
 								cPlayer3D->SetCurrHealth(cPlayer3D->GetCurrHealth() - 50);
 							}
 							std::vector<CEntity3D*> tempEntity = CWave::GetInstance()->GetEnemies();
@@ -617,6 +619,7 @@ void CEntityManager::Update(const double dElapsedTime)
 								if (tempEnemy != nullptr && cExplosiveBarrel->CheckForCollision(tempEnemy))
 								{
 									std::cout << "Enemy hit by explosive barrel explosion" << std::endl;
+									cSoundController->PlaySoundByID(5);
 									tempEnemy->SetHealth(tempEnemy->GetHealth() - 50);
 								}
 							}
@@ -637,7 +640,7 @@ void CEntityManager::Update(const double dElapsedTime)
 						if (cBarricade->GetHealth() > 0)
 						{
 							cBarricade->SetHealth(cBarricade->GetHealth() - (cPlayer3D->GetWeapon()->GetDamageOutput() * cPlayer3D->GetDmageMultiplier()));
-							cSoundController->PlaySoundByID(5);
+							//cSoundController->PlaySoundByID(5);
 						}
 						else if (cBarricade->GetDespawnQueue() == false)
 						{
@@ -655,7 +658,7 @@ void CEntityManager::Update(const double dElapsedTime)
 						if (cBarricade->GetHealth() > 0)
 						{
 							cBarricade->SetHealth(cBarricade->GetHealth() - (cPlayer3D->GetWeapon()->GetDamageOutput() * cPlayer3D->GetDmageMultiplier()));
-							cSoundController->PlaySoundByID(5);
+							//cSoundController->PlaySoundByID(5);
 						}
 						else if (cBarricade->GetDespawnQueue() == false)
 						{

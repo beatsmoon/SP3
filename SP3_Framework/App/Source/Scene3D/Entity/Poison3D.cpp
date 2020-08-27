@@ -141,11 +141,11 @@ void CPoison3D::SetProjection(glm::mat4 projection)
 void CPoison3D::Update(const double dElapsedTime)
 {
 	
-	if(currEnemy->GetHealth() < 1 || currEnemy->GetHealth() > currEnemy->GetMaxHealth())
+	/*if(currEnemy->GetHealth() < 1 || currEnemy->GetHealth() > currEnemy->GetMaxHealth())
 	{
 		SetToDelete(true);
 		return;
-	}
+	}*/
 
 	if (currEnemy->GetHealth() > 0)
 	{
