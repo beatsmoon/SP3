@@ -68,8 +68,12 @@ bool CSceneShop3D::Init(void)
 */
 void CSceneShop3D::Update(const double dElapsedTime)
 {
+	
 	cShop->Update(dElapsedTime);
 	cShop->SetPrices();
+
+
+
 
 	//if (CKeyboardController::GetInstance()->IsKeyPressed(GLFW_KEY_P))
 	//{
@@ -141,6 +145,8 @@ void CSceneShop3D::Render(void)
 	cTextRenderer->Render(std::to_string(cShop->GetPrice(BARREL)), cSettings->iWindowWidth * 0.59296, cSettings->iWindowHeight * 0.49, 0.6f, glm::vec3(1.f, 1.f, 1.f));
 
 	//Third Row
+
+	cTextRenderer->Render(std::to_string(cShop->GetPrice(BARREL)), cSettings->iWindowWidth * 0.09656, cSettings->iWindowHeight * 0.23342, 0.6f, glm::vec3(1.f, 1.f, 1.f));
 
 	cTextRenderer->PostRender();
 }

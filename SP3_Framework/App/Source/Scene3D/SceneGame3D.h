@@ -34,6 +34,8 @@
 // Include SoundController
 #include "..\SoundController\SoundController.h"
 
+#include "../CameraEffects/Shop.h"
+
 // Include Player3D
 #include "Player3D.h"
 // Include Camera

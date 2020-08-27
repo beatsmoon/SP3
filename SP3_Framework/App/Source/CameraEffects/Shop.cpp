@@ -40,9 +40,6 @@ CShop::~CShop(void)
 		cScore = NULL;
 	}
 
-	
-	
-	
 }
 
 bool CShop::Init(void)
@@ -71,9 +68,6 @@ bool CShop::Init(void)
 	cSettings = CSettings::GetInstance();
 
 	cScore = CScore::GetInstance();
-
-
-	
 
 	transform = glm::mat4(1.0f); // make sure to initialize matrix to identity matrix first
 
@@ -173,6 +167,7 @@ void CShop::Update(const double dElapsedTime)
 				else
 				{
 					cScore->SetScore(cScore->GetScore() - iSniper);
+					iMoneySpent += iSniper;
 				}
 
 				// If player does not already have sniper
@@ -231,6 +226,7 @@ void CShop::Update(const double dElapsedTime)
 					else
 					{
 						cScore->SetScore(cScore->GetScore() - iAK);
+						iMoneySpent += iAK;
 					}
 					
 						sItemBought = "Bought AK47";
@@ -283,6 +279,7 @@ void CShop::Update(const double dElapsedTime)
 				else 
 				{
 					cScore->SetScore(cScore->GetScore() - iShotgun);
+					iMoneySpent += iShotgun;
 				}
 
 				if (cPlayer3D->GetInventoryWeapon(0)->GetWeaponName() != Weapon_Type::W_SHOTGUN)
@@ -337,6 +334,7 @@ void CShop::Update(const double dElapsedTime)
 				else
 				{
 					cScore->SetScore(cScore->GetScore() - iExtMag);
+					iMoneySpent += iExtMag;
 				}
 
 				if (cPlayer3D->GetInventoryWeapon(0)->GetExtMag()->GetTierLevel() != cPlayer3D->GetInventoryWeapon(0)->GetExtMag()->TIER3)
@@ -368,6 +366,7 @@ void CShop::Update(const double dElapsedTime)
 				else 
 				{
 					cScore->SetScore(cScore->GetScore() - iScope);
+					iMoneySpent += iScope;
 				}
 
 				if (cPlayer3D->GetInventoryWeapon(0)->GetScope()->GetTierLevel() != cPlayer3D->GetInventoryWeapon(0)->GetScope()->TIER3)
@@ -396,6 +395,7 @@ void CShop::Update(const double dElapsedTime)
 				else 
 				{
 					cScore->SetScore(cScore->GetScore() - iBarrel);
+					iMoneySpent += iBarrel;
 				}
 
 				//Player buys barrel attachment;
@@ -428,6 +428,7 @@ void CShop::Update(const double dElapsedTime)
 				else
 				{
 					cScore->SetScore(cScore->GetScore() - iAmmo);
+					iMoneySpent += iAmmo;
 				}
 
 				if (cPlayer3D->GetWeapon()->GetTotalRound() != cPlayer3D->GetWeapon()->GetMaxTotalRound())
@@ -445,7 +446,6 @@ void CShop::Update(const double dElapsedTime)
 		}
 	}
 
-	
 
 }
 
@@ -475,23 +475,23 @@ void CShop::SetItemBought(std::string sItemBought)
 void CShop::SetPrices(void)
 {
 	//Sniper
-	if (cScore->GetScore() * 0.15 > 1500)
+	if (cScore->GetScore() * 0.15 > 3500)
 	{
 		iSniper = cScore->GetScore() * 0.15;	
 	}
-	else if (cScore->GetScore() * 0.15 <= 1500 || cScore->GetScore() < 1500)
+	else if (cScore->GetScore() * 0.15 <= 3500 || cScore->GetScore() < 3500)
 	{
-		iSniper = 1500;		
+		iSniper = 3500;
 	}
 
 	//AK47
-	if (cScore->GetScore() * 0.2 > 2500)
+	if (cScore->GetScore() * 0.2 > 5500)
 	{
 		iAK = cScore->GetScore() * 0.2;		
 	}
-	else if (cScore->GetScore() * 0.2 <= 2500 || cScore->GetScore() < 2500)
+	else if (cScore->GetScore() * 0.2 <= 5500 || cScore->GetScore() < 5500)
 	{
-		iAK = 2500;
+		iAK = 5500;
 	}
 	
 	//Shotgun
@@ -500,14 +500,14 @@ void CShop::SetPrices(void)
 		iShotgun = cScore->GetScore() * 0.1;
 	}
 
-	else if (cScore->GetScore() * 0.1 <= 1000 || cScore->GetScore() < 1000)
+	else if (cScore->GetScore() * 0.1 <= 2500 || cScore->GetScore() < 2500)
 	{
-		iShotgun = 1000;
+		iShotgun = 2500;
 	}
 
-	iExtMag = 750;
-	iScope = 900;
-	iBarrel = 1200;
+	iExtMag = 1250;
+	iScope = 1100;
+	iBarrel = 1500;
 	iAmmo = 500;
 
 }
@@ -554,6 +554,16 @@ int CShop::GetPrice(ITEM eItem)
 
 	}
 
+}
+
+void CShop::SetMoneySpent(int iMoneySpent)
+{
+	this->iMoneySpent = iMoneySpent;
+}
+
+int CShop::GetMoneySpent(void)
+{
+	return iMoneySpent;
 }
 
 
