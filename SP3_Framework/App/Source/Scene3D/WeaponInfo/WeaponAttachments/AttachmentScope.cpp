@@ -354,7 +354,3 @@ CGunScope::TIERLEVEL CGunScope::GetTierLevel(void) const
 {
 	return eTierLevel;
 }
-void CGunScope::UpgradeScope()
-{
-	eTierLevel = static_cast<TIERLEVEL>(static_cast<int>(eTierLevel) + 1);
-}

@@ -141,7 +141,7 @@ bool CBoss3D::Init(void)
 	{
 		health = 400;
 		speed = Math::RandFloatMinMax(0.8f, 1.3f);
-		rangeOfSight = 6.f;
+		rangeOfSight = 10.f;
 		splitting = 0;
 
 		vec3Scale = glm::vec3(1.5, 1.5, 1.5);
@@ -160,7 +160,7 @@ bool CBoss3D::Init(void)
 	{
 		health = 400;
 		speed = Math::RandFloatMinMax(1.0f, 1.2f);
-		rangeOfSight = 6.f;
+		rangeOfSight = 10.f;
 		splitting = 0;
 
 		vec3Scale = glm::vec3(0.45, 0.45, 0.45);
@@ -179,7 +179,7 @@ bool CBoss3D::Init(void)
 	{
 		health = 400;
 		speed = Math::RandFloatMinMax(0.1f, 0.7f);
-		rangeOfSight = 6.f;
+		rangeOfSight = 10.f;
 		splitting = 3;
 
 		vec3Scale = glm::vec3(0.45, 0.45, 0.45);

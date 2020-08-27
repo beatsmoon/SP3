@@ -277,7 +277,6 @@ void CGunBarrel::PostRender(void)
 void CGunBarrel::UpgradeBarrel()
 {
 	eTierLevel = static_cast<TIERLEVEL>(static_cast<int>(eTierLevel) + 1);
-
 }
 
 float CGunBarrel::GetRecoilReduction(void)

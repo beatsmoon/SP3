@@ -83,7 +83,6 @@ public:
 	void SetTierLevel(const TIERLEVEL eStatus);
 	TIERLEVEL GetTierLevel(void) const;
 
-	void UpgradeScope();
 protected:
 	// The handle to the CGroundMap class instance
 	CGroundMap* cGroundMap;
