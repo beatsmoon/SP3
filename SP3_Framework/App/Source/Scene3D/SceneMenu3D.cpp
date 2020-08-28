@@ -55,7 +55,8 @@ CSceneMenu3D::CSceneMenu3D(void)
 	, cSkybox(NULL)
 	, cPistol(NULL)
 	, bHighscoreEnabled(false)
-	, cCrossHair(NULL) 
+	, cCrossHair(NULL)
+	, dInitialisationTime(0.0)
 {
 }
 
@@ -75,14 +76,14 @@ CSceneMenu3D::~CSceneMenu3D(void)
 		cCrossHair->Destroy();
 		cCrossHair = NULL;
 	}
-	
+
 
 }
 
 /**
  @brief Init Initialise this instance
  @return true if the initialisation is successful, else false
- */ 
+ */
 bool CSceneMenu3D::Init(void)
 {
 	if (!CScene3D::Init())
@@ -128,7 +129,7 @@ bool CSceneMenu3D::Init(void)
 	cPistol = new CWeapon(Weapon_Type::W_PISTOL);
 	cPistol->Init();
 	cPistol->SetShader(cSimpleShader);
-	
+
 	cSkybox = CSkyBox::GetInstance();
 	cSkybox->SetShader(skyBoxShader);
 	cSkybox->Init();
@@ -141,6 +142,8 @@ bool CSceneMenu3D::Init(void)
 */
 void CSceneMenu3D::Update(const double dElapsedTime)
 {
+	// Give the compiler about 0.125s to calculate cursor pos and set it to center.
+	// This prevents menu bug where camera turns towards the cursor position at the start of the application
 	if (dInitialisationTime < 0.125)
 	{
 		dInitialisationTime += dElapsedTime;
@@ -159,25 +162,63 @@ void CSceneMenu3D::Update(const double dElapsedTime)
 	if (cMouseController->IsButtonDown(CMouseController::BUTTON_TYPE::LMB) && cPistol->GetMagRound() > 0
 		&& cPistol->GetFiringType() == CWeaponInfo::FIRINGTYPE::AUTO)
 	{
-		CProjectile* cProjectile = cPistol->Discharge(cPlayer3D->GetPosition(), cPlayer3D->GetFront(), cPlayer3D);
-		if (cProjectile)
 		{
-			cProjectile->SetGravityMultiplier(cPistol->CalculateGravityMultiplier());
-			cSoundController->PlaySoundByID(10);
-			cEntityManager->Add(cProjectile);
-			cPlayer3D->TriggerRecoil();
+			CProjectile* cProjectile = cPistol->Discharge(cPlayer3D->GetPosition(), cPlayer3D->GetFront(), cPlayer3D);
+			if (cProjectile)
+			{
+				cProjectile->SetGravityMultiplier(cPistol->CalculateGravityMultiplier());
+
+				cEntityManager->Add(cProjectile);
+				cPlayer3D->TriggerRecoil();
+			}
+			//if (i == BulletPerShot - 1)
+			{
+				cPistol->SetMagRound(cPistol->GetMagRound() - 1);
+				//cPistol->SetCanFire(false);
+			}
 		}
 	}
 	else if (cMouseController->IsButtonReleased(CMouseController::BUTTON_TYPE::LMB) && cPistol->GetMagRound() > 0
 		&& cPistol->GetFiringType() == CWeaponInfo::FIRINGTYPE::SINGLE)
 	{
-		CProjectile* cProjectile = cPistol->Discharge(cPlayer3D->GetPosition(), cPlayer3D->GetFront(), cPlayer3D);
-		if (cProjectile)
 		{
-			cProjectile->SetGravityMultiplier(cPistol->CalculateGravityMultiplier());
-			cSoundController->PlaySoundByID(10);
-			cEntityManager->Add(cProjectile);
-			cPlayer3D->TriggerRecoil();
+			CProjectile* cProjectile = cPistol->Discharge(cPlayer3D->GetPosition(), cPlayer3D->GetFront(), cPlayer3D);
+			if (cProjectile)
+			{
+				cProjectile->SetGravityMultiplier(cPistol->CalculateGravityMultiplier());
+				cEntityManager->Add(cProjectile);
+				cPlayer3D->TriggerRecoil();
+			}
+			//if (i == BulletPerShot - 1)
+			{
+				//cPistol->SetMagRound((cPistol->GetMagRound()) - 1);
+				//cPistol->SetCanFire(false);
+			}
+		}
+	}
+
+	if (CKeyboardController::GetInstance()->IsKeyPressed(GLFW_KEY_R)
+		&& cPistol->GetMagRound() < cPistol->GetMaxMagRound())
+	{
+		static double InputDelay = 10.f;
+		if (InputDelay < 10.f)
+		{
+			InputDelay += 1.f;
+
+		}
+		else
+		{
+			InputDelay = 0.f;
+			if (cPistol != NULL)
+			{
+				cPistol->Reload();
+				//cPlayer3D->GetWeapon()->SetCanFire(false);
+
+			}
+			else
+			{
+				cout << "there is no weapon to reload" << endl;
+			}
 		}
 	}
 
