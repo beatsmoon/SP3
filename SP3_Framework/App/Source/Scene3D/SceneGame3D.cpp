@@ -1046,8 +1046,9 @@ void CSceneGame3D::Render(void)
 	}
 	cTextRenderer->Render("Score: " + std::to_string(cScore->GetScore()), cSettings->iWindowWidth * 0.01, cSettings->iWindowHeight * 0.88, 1.f, glm::vec3(1.f, 0.f, 0.f));
 
+	cTextRenderer->Render(std::to_string(cPlayer3D->GetCurrHealth()) + " / " + std::to_string(cPlayer3D->GetMaxHealth()), cSettings->iWindowWidth * 0.1, cSettings->iWindowHeight * 0.95, 0.75f, glm::vec3(1.f, 1.f, 1.f));
 
-	cTextRenderer->Render("Score: " + std::to_string(cScore->GetScore()), cSettings->iWindowWidth * 0.01, cSettings->iWindowHeight * 0.88, 1.f, glm::vec3(1.f, 0.f, 0.f));
+	cTextRenderer->Render("Wave: " + std::to_string(cWave->GetWaveNumber()), cSettings->iWindowWidth * 0.01, cSettings->iWindowHeight * 0.83, 1.f, glm::vec3(0.f, 1.f, 0.f));
 
 	// Call the cTextRenderer's PostRender()
 	cTextRenderer->PostRender();

@@ -149,9 +149,9 @@ bool CEntityManager::CollisionCheck(CEntity3D* cEntity3D)
 				else
 				{
 					damageDelay = 0.f;
-					cEntity3D->RollbackPosition();
+					//cEntity3D->RollbackPosition();
 					// Rollback the NPC's position
-					(*it)->RollbackPosition();
+					//(*it)->RollbackPosition();
 					cout << "** Collision between Player and poison ***" << endl;
 					
 					cCameraEffects->Activate_BloodScreen();
@@ -567,6 +567,7 @@ void CEntityManager::Update(const double dElapsedTime)
 						{
 							cExplosiveBarrel->SetColliderScale(cExplosiveBarrel->GetColliderScale() * 3.f);
 							cExplosiveBarrel->SetDespawnQueue(true);
+							cSoundController->PlaySoundByID(2);
 							if (cExplosiveBarrel->CheckForCollision(cPlayer3D))
 							{
 								std::cout << "Player hit by Explosive Barrel explosion" << std::endl;
@@ -606,6 +607,7 @@ void CEntityManager::Update(const double dElapsedTime)
 						{
 							cExplosiveBarrel->SetColliderScale(cExplosiveBarrel->GetColliderScale() * 3.f);
 							cExplosiveBarrel->SetDespawnQueue(true);
+							cSoundController->PlaySoundByID(2);
 							if (cExplosiveBarrel->CheckForCollision(cPlayer3D))
 							{
 								std::cout << "Player hit by Explosive Barrel explosion" << std::endl;
