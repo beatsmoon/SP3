@@ -254,7 +254,7 @@ void CEntityManager::Update(const double dElapsedTime)
 {
 	std::list<CEntity3D*>::iterator it, end;
 	std::list<CEntity3D*>::iterator it_other;
-
+ 
 	// Update all CEntity3D
 	end = lEntity3D.end();
 	for (it = lEntity3D.begin(); it != end; ++it)
@@ -710,7 +710,6 @@ void CEntityManager::CleanUp(void)
 					if (tempEntity.at(i) == (*it))
 					{
 						CWave::GetInstance()->DeleteEnemy((*it));
-						std::cout << CWave::GetInstance()->GetEnemies().size() << std::endl;
 						break;
 					}
 				}
@@ -865,6 +864,7 @@ void CEntityManager::DeleteBoss(void)
 
 		}
 
+		CWave::GetInstance()->GetEnemies().clear();
 		SetWaveStarted(false);
 		bIsBossAlive = false;
 
@@ -881,11 +881,11 @@ void CEntityManager::DeleteEnemies(void)
 	{
 		if ((*it)->GetType() == CEntity3D::TYPE::ZOMBIE || (*it)->GetType() == CEntity3D::TYPE::POISON)
 		{
-			CWave::GetInstance()->GetEnemies().clear();
 			(*it)->SetToDelete(true);
 		}
 	}
 
+	CWave::GetInstance()->GetEnemies().clear();
 	SetWaveStarted(false);
 }
 
