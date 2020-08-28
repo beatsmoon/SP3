@@ -369,6 +369,7 @@ void CSceneMenu3D::Render(void)
 			CScore* cScore = CScore::GetInstance();
 			cTextRenderer->Render("FINAL SCORE: " + std::to_string(cScore->GetScore()), 50.0f, 50.0f, 1.f, glm::vec3(1.0f, 1.0f, 0.0f));
 			cTextRenderer->Render("FINAL TIME: " + std::to_string(cScore->GetFinalGameTime()), 50.0f, 100.0f, 1.f, glm::vec3(1.0f, 1.0f, 0.0f));
+			cTextRenderer->Render("Press escape to go back to menu", 50.f, 150.f, 0.5f, glm::vec3(1.0f, 1.0f, 0.f));
 		}
 	}
 
