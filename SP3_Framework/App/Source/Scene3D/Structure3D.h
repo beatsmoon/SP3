@@ -36,7 +36,7 @@ public:
 	// Constructor with vectors
 	CStructure3D(	const glm::vec3 vec3Position,
 				CEntity3D::TYPE type,
-				const glm::vec3 vec3Front = glm::vec3(0.0f, 0.0f, -1.0f),
+				glm::vec3 vec3Front = glm::vec3(0.0f, 0.0f, 1.0f),
 				const float fYaw = -90.0f,
 				const float fPitch = 0.0f
 				);
@@ -69,7 +69,7 @@ public:
 
 	void SetHealth(const int iStructureHealth);
 	int GetHealth();
-
+	void SetfYaw(float fValue);
 	void RotateToPlayer();
 
 protected:

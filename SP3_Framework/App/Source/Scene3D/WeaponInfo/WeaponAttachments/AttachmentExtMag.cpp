@@ -189,7 +189,6 @@ void CGunExtMag::Update(const double dElapsedTime)
 }
 void CGunExtMag::AddAmmo(void)
 {
-
 }
 /**
 @brief Activate the CCollider for this class instance

@@ -336,23 +336,67 @@ bool CSceneGame3D::Init(void)
 	cPoison3D->ActivateCollider(cSimpleShader);
 	cEntityManager->Add(cPoison3D);*/
 
-	CStructure3D* cBarricade = new CStructure3D(glm::vec3(0.f, 0.5f, 20.f), CEntity3D::TYPE::BARRICADE);
-	cBarricade->SetShader(cShader);
-	cBarricade->Init();
-	cBarricade->ActivateCollider(cSimpleShader);
-	cEntityManager->Add(cBarricade);
+	//CStructure3D* cBarricade = new CStructure3D(glm::vec3(0.f, 0.5f, 20.f), CEntity3D::TYPE::BARRICADE);
+	//cBarricade->SetShader(cShader);
+	//cBarricade->Init();
+	//cBarricade->ActivateCollider(cSimpleShader);
+	//cEntityManager->Add(cBarricade);
 
-	float pos = 0.f;
-	for (unsigned int i = 0; i < 5; ++i)
+	//float pos = 0.f;
+	//for (unsigned int i = 0; i < 5; ++i)
+	//{
+	//	CStructure3D* cExplosiveBarrel = new CStructure3D(glm::vec3(pos, 0.3f, 10.f), CEntity3D::TYPE::EXPLOSIVE_BARREL);
+	//	cExplosiveBarrel->SetShader(cShader);
+	//	cExplosiveBarrel->Init();
+	//	cExplosiveBarrel->ActivateCollider(cSimpleShader);
+	//	cEntityManager->Add(cExplosiveBarrel);
+	//	pos += 5.f;
+	//}
+	for (unsigned int i = 0; i < 2; ++i)
 	{
-		CStructure3D* cExplosiveBarrel = new CStructure3D(glm::vec3(pos, 0.5f, 10.f), CEntity3D::TYPE::EXPLOSIVE_BARREL);
-		cExplosiveBarrel->SetShader(cShader);
-		cExplosiveBarrel->Init();
-		cExplosiveBarrel->ActivateCollider(cSimpleShader);
-		cEntityManager->Add(cExplosiveBarrel);
-		pos += 5.f;
+		for (unsigned int j = 0; j < 3; ++j)
+		{
+			if (j != 1)
+			{
+				CStructure3D* cBarricade = new CStructure3D(glm::vec3(0.f + (j * 3.f), 0.4f, -3.f + (i * 6))
+					, CEntity3D::TYPE::BARRICADE , glm::vec3(0.0f, 0.0f, 1.0f));
+				cBarricade->SetShader(cShader);
+				cBarricade->Init();
+				cBarricade->SetFront(glm::vec3(0, 0, 1));
+				cBarricade->ActivateCollider(cSimpleShader);
+				cEntityManager->Add(cBarricade);
+
+				if (i == 0)
+				{
+					CStructure3D* cExplosiveBarrel = new CStructure3D(cBarricade->GetPosition() + glm::vec3(3, 0, -3), CEntity3D::TYPE::EXPLOSIVE_BARREL);
+					cExplosiveBarrel->SetShader(cShader);
+					cExplosiveBarrel->Init();
+					cExplosiveBarrel->ActivateCollider(cSimpleShader);
+					cEntityManager->Add(cExplosiveBarrel);
+				}
+				else
+				{
+					CStructure3D* cExplosiveBarrel = new CStructure3D(cBarricade->GetPosition() + glm::vec3(3, 0, 3), CEntity3D::TYPE::EXPLOSIVE_BARREL);
+					cExplosiveBarrel->SetShader(cShader);
+					cExplosiveBarrel->Init();
+					cExplosiveBarrel->ActivateCollider(cSimpleShader);
+					cEntityManager->Add(cExplosiveBarrel);
+				}
+			}
+		}
 	}
 
+	for (unsigned int i = 0; i < 2; ++i)
+	{
+				CStructure3D* cBarricade = new CStructure3D(glm::vec3(-4.f + (i * 14), 0.4f, 0.f /*+ (j * 1.5f)*/)
+					, CEntity3D::TYPE::BARRICADE , glm::vec3(1,0,0));
+				cBarricade->SetShader(cShader);
+				cBarricade->Init();
+				cBarricade->SetFront(glm::vec3(1, 0, 0));
+				cBarricade->SetfYaw(0.0f);
+				cBarricade->ActivateCollider(cSimpleShader);
+				cEntityManager->Add(cBarricade);
+	}
 	return true;
 }
 
@@ -1016,9 +1060,9 @@ void CSceneGame3D::Render(void)
 	//cTextRenderer->Render(glm::to_string(cPlayer3D->GetPosition()), 10.0f, 30.0f, 0.5f, glm::vec3(1.0f, 1.0f, 0.0f));
 	
 	// Render Player Position
-	//cTextRenderer->Render(glm::to_string(cPlayer3D->GetPosition()),
-						//  10.0f, 30.0f, 0.5f,
-					  	  //glm::vec3(1.0f, 1.0f, 1.0f));
+	cTextRenderer->Render(glm::to_string(cPlayer3D->GetPosition()),
+						  10.0f, 30.0f, 0.5f,
+					  	  glm::vec3(1.0f, 1.0f, 1.0f));
 	   
 	// Render Camera Position
 	//cTextRenderer->Render(glm::to_string(cCamera->vec3Position), 10.0f, 10.0f, 0.5f, glm::vec3(1.0f, 1.0f, 0.0f));
@@ -1027,7 +1071,8 @@ void CSceneGame3D::Render(void)
 	{
 		cTextRenderer->Render(to_string(cPlayer3D->GetWeapon()->GetMagRound()), cSettings->iWindowWidth - 190, 60.0f, 1.5f, glm::vec3(1.0f, 1.0f, 1.0f));
 		cTextRenderer->Render("/", cSettings->iWindowWidth - 120, 60.0f, 1.5f, glm::vec3(1.0f, 1.0f, 1.0f));
-		cTextRenderer->Render(to_string(cPlayer3D->GetWeapon()->GetTotalRound()),  float(cSettings->iWindowWidth - 100), 60.0f, 1.f, glm::vec3(1.0f, 1.0f, 1.0f));
+		if (cPlayer3D->GetWeapon()->GetWeaponName() != Weapon_Type::W_PISTOL)
+			cTextRenderer->Render(to_string(cPlayer3D->GetWeapon()->GetTotalRound()), float(cSettings->iWindowWidth - 100), 60.0f, 1.f, glm::vec3(1.0f, 1.0f, 1.0f));
 		if (cPlayer3D->GetWeapon()->GetIsReloadStatus())
 		{
 			cTextRenderer->Render("Reloading :", 10, 150.0f, 0.5f, glm::vec3(1.0f, 0.0f, 0.0f));
