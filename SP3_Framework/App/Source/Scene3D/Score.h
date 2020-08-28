@@ -41,6 +41,8 @@ public:
 
 	virtual bool Init(void);
 
+	void Update(const double dElapsedTime);
+
 	virtual void BubbleSort();
 
 	virtual void Swap(int location1, int location2);
@@ -48,6 +50,12 @@ public:
 	virtual void UpdateHighScores(void);
 
 	virtual void GetHighScores(void);
+
+	void SetGameTime(const double dGameTime);
+	double GetGameTime() const;
+
+	void SetFinalGameTime(const double dGameTime);
+	double GetFinalGameTime() const;
 
 	std::vector<int>& GetScoreboard();
 
@@ -59,6 +67,9 @@ protected:
 	unsigned int iScore, iScoreToAdd;
 
 	float fMultiplier;
+
+	double dCurrGameTime;
+	double dFinalGameTime;
 
 	std::vector<int> vScoreBoard;
 

@@ -356,9 +356,21 @@ void CSceneMenu3D::Render(void)
 
 	// Render Camera Position
 	if (e_MenuType == MENU_TYPE::M_MAIN_MENU)
+	{
 		cTextRenderer->Render("MAIN MENU", 10.0f, 10.0f, 0.5f, glm::vec3(1.0f, 1.0f, 0.0f));
+
+	}
 	else if (e_MenuType == MENU_TYPE::M_END_MENU)
+	{
 		cTextRenderer->Render("END MENU", 10.0f, 10.0f, 0.5f, glm::vec3(1.0f, 1.0f, 0.0f));
+		CWave* cWave = CWave::GetInstance();
+		if (cWave->GetWaveNumber() > CWave::MAX_WAVE_COUNT)
+		{
+			CScore* cScore = CScore::GetInstance();
+			cTextRenderer->Render("FINAL SCORE: " + std::to_string(cScore->GetScore()), 50.0f, 50.0f, 1.f, glm::vec3(1.0f, 1.0f, 0.0f));
+			cTextRenderer->Render("FINAL TIME: " + std::to_string(cScore->GetFinalGameTime()), 50.0f, 100.0f, 1.f, glm::vec3(1.0f, 1.0f, 0.0f));
+		}
+	}
 
 	int iScoreCounter = 1;
 	float yPos = cSettings->iWindowHeight * 0.5f + 50.f;

@@ -52,6 +52,8 @@ public:
 	std::vector<CEntity3D*>& GetEnemies();
 	void DeleteEnemy(CEntity3D* enemy);
 
+	static const int MAX_WAVE_COUNT = 10;
+
 protected:
 	
 	std::vector<CEntity3D*> vEnemies;
@@ -64,5 +66,6 @@ protected:
 
 	bool bWriteScore;
 
+	bool bAllWavesCleared;
 
 };

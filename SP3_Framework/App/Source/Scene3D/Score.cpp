@@ -7,9 +7,11 @@
 using namespace std;
 
 CScore::CScore()
-	:iScore(0)
-	,fMultiplier(1.f)
-	,iScoreToAdd(100)
+	: iScore(0)
+	, fMultiplier(1.f)
+	, iScoreToAdd(100)
+	, dCurrGameTime(0.0)
+	, dFinalGameTime(0.0)
 {
 }
 
@@ -23,6 +25,11 @@ CScore::~CScore()
 bool CScore::Init(void)
 {
 	return true;
+}
+
+void CScore::Update(const double dElapsedTime)
+{
+	dCurrGameTime += dElapsedTime;
 }
 
 void CScore::BubbleSort()
@@ -80,6 +87,26 @@ void CScore::GetHighScores(void)
 
 	//Sort high score list into the vector
 	BubbleSort();
+}
+
+void CScore::SetGameTime(const double dGameTime)
+{
+	dCurrGameTime = dGameTime;
+}
+
+void CScore::SetFinalGameTime(const double dGameTime)
+{
+	dFinalGameTime = dGameTime;
+}
+
+double CScore::GetFinalGameTime() const
+{
+	return dFinalGameTime;
+}
+
+double CScore::GetGameTime() const
+{
+	return dCurrGameTime;
 }
 
 std::vector<int>& CScore::GetScoreboard()

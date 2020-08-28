@@ -327,13 +327,22 @@ void Application::Run(void)
 		}
 		}
 
+		std::cout << cSceneManager->GetCurrentScene() << std::endl;
 		if (CKeyboardController::GetInstance()->IsKeyPressed(GLFW_KEY_ESCAPE))
 		{
-			if (cSceneManager->GetCurrentScene() != SCENES::SHOP)
+			CSceneMenu3D* cSceneMenu3D = CSceneMenu3D::GetInstance();
+			if (cSceneManager->GetCurrentScene() == SCENES::MENU &&
+				cSceneMenu3D->GetMenuType() == CSceneMenu3D::MENU_TYPE::M_END_MENU)
+			{
+				CWave::GetInstance()->SetWaveNumber(1);
+				cSceneMenu3D->RecalculateButtonPosition();
+				cSceneMenu3D->SetMenuType(CSceneMenu3D::MENU_TYPE::M_MAIN_MENU);
+				CEntityManager::GetInstance()->SetToMenu();
+			}
+			else if (cSceneManager->GetCurrentScene() != SCENES::SHOP)
 			{
 				cSceneManager->DisableScene(SCENES::GAME);
 				cSceneManager->EnableScene(SCENES::MENU);
-				CSceneMenu3D* cSceneMenu3D = CSceneMenu3D::GetInstance();
 				cSceneMenu3D->RecalculateButtonPosition();
 				CEntityManager::GetInstance()->SetToMenu();
 			}
