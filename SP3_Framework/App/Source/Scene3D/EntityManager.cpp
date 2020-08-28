@@ -570,7 +570,7 @@ void CEntityManager::Update(const double dElapsedTime)
 						}
 						else if (cExplosiveBarrel->GetDespawnQueue() == false)
 						{
-							cExplosiveBarrel->SetColliderScale(cExplosiveBarrel->GetColliderScale() * 3.f);
+							cExplosiveBarrel->SetColliderScale(cExplosiveBarrel->GetColliderScale() * 5.f);
 							cExplosiveBarrel->SetDespawnQueue(true);
 							cSoundController->PlaySoundByID(2);
 							if (cExplosiveBarrel->CheckForCollision(cPlayer3D))
@@ -587,7 +587,12 @@ void CEntityManager::Update(const double dElapsedTime)
 								{
 									std::cout << "Enemy hit by explosive barrel explosion" << std::endl;
 									cSoundController->PlaySoundByID(5);
-									tempEnemy->SetHealth(tempEnemy->GetHealth() - 50);
+									tempEnemy->SetHealth(tempEnemy->GetHealth() - 2000);
+									if (tempEnemy->GetHealth() < 0)
+									{
+										FindAndDeletePoison(tempEnemy);
+										tempEnemy->SetToDelete(true);
+									}
 								}
 							}
 							cExplosiveBarrel->SetCollisionState(false);
@@ -610,7 +615,7 @@ void CEntityManager::Update(const double dElapsedTime)
 						}
 						else if (cExplosiveBarrel->GetDespawnQueue() == false)
 						{
-							cExplosiveBarrel->SetColliderScale(cExplosiveBarrel->GetColliderScale() * 3.f);
+							cExplosiveBarrel->SetColliderScale(cExplosiveBarrel->GetColliderScale() * 5.f);
 							cExplosiveBarrel->SetDespawnQueue(true);
 							cSoundController->PlaySoundByID(2);
 							if (cExplosiveBarrel->CheckForCollision(cPlayer3D))
@@ -627,7 +632,12 @@ void CEntityManager::Update(const double dElapsedTime)
 								{
 									std::cout << "Enemy hit by explosive barrel explosion" << std::endl;
 									cSoundController->PlaySoundByID(5);
-									tempEnemy->SetHealth(tempEnemy->GetHealth() - 50);
+									tempEnemy->SetHealth(tempEnemy->GetHealth() - 2000);
+									if (tempEnemy->GetHealth() < 0)
+									{
+										FindAndDeletePoison(tempEnemy);
+										tempEnemy->SetToDelete(true);
+									}
 								}
 							}
 							cExplosiveBarrel->SetCollisionState(false);
@@ -871,15 +881,7 @@ void CEntityManager::DeleteEnemies(void)
 	{
 		if ((*it)->GetType() == CEntity3D::TYPE::ZOMBIE || (*it)->GetType() == CEntity3D::TYPE::POISON)
 		{
-			std::vector<CEntity3D*> tempEntity = CWave::GetInstance()->GetEnemies();
-			for (size_t i = 0; i < tempEntity.size(); ++i)
-			{
-				if (tempEntity.at(i) == (*it))
-				{
-					CWave::GetInstance()->DeleteEnemy((*it));
-					break;
-				}
-			}
+			CWave::GetInstance()->GetEnemies().clear();
 			(*it)->SetToDelete(true);
 		}
 	}
