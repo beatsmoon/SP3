@@ -33,7 +33,7 @@ CStructure3D::CStructure3D(void)
  @param yaw A const float variable which contains the yaw of the camera
  @param pitch A const float variable which contains the pitch of the camera
  */
-CStructure3D::CStructure3D(const glm::vec3 vec3Position, CEntity3D::TYPE type, const glm::vec3 vec3Front, const float fYaw, const float fPitch)
+CStructure3D::CStructure3D(const glm::vec3 vec3Position, CEntity3D::TYPE type,  glm::vec3 vec3Front, const float fYaw, const float fPitch)
 	: cGroundMap(NULL)
 	, iStructureHealth(100)
 	, cPlayer3D(NULL)
@@ -43,6 +43,7 @@ CStructure3D::CStructure3D(const glm::vec3 vec3Position, CEntity3D::TYPE type, c
 {
 	// Set the default position to the origin
 	this->vec3Position = vec3Position;
+	this->vec3Front = vec3Front;
 	SetType(type);
 }
 
@@ -97,9 +98,8 @@ bool CStructure3D::Init(void)
 	{
 	case EXPLOSIVE_BARREL:
 	{
-		vec3Scale = glm::vec3(0.5,0.5,0.5); // OBJ scale
+		vec3Scale = glm::vec3(0.2,0.2,0.2); // OBJ scale
 		vec3ColliderScale = glm::vec3(1.0, 1.0, 1.0); // collider scale
-
 		std::string file_path = "OBJ/explosivebarrel.obj";
 		bool success = LoadOBJ(file_path.c_str(), vertices, uvs, normals);
 		if (!success)
@@ -112,6 +112,7 @@ bool CStructure3D::Init(void)
 	{
 		vec3Scale = glm::vec3(0.25,0.25,0.25); // OBJ scale
 		vec3ColliderScale = glm::vec3(1.0, 1.0, 1.0); // collider scale
+		//model = glm::rotate(model, glm::radians(-fYaw + 90.f), glm::vec3(0.f, 1.f, 0.f));
 
 		std::string file_path = "OBJ/barricade.obj";
 		bool success = LoadOBJ(file_path.c_str(), vertices, uvs, normals);
@@ -289,6 +290,9 @@ void CStructure3D::Render(void)
 		RotateToPlayer();
 		model = glm::rotate(model, glm::radians(-fYaw + 90.f), glm::vec3(0.f, 1.f, 0.f));
 	}
+	else
+		model = glm::rotate(model, glm::radians(-fYaw + 90.f), glm::vec3(0.f, 1.f, 0.f));
+
 	model = glm::scale(model, vec3Scale);
 	
 
@@ -350,6 +354,11 @@ void CStructure3D::SetHealth(const int iStructureHealth)
 int CStructure3D::GetHealth()
 {
 	return iStructureHealth;
+}
+
+void CStructure3D::SetfYaw(float fValue)
+{
+	fYaw = fValue;
 }
 
 void CStructure3D::RotateToPlayer()

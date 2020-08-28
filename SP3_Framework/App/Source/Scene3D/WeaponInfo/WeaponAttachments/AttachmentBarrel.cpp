@@ -310,33 +310,3 @@ CGunBarrel::TIERLEVEL CGunBarrel::GetTierLevel(void) const
 	return eTierLevel;
 }
 
-//CGunBarrel::TIERLEVEL CGunBarrel::SetTier(void)
-//{
-//	//switch (eTierLevel)
-//	//{
-//
-//	//	case NULL:
-//	//	{
-//	//		eTierLevel = TIERLEVEL::TIER1;
-//	//	}
-//	//	break;
-//
-//	//	case TIERLEVEL::TIER1:
-//	//	{
-//	//		eTierLevel = TIERLEVEL::TIER2;
-//	//	}
-//	//	break;
-//
-//	//	case TIERLEVEL::TIER2:
-//	//	{
-//	//		eTierLevel = TIERLEVEL::TIER3;
-//	//	}
-//	//	break;
-//
-//	//	case TIERLEVEL::TIER3:
-//	//	{
-//	//		//do nothing
-//	//	}
-//	//	break;
-//	//
-//}

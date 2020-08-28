@@ -294,56 +294,38 @@ bool CSceneGame3D::Init(void)
 	cRenderHoldingGun->SetShader(cGUIShader);
 	cRenderHoldingGun->Init();
 
-	for (int i = 0; i < 3; i++)
+	for (unsigned int i = 0; i < 2; ++i)
 	{
-		/*int k = Math::RandIntMinMax(0, 2);
+		for (unsigned int j = 0; j < 3; ++j)
+		{
+			if (j != 1)
+			{
+				CStructure3D* cBarricade = new CStructure3D(glm::vec3(0.f + (j * 3.f), 0.4f, -3.f + (i * 6))
+					, CEntity3D::TYPE::BARRICADE , glm::vec3(0.0f, 0.0f, 1.0f));
+				cBarricade->SetShader(cShader);
+				cBarricade->Init();
+				cBarricade->SetFront(glm::vec3(0, 0, 1));
+				cBarricade->ActivateCollider(cSimpleShader);
+				cEntityManager->Add(cBarricade);
 
-		CEnemy3D* cEnemy3D = new CEnemy3D(glm::vec3(Math::RandFloatMinMax(-10.0f, 10.0f), 0.5f, Math::RandFloatMinMax(-10.0f, 10.0f)), 2);
-		cEnemy3D->SetShader(cShader);
-		cEnemy3D->Init();
-		cEnemy3D->ActivateCollider(cSimpleShader);
-		cEntityManager->Add(cEnemy3D);
-
-		CPoison3D* CPoison3D = new CPoison3D(cEnemy3D->GetPosition(), 2, cEnemy3D);
-		CPoison3D->SetShader(cShader);
-		CPoison3D->Init();
-		CPoison3D->ActivateCollider(cSimpleShader);
-		cEntityManager->Add(CPoison3D);*/
-
-	/*	CStructure3D* rifleAmmo = new CStructure3D(glm::vec3(Math::RandFloatMinMax(-10.0f, 10.0f), 0.5f, Math::RandFloatMinMax(-10.0f, 10.0f))
-			, CEntity3D::TYPE::RIFLE_AMMO);
-		rifleAmmo->SetShader(cShader);
-		rifleAmmo->Init();
-		rifleAmmo->ActivateCollider(cSimpleShader);
-		cEntityManager->Add(rifleAmmo);
-
-		CStructure3D* pistolAmmo = new CStructure3D(glm::vec3(Math::RandFloatMinMax(-10.0f, 10.0f), 0.5f, Math::RandFloatMinMax(-10.0f, 10.0f))
-			, CEntity3D::TYPE::PISTOL_AMMO);
-		pistolAmmo->SetShader(cShader);
-		pistolAmmo->Init();
-		pistolAmmo->ActivateCollider(cSimpleShader);
-		cEntityManager->Add(pistolAmmo);*/
-
-
-	}
-
-	
-
-	CStructure3D* cBarricade = new CStructure3D(glm::vec3(0.f, 0.5f, 20.f), CEntity3D::TYPE::BARRICADE);
-	cBarricade->SetShader(cShader);
-	cBarricade->Init();
-	cBarricade->ActivateCollider(cSimpleShader);
-	cEntityManager->Add(cBarricade);
-
-	float pos = 0.f;
-	for (unsigned int i = 0; i < 5; ++i)
-	{
-		CStructure3D* cExplosiveBarrel = new CStructure3D(glm::vec3(pos, 0.5f, 10.f), CEntity3D::TYPE::EXPLOSIVE_BARREL);
-		cExplosiveBarrel->SetShader(cShader);
-		cExplosiveBarrel->Init();
-		cExplosiveBarrel->ActivateCollider(cSimpleShader);
-		cEntityManager->Add(cExplosiveBarrel);
-		pos += 5.f;
+				if (i == 0)
+				{
+					CStructure3D* cExplosiveBarrel = new CStructure3D(cBarricade->GetPosition() + glm::vec3(3, 0, -3), CEntity3D::TYPE::EXPLOSIVE_BARREL);
+					cExplosiveBarrel->SetShader(cShader);
+					cExplosiveBarrel->Init();
+					cExplosiveBarrel->ActivateCollider(cSimpleShader);
+					cEntityManager->Add(cExplosiveBarrel);
+				}
+				else
+				{
+					CStructure3D* cExplosiveBarrel = new CStructure3D(cBarricade->GetPosition() + glm::vec3(3, 0, 3), CEntity3D::TYPE::EXPLOSIVE_BARREL);
+					cExplosiveBarrel->SetShader(cShader);
+					cExplosiveBarrel->Init();
+					cExplosiveBarrel->ActivateCollider(cSimpleShader);
+					cEntityManager->Add(cExplosiveBarrel);
+				}
+			}
+		}
 	}
 
 	dWaveResetTimer = 0.0f;
@@ -1052,9 +1034,9 @@ void CSceneGame3D::Render(void)
 	//cTextRenderer->Render(glm::to_string(cPlayer3D->GetPosition()), 10.0f, 30.0f, 0.5f, glm::vec3(1.0f, 1.0f, 0.0f));
 	
 	// Render Player Position
-	//cTextRenderer->Render(glm::to_string(cPlayer3D->GetPosition()),
-						//  10.0f, 30.0f, 0.5f,
-					  	  //glm::vec3(1.0f, 1.0f, 1.0f));
+	cTextRenderer->Render(glm::to_string(cPlayer3D->GetPosition()),
+						  10.0f, 30.0f, 0.5f,
+					  	  glm::vec3(1.0f, 1.0f, 1.0f));
 	   
 	// Render Camera Position
 	//cTextRenderer->Render(glm::to_string(cCamera->vec3Position), 10.0f, 10.0f, 0.5f, glm::vec3(1.0f, 1.0f, 0.0f));
@@ -1063,6 +1045,7 @@ void CSceneGame3D::Render(void)
 	{
 		cTextRenderer->Render(to_string(cPlayer3D->GetWeapon()->GetMagRound()), cSettings->iWindowWidth - 190, 60.0f, 1.5f, glm::vec3(1.0f, 1.0f, 1.0f));
 		cTextRenderer->Render("/", cSettings->iWindowWidth - 120, 60.0f, 1.5f, glm::vec3(1.0f, 1.0f, 1.0f));
+
 		if (cPlayer3D->GetWeapon()->GetWeaponName() == Weapon_Type::W_PISTOL)
 		{
 			cTextRenderer->Render(to_string(99), float(cSettings->iWindowWidth - 100), 60.0f, 1.f, glm::vec3(1.0f, 1.0f, 1.0f));

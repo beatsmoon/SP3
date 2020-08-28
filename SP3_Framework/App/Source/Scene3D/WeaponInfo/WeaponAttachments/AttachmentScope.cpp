@@ -288,26 +288,7 @@ void CGunScope::Render(void)
 		cCollider->projection = projection;
 		cCollider->Render();
 	}
-		// Activate shader
-	//cShader->use();
 
-	//unsigned int transformLoc;
-	//// get matrix's uniform location and set matrix
-	//transformLoc = glGetUniformLocation(cShader->ID, "transform");
-
-	//// Update the shaders with the latest transform
-	//glUniformMatrix4fv(transformLoc, 1, GL_FALSE, glm::value_ptr(transform));
-
-	//// Get the texture to be rendered
-	//glBindTexture(GL_TEXTURE_2D, iTextureID);
-
-	//// Render the quad
-	//glBindVertexArray(VAO);
-	//glDrawArrays(GL_TRIANGLES, 0, 6);
-
-	//// Reset to default
-	//glBindVertexArray(0);
-	//glBindTexture(GL_TEXTURE_2D, 0);
 }
 
 /**
@@ -322,7 +303,6 @@ void CGunScope::UpgradeScope()
 {
 	eTierLevel = static_cast<TIERLEVEL>(static_cast<int>(eTierLevel) + 1);
 }
-
 
 float CGunScope::GetAdditionMag(void)
 {

@@ -332,21 +332,6 @@ void CPlayer3D::ProcessRotate(float fXOffset, float fYOffset, const bool constra
 	fXOffset *= fMouseSensitivity;
 	fYOffset *= fMouseSensitivity;
 
-	//if (scopeMode == true)
-	//{
-	//	if (GetWeapon()->GetScopeZoom() == 2.0f) // pistol
-	//	{
-
-	//		fXOffset *= 0.9;
-	//		fYOffset *= 0.9;
-	//	}
-	//	else // rifle
-	//	{
-
-	//		fXOffset *= 0.7;
-	//		fYOffset *= 0.7;
-	//	}
-	//}
 	if (scopeMode == true)
 	{
 		if (GetWeapon()->GetScope()->GetTierLevel() == CGunScope::TIERLEVEL::TIER1)
@@ -434,18 +419,12 @@ CWeapon* CPlayer3D::GetInventoryWeapon(const int iSlot) const
 
 glm::vec3 CPlayer3D::CalculateBulletDir()
 {
-	//glm::vec3 front;
-	//front.x = cos(glm::radians(fYaw + Math::RandFloatMinMax(-10, 10))) * cos(glm::radians(fPitch));
-	//front.y = sin(glm::radians(fPitch));
-	//front.z = sin(glm::radians(fYaw)) * cos(glm::radians(fPitch));
-	//vec3Front = glm::normalize(front);
-
+	//Randomize the X and Z axis of bullet
 	glm::vec3 front;
 	front.x = cos(glm::radians(fYaw + Math::RandFloatMinMax(-2, 2))) * cos(glm::radians(fPitch));
 	front.y = sin(glm::radians(fPitch + Math::RandFloatMinMax(-2, 2)));
 	front.z = sin(glm::radians(fYaw + Math::RandFloatMinMax(-2, 2))) * cos(glm::radians(fPitch));
 	vec3Front = glm::normalize(front);
-
 
 	return vec3Front;
 }
@@ -484,11 +463,6 @@ CProjectile* CPlayer3D::DischargeWeapon(void)
 			return cPrimaryWeapon->Discharge(vec3Position, vec3Front, (CEntity3D*)this);
 		}
 
-	/*	if (cPrimaryWeapon->GetWeaponName() == Weapon_Type::W_SHOTGUN)
-			return cPrimaryWeapon->Discharge(vec3Position, CalculateBulletDir(), (CEntity3D*)this);
-		else
-			return cPrimaryWeapon->Discharge(vec3Position, vec3Front, (CEntity3D*)this);*/
-
 	}
 	else if ((iCurrentWeapon == 1) && (cSecondaryWeapon))
 	{
@@ -507,13 +481,7 @@ CProjectile* CPlayer3D::DischargeWeapon(void)
 			//cSoundController->PlaySoundByID(12);
 			return cSecondaryWeapon->Discharge(vec3Position, vec3Front, (CEntity3D*)this);
 		}
-
-		/*if (cSecondaryWeapon->GetWeaponName() == Weapon_Type::W_SHOTGUN)
-			return cSecondaryWeapon->Discharge(vec3Position, CalculateBulletDir(), (CEntity3D*)this);
-		else
-			return cSecondaryWeapon->Discharge(vec3Position, vec3Front, (CEntity3D*)this);*/
 	}
-	return NULL;
 
 	return NULL;
 }
