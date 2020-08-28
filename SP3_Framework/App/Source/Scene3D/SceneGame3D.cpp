@@ -214,7 +214,16 @@ bool CSceneGame3D::Init(void)
 	cGunScope->Init();
 	cGunScope->SetTierLevel(CGunScope::TIERLEVEL::NOTIER);
 
-	CWeapon* rifle = new CWeapon(Weapon_Type::W_AK47);
+	//CWeapon* rifle = new CWeapon(Weapon_Type::W_AK47);
+	//rifle->Init();
+	//rifle->SetShader(cSimpleShader);
+	//cPlayer3D->SetWeapon(0, rifle);
+	//cPlayer3D->SetCurrentWeapon(0);
+	//cPlayer3D->GetWeapon()->SetBarrel(cGunBarrel);
+	//cPlayer3D->GetWeapon()->SetExtMag(cGunExtMag);
+	//cPlayer3D->GetWeapon()->SetScope(cGunScope);
+
+	CWeapon* rifle = new CWeapon(Weapon_Type::W_BAREHAND);
 	rifle->Init();
 	rifle->SetShader(cSimpleShader);
 	cPlayer3D->SetWeapon(0, rifle);
@@ -1022,11 +1031,11 @@ void CSceneGame3D::Render(void)
 	// Render Camera Position
 	//cTextRenderer->Render(glm::to_string(cCamera->vec3Position), 10.0f, 10.0f, 0.5f, glm::vec3(1.0f, 1.0f, 0.0f));
 
-	if (cPlayer3D->GetWeapon() != NULL)
+	if (cPlayer3D->GetWeapon() != NULL && cPlayer3D->GetWeapon()->GetWeaponName() != Weapon_Type::W_BAREHAND)
 	{
 		cTextRenderer->Render(to_string(cPlayer3D->GetWeapon()->GetMagRound()), cSettings->iWindowWidth - 190, 60.0f, 1.5f, glm::vec3(1.0f, 1.0f, 1.0f));
 		cTextRenderer->Render("/", cSettings->iWindowWidth - 120, 60.0f, 1.5f, glm::vec3(1.0f, 1.0f, 1.0f));
-		cTextRenderer->Render(to_string(cPlayer3D->GetWeapon()->GetTotalRound()), cSettings->iWindowWidth - 100, 60.0f, 1.f, glm::vec3(1.0f, 1.0f, 1.0f));
+		cTextRenderer->Render(to_string(cPlayer3D->GetWeapon()->GetTotalRound()),  float(cSettings->iWindowWidth - 100), 60.0f, 1.f, glm::vec3(1.0f, 1.0f, 1.0f));
 		if (cPlayer3D->GetWeapon()->GetIsReloadStatus())
 		{
 			cTextRenderer->Render("Reloading :", 10, 150.0f, 0.5f, glm::vec3(1.0f, 0.0f, 0.0f));
@@ -1034,13 +1043,15 @@ void CSceneGame3D::Render(void)
 			cout << cPlayer3D->GetWeapon()->GetReloadTime() * cPlayer3D->GetReloadSpeedMultiplier() << endl;
 		}
 	}
-	// Render Tier Level For Barrel
-	cTextRenderer->Render(to_string(static_cast<int>(cPlayer3D->GetWeapon()->GetBarrel()->GetTierLevel())), 7.0f, 5.0f, 0.5f, glm::vec3(1.0f, 1.0f, 1.0f));
-	// Render Tier Level For ExtMag
-	cTextRenderer->Render(to_string(static_cast<int>(cPlayer3D->GetWeapon()->GetExtMag()->GetTierLevel())), 40.0f, 5.0f, 0.5f, glm::vec3(1.0f, 1.0f, 1.0f));
-	// Render Tier Level For Scope
-	cTextRenderer->Render(to_string(static_cast<int>(cPlayer3D->GetWeapon()->GetScope()->GetTierLevel())), 71.0f, 5.0f, 0.5f, glm::vec3(1.0f, 1.0f, 1.0f));
-
+	if (cPlayer3D->GetWeapon()->GetWeaponName() != Weapon_Type::W_BAREHAND)
+	{
+		// Render Tier Level For Barrel
+		cTextRenderer->Render(to_string(static_cast<int>(cPlayer3D->GetWeapon()->GetBarrel()->GetTierLevel())), 7.0f, 5.0f, 0.5f, glm::vec3(1.0f, 1.0f, 1.0f));
+		// Render Tier Level For ExtMag
+		cTextRenderer->Render(to_string(static_cast<int>(cPlayer3D->GetWeapon()->GetExtMag()->GetTierLevel())), 40.0f, 5.0f, 0.5f, glm::vec3(1.0f, 1.0f, 1.0f));
+		// Render Tier Level For Scope
+		cTextRenderer->Render(to_string(static_cast<int>(cPlayer3D->GetWeapon()->GetScope()->GetTierLevel())), 71.0f, 5.0f, 0.5f, glm::vec3(1.0f, 1.0f, 1.0f));
+	}
 	cTextRenderer->Render("Score: " + std::to_string(cScore->GetScore()), cSettings->iWindowWidth * 0.01, cSettings->iWindowHeight * 0.88, 1.f, glm::vec3(1.f, 0.f, 0.f));
 
 

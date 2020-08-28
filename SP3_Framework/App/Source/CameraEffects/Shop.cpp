@@ -155,11 +155,11 @@ void CShop::Update(const double dElapsedTime)
 	static float bouncetime = 0.0f;
 
 	//Logic for buying in Shop UI
-	if(bShopActive)
+	if (bShopActive)
 	{
 		if (cMouseController->IsButtonPressed(CMouseController::BUTTON_TYPE::LMB) && bouncetime < GetTickCount64())
 		{
-		
+
 			//Buy sniper
 			if ((cMouseController->GetMousePositionX() >= m_windowWidth * 0.1 && cMouseController->GetMousePositionX() <= m_windowWidth * 0.2625)
 				&& (cMouseController->GetMousePositionY() >= m_windowHeight * 0.125 && cMouseController->GetMousePositionY() <= m_windowHeight * 0.375))
@@ -182,41 +182,41 @@ void CShop::Update(const double dElapsedTime)
 				}
 
 				// If player does not already have sniper
-					if (cPlayer3D->GetInventoryWeapon(0)->GetWeaponName() != Weapon_Type::W_SNIPER)
-					{
-						sItemBought = "Bought Sniper Rifle";
-						delete cPlayer3D->GetInventoryWeapon(0);
+				if (cPlayer3D->GetInventoryWeapon(0)->GetWeaponName() != Weapon_Type::W_SNIPER)
+				{
+					sItemBought = "Bought Sniper Rifle";
+					delete cPlayer3D->GetInventoryWeapon(0);
 
-						//Player buys Sniper
-						CGunBarrel* cGunBarrel = new CGunBarrel();
-						cGunBarrel->SetShader(cShader);
-						cGunBarrel->Init();
-						cGunBarrel->SetTierLevel(CGunBarrel::TIERLEVEL::NOTIER);
+					//Player buys Sniper
+					CGunBarrel* cGunBarrel = new CGunBarrel();
+					cGunBarrel->SetShader(cShader);
+					cGunBarrel->Init();
+					cGunBarrel->SetTierLevel(CGunBarrel::TIERLEVEL::NOTIER);
 
-						CGunExtMag* cGunExtMag = new CGunExtMag();
-						cGunExtMag->SetShader(cShader);
-						cGunExtMag->Init();
-						cGunExtMag->SetTierLevel(CGunExtMag::TIERLEVEL::NOTIER);
+					CGunExtMag* cGunExtMag = new CGunExtMag();
+					cGunExtMag->SetShader(cShader);
+					cGunExtMag->Init();
+					cGunExtMag->SetTierLevel(CGunExtMag::TIERLEVEL::NOTIER);
 
-						CGunScope* cGunScope = new CGunScope();
-						cGunScope->SetShader(cShader);
-						cGunScope->Init();
-						cGunScope->SetTierLevel(CGunScope::TIERLEVEL::TIER3);
+					CGunScope* cGunScope = new CGunScope();
+					cGunScope->SetShader(cShader);
+					cGunScope->Init();
+					cGunScope->SetTierLevel(CGunScope::TIERLEVEL::TIER3);
 
-						CWeapon* rifle = new CWeapon(Weapon_Type::W_SNIPER);
-						rifle->Init();
-						rifle->SetShader(cSimpleShader);
-						cPlayer3D->SetWeapon(0, rifle);
-						cPlayer3D->SetCurrentWeapon(0);
-						cPlayer3D->GetWeapon()->SetBarrel(cGunBarrel);
-						cPlayer3D->GetWeapon()->SetExtMag(cGunExtMag);
-						cPlayer3D->GetWeapon()->SetScope(cGunScope);
-					}
+					CWeapon* rifle = new CWeapon(Weapon_Type::W_SNIPER);
+					rifle->Init();
+					rifle->SetShader(cSimpleShader);
+					cPlayer3D->SetWeapon(0, rifle);
+					cPlayer3D->SetCurrentWeapon(0);
+					cPlayer3D->GetWeapon()->SetBarrel(cGunBarrel);
+					cPlayer3D->GetWeapon()->SetExtMag(cGunExtMag);
+					cPlayer3D->GetWeapon()->SetScope(cGunScope);
+				}
 
-					else
-					{
-						sItemBought = "You already have a Sniper Rifle";
-					}
+				else
+				{
+					sItemBought = "You already have a Sniper Rifle";
+				}
 			}
 
 
@@ -230,7 +230,7 @@ void CShop::Update(const double dElapsedTime)
 					if (cScore->GetScore() < 2500)
 					{
 						sItemBought = "Not enough money";
-						
+
 						return;
 					}
 
@@ -244,36 +244,36 @@ void CShop::Update(const double dElapsedTime)
 						cScore->SetScore(cScore->GetScore() - 2500);
 					}
 
-					
-						sItemBought = "Bought AK47";
-						//Player buys AK47
-						delete cPlayer3D->GetInventoryWeapon(0);
 
-						//Player buys AK47
-						CGunBarrel* cGunBarrel = new CGunBarrel();
-						cGunBarrel->SetShader(cShader);
-						cGunBarrel->Init();
-						cGunBarrel->SetTierLevel(CGunBarrel::TIERLEVEL::NOTIER);
+					sItemBought = "Bought AK47";
+					//Player buys AK47
+					delete cPlayer3D->GetInventoryWeapon(0);
 
-						CGunExtMag* cGunExtMag = new CGunExtMag();
-						cGunExtMag->SetShader(cShader);
-						cGunExtMag->Init();
-						cGunExtMag->SetTierLevel(CGunExtMag::TIERLEVEL::NOTIER);
+					//Player buys AK47
+					CGunBarrel* cGunBarrel = new CGunBarrel();
+					cGunBarrel->SetShader(cShader);
+					cGunBarrel->Init();
+					cGunBarrel->SetTierLevel(CGunBarrel::TIERLEVEL::NOTIER);
 
-						CGunScope* cGunScope = new CGunScope();
-						cGunScope->SetShader(cShader);
-						cGunScope->Init();
-						cGunScope->SetTierLevel(CGunScope::TIERLEVEL::NOTIER);
+					CGunExtMag* cGunExtMag = new CGunExtMag();
+					cGunExtMag->SetShader(cShader);
+					cGunExtMag->Init();
+					cGunExtMag->SetTierLevel(CGunExtMag::TIERLEVEL::NOTIER);
 
-						CWeapon* rifle = new CWeapon(Weapon_Type::W_AK47);
-						rifle->Init();
-						rifle->SetShader(cSimpleShader);
-						cPlayer3D->SetWeapon(0, rifle);
-						cPlayer3D->SetCurrentWeapon(0);
-						cPlayer3D->GetWeapon()->SetBarrel(cGunBarrel);
-						cPlayer3D->GetWeapon()->SetExtMag(cGunExtMag);
-						cPlayer3D->GetWeapon()->SetScope(cGunScope);
-					
+					CGunScope* cGunScope = new CGunScope();
+					cGunScope->SetShader(cShader);
+					cGunScope->Init();
+					cGunScope->SetTierLevel(CGunScope::TIERLEVEL::NOTIER);
+
+					CWeapon* rifle = new CWeapon(Weapon_Type::W_AK47);
+					rifle->Init();
+					rifle->SetShader(cSimpleShader);
+					cPlayer3D->SetWeapon(0, rifle);
+					cPlayer3D->SetCurrentWeapon(0);
+					cPlayer3D->GetWeapon()->SetBarrel(cGunBarrel);
+					cPlayer3D->GetWeapon()->SetExtMag(cGunExtMag);
+					cPlayer3D->GetWeapon()->SetScope(cGunScope);
+
 				}
 
 				else
@@ -341,133 +341,142 @@ void CShop::Update(const double dElapsedTime)
 			}
 
 
-			//Extended Magazine attachment
-			if ((cMouseController->GetMousePositionX() >= m_windowWidth * 0.08984 && cMouseController->GetMousePositionX() <= m_windowWidth * 0.22265)
-				&& (cMouseController->GetMousePositionY() >= m_windowHeight * 0.51315 && cMouseController->GetMousePositionY() <= m_windowHeight * 0.67105))
+			if (cPlayer3D->GetWeapon()->GetWeaponName() != Weapon_Type::W_BAREHAND)
 			{
-				if (cScore->GetScore() < 750)
+				//Extended Magazine attachment
+				if ((cMouseController->GetMousePositionX() >= m_windowWidth * 0.08984 && cMouseController->GetMousePositionX() <= m_windowWidth * 0.22265)
+					&& (cMouseController->GetMousePositionY() >= m_windowHeight * 0.51315 && cMouseController->GetMousePositionY() <= m_windowHeight * 0.67105))
 				{
-					sItemBought = "Not enough money";
+					if (cScore->GetScore() < 750)
+					{
+						sItemBought = "Not enough money";
 
-					return;
+						return;
+					}
+
+					else if (cScore->GetScore() >= 750)
+					{
+						cScore->SetScore(cScore->GetScore() - 750);
+					}
+
+					if (cPlayer3D->GetInventoryWeapon(0)->GetExtMag()->GetTierLevel() != cPlayer3D->GetInventoryWeapon(0)->GetExtMag()->TIER3)
+					{
+
+						cPlayer3D->GetInventoryWeapon(0)->GetExtMag()->UpgradeExtMag();
+
+						cPlayer3D->GetInventoryWeapon(0)->SetMaxMagRound(cPlayer3D->GetInventoryWeapon(0)->GetMaxMagRound()
+							+ cPlayer3D->GetInventoryWeapon(0)->GetExtMag()->GetAdditionMag());
+						sItemBought = "Bought a tier " + std::to_string(static_cast<int>(cPlayer3D->GetInventoryWeapon(0)->GetExtMag()->GetTierLevel())) + "Extended Magazine";
+					}
+
+					else
+					{
+						sItemBought = "Extended Magazine is maxed";
+					}
 				}
 
-				else if (cScore->GetScore() >= 750)
+				//Scope attachment
+				if ((cMouseController->GetMousePositionX() >= m_windowWidth * 0.31641 && cMouseController->GetMousePositionX() <= m_windowWidth * 0.44921)
+					&& (cMouseController->GetMousePositionY() >= m_windowHeight * 0.51315 && cMouseController->GetMousePositionY() <= m_windowHeight * 0.67105))
 				{
-					cScore->SetScore(cScore->GetScore() - 750);
+					if (cScore->GetScore() < 900)
+					{
+						sItemBought = "Not enough money";
+
+						return;
+					}
+
+					else if (cScore->GetScore() >= 900)
+					{
+						cScore->SetScore(cScore->GetScore() - 900);
+					}
+
+					if (cPlayer3D->GetInventoryWeapon(0)->GetScope()->GetTierLevel() != cPlayer3D->GetInventoryWeapon(0)->GetScope()->TIER3)
+					{
+
+						cPlayer3D->GetInventoryWeapon(0)->GetScope()->UpgradeScope();
+						sItemBought = "Bought a tier " + std::to_string(static_cast<int>(cPlayer3D->GetInventoryWeapon(0)->GetScope()->GetTierLevel())) + " Scope";
+					}
+
+					else
+					{
+						sItemBought = "Scope is maxed";
+					}
 				}
 
-				if (cPlayer3D->GetInventoryWeapon(0)->GetExtMag()->GetTierLevel() != cPlayer3D->GetInventoryWeapon(0)->GetExtMag()->TIER3)
+				//Barrel attachment
+				if ((cMouseController->GetMousePositionX() >= m_windowWidth * 0.54297 && cMouseController->GetMousePositionX() <= m_windowWidth * 0.67578)
+					&& (cMouseController->GetMousePositionY() >= m_windowHeight * 0.51315 && cMouseController->GetMousePositionY() <= m_windowHeight * 0.67105))
 				{
+					if (cScore->GetScore() < 1200)
+					{
+						sItemBought = "Not enough money";
 
-					cPlayer3D->GetInventoryWeapon(0)->GetExtMag()->UpgradeExtMag();
+						return;
+					}
 
-					cPlayer3D->GetInventoryWeapon(0)->SetMaxMagRound(cPlayer3D->GetInventoryWeapon(0)->GetMaxMagRound()
-						+ cPlayer3D->GetInventoryWeapon(0)->GetExtMag()->GetAdditionMag());
-					sItemBought = "Bought a tier " + std::to_string(static_cast<int>(cPlayer3D->GetInventoryWeapon(0)->GetExtMag()->GetTierLevel())) + "Extended Magazine";
+					else if (cScore->GetScore() >= 1200)
+					{
+						cScore->SetScore(cScore->GetScore() - 1200);
+					}
+
+					//Player buys barrel attachment;
+					CGunBarrel* cGunBarrel = new CGunBarrel();
+					cGunBarrel->Init();
+
+					if (cPlayer3D->GetInventoryWeapon(0)->GetBarrel()->GetTierLevel() != cPlayer3D->GetInventoryWeapon(0)->GetBarrel()->TIER3)
+					{
+						cPlayer3D->GetInventoryWeapon(0)->GetBarrel()->UpgradeBarrel();
+						//cout << static_cast<int>(cPlayer3D->GetInventoryWeapon(0)->GetBarrel()->GetTierLevel()) << endl;
+						sItemBought = "Bought a tier " + std::to_string(static_cast<int>(cPlayer3D->GetInventoryWeapon(0)->GetBarrel()->GetTierLevel())) + " Barrel";
+					}
+					else
+					{
+						sItemBought = "Barrel is maxed";
+					}
+
 				}
 
-				else
+				//Bottom Left Box
+				if ((cMouseController->GetMousePositionX() >= m_windowWidth * 0.076562 && cMouseController->GetMousePositionX() <= m_windowWidth * 0.1625)
+					&& (cMouseController->GetMousePositionY() >= m_windowHeight * 0.76973 && cMouseController->GetMousePositionY() <= m_windowHeight * 0.92105))
 				{
-					sItemBought = "Extended Magazine is maxed";
+					if (cScore->GetScore() < 500)
+					{
+						sItemBought = "Not enough money";
+						return;
+					}
+
+					else if (cScore->GetScore() >= 500)
+					{
+						cScore->SetScore(cScore->GetScore() - 500);
+					}
+
+					if (cPlayer3D->GetWeapon()->GetTotalRound() != cPlayer3D->GetWeapon()->GetMaxTotalRound())
+					{
+
+						//Player buys Ammo
+						cPlayer3D->GetInventoryWeapon(0)->AddRounds(cPlayer3D->GetInventoryWeapon(0)->GetMaxMagRound());
+						sItemBought = "Ammo Bought" + std::to_string(cPlayer3D->GetInventoryWeapon(0)->GetMagRound()) + " / " +
+							std::to_string(cPlayer3D->GetInventoryWeapon(0)->GetTotalRound());
+
+
+						//Bottom Left Box
+						if ((cMouseController->GetMousePositionX() >= m_windowWidth * 0.076562 && cMouseController->GetMousePositionX() <= m_windowWidth * 0.1625)
+							&& (cMouseController->GetMousePositionY() >= m_windowHeight * 0.76973 && cMouseController->GetMousePositionY() <= m_windowHeight * 0.92105))
+						{
+							cout << "Ammo Bought" << endl;
+							//Player buys Ammo
+							cPlayer3D->GetInventoryWeapon(0)->AddRounds(30);
+
+						}
+					}
+					bouncetime = GetTickCount64() + 500;
 				}
 			}
-
-			//Scope attachment
-			if ((cMouseController->GetMousePositionX() >= m_windowWidth * 0.31641 && cMouseController->GetMousePositionX() <= m_windowWidth * 0.44921)
-				&& (cMouseController->GetMousePositionY() >= m_windowHeight * 0.51315 && cMouseController->GetMousePositionY() <= m_windowHeight * 0.67105))
-			{
-				if (cScore->GetScore() < 900)
-				{
-					sItemBought = "Not enough money";
-
-					return;
-				}
-
-				else if (cScore->GetScore() >= 900)
-				{
-					cScore->SetScore(cScore->GetScore() - 900);
-				}
-
-				if (cPlayer3D->GetInventoryWeapon(0)->GetScope()->GetTierLevel() != cPlayer3D->GetInventoryWeapon(0)->GetScope()->TIER3)
-				{
-
-					cPlayer3D->GetInventoryWeapon(0)->GetScope()->UpgradeScope();
-					sItemBought = "Bought a tier " + std::to_string(static_cast<int>(cPlayer3D->GetInventoryWeapon(0)->GetScope()->GetTierLevel())) + " Scope";
-				}
-
-				else
-				{
-					sItemBought = "Scope is maxed";
-				}
-			}
-
-			//Barrel attachment
-			if ((cMouseController->GetMousePositionX() >= m_windowWidth * 0.54297 && cMouseController->GetMousePositionX() <= m_windowWidth * 0.67578)
-				&& (cMouseController->GetMousePositionY() >= m_windowHeight * 0.51315 && cMouseController->GetMousePositionY() <= m_windowHeight * 0.67105))
-			{
-				if (cScore->GetScore() < 1200)
-				{
-					sItemBought = "Not enough money";
-
-					return;
-				}
-
-				else if (cScore->GetScore() >= 1200)
-				{
-					cScore->SetScore(cScore->GetScore() - 1200);
-				}
-
-				//Player buys barrel attachment;
-				CGunBarrel* cGunBarrel = new CGunBarrel();
-				cGunBarrel->Init();
-
-				if (cPlayer3D->GetInventoryWeapon(0)->GetBarrel()->GetTierLevel() != cPlayer3D->GetInventoryWeapon(0)->GetBarrel()->TIER3)
-				{
-					cPlayer3D->GetInventoryWeapon(0)->GetBarrel()->UpgradeBarrel();
-					//cout << static_cast<int>(cPlayer3D->GetInventoryWeapon(0)->GetBarrel()->GetTierLevel()) << endl;
-					sItemBought = "Bought a tier " + std::to_string(static_cast<int>(cPlayer3D->GetInventoryWeapon(0)->GetBarrel()->GetTierLevel())) + " Barrel";
-				}
-
-				else
-				{
-					sItemBought = "Barrel is maxed";
-				}
-
-			}
-
-			//Bottom Left Box
-			if ((cMouseController->GetMousePositionX() >= m_windowWidth * 0.076562 && cMouseController->GetMousePositionX() <= m_windowWidth * 0.1625)
-				&& (cMouseController->GetMousePositionY() >= m_windowHeight * 0.76973 && cMouseController->GetMousePositionY() <= m_windowHeight * 0.92105))
-			{
-				if (cScore->GetScore() < 500)
-				{
-					sItemBought = "Not enough money";
-					return;
-				}
-
-				else if (cScore->GetScore() >= 500)
-				{
-					cScore->SetScore(cScore->GetScore() - 500);
-				}
-
-				if (cPlayer3D->GetWeapon()->GetTotalRound() != cPlayer3D->GetWeapon()->GetMaxTotalRound())
-				{
-					
-					//Player buys Ammo
-					cPlayer3D->GetInventoryWeapon(0)->AddRounds(cPlayer3D->GetInventoryWeapon(0)->GetMaxMagRound());
-					sItemBought = "Ammo Bought" + std::to_string(cPlayer3D->GetInventoryWeapon(0)->GetMagRound()) + " / " +
-						std::to_string(cPlayer3D->GetInventoryWeapon(0)->GetTotalRound());
-				}
-			}
-
-			bouncetime = GetTickCount64() + 500;
 
 		}
 	}
-
-	
-
 }
 
 //Activate Shop UI

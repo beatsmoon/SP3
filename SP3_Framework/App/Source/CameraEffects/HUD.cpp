@@ -394,6 +394,11 @@ void CHUD::Update(const double dElapsedTime)
 				iTextureID = LoadTexture("Images/GUI/NoAttachment/Scene3D_Holding_Sniper.tga");
 			}
 			break;
+			case Weapon_Type::W_BAREHAND:
+			{
+				iTextureID = 0;
+			}
+			break;
 			}
 		}
 	}
@@ -401,7 +406,7 @@ void CHUD::Update(const double dElapsedTime)
 
 void CHUD::PreRender(void)
 {
-	if (!bActive)
+	if (!bActive || currentType == Weapon_Type::W_BAREHAND)
 		return;
 
 	// bind textures on corresponding texture units
@@ -424,7 +429,7 @@ void CHUD::Render(void)
 	// Activate shader
 	cShader->use();
 
-	if (!bActive)
+	if (!bActive || currentType == Weapon_Type::W_BAREHAND)
 		return;
 
 	unsigned int transformLoc;
@@ -456,7 +461,7 @@ void CHUD::Render(void)
 
 void CHUD::PostRender(void)
 {
-	if (!bActive)
+	if (!bActive || currentType == Weapon_Type::W_BAREHAND)
 		return;
 
 	// Disable blending
