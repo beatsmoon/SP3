@@ -254,7 +254,7 @@ void CEntityManager::Update(const double dElapsedTime)
 {
 	std::list<CEntity3D*>::iterator it, end;
 	std::list<CEntity3D*>::iterator it_other;
-
+ 
 	// Update all CEntity3D
 	end = lEntity3D.end();
 	for (it = lEntity3D.begin(); it != end; ++it)
