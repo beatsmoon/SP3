@@ -179,13 +179,18 @@ void CWEAPONHUD::Update(const double dElapsedTime)
 			iTextureID = LoadTexture("Images/GUI/HUD/NewV2/Scene3D_GUI_Sniper.tga");
 		}
 		break;
+		case Weapon_Type::W_BAREHAND:
+		{
+			iTextureID = 0;
+		}
+		break;
 	}
 
 }
 
 void CWEAPONHUD::PreRender(void)
 {
-	if (!bActive)
+	if (!bActive || type == Weapon_Type::W_BAREHAND)
 		return;
 
 	// bind textures on corresponding texture units
@@ -208,7 +213,7 @@ void CWEAPONHUD::Render(void)
 	// Activate shader
 	cShader->use();
 
-	if (!bActive)
+	if (!bActive || type == Weapon_Type::W_BAREHAND)
 		return;
 
 	unsigned int transformLoc;
@@ -240,7 +245,7 @@ void CWEAPONHUD::Render(void)
 
 void CWEAPONHUD::PostRender(void)
 {
-	if (!bActive)
+	if (!bActive || type == Weapon_Type::W_BAREHAND)
 		return;
 
 	// Disable blending

@@ -601,6 +601,7 @@ void CPlayer3D::SetToJump(void)
  */
 void CPlayer3D::Update(const double dElapsedTime)
 {
+	//if (cPrimaryWeapon != NULL)
 	cPrimaryWeapon->Update(dElapsedTime);
 	cSecondaryWeapon->Update(dElapsedTime);
 

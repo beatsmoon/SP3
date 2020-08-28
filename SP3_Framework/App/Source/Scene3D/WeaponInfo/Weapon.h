@@ -5,6 +5,7 @@
 enum Weapon_Type
 {
 	W_PISTOL,
+	W_BAREHAND,
 	W_M4,
 	W_AK47,
 	W_SHOTGUN,

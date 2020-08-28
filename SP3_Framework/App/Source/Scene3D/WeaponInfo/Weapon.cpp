@@ -55,6 +55,36 @@ void CWeapon::Init(void)
 		fSpeedOfBullet = 30.0f;
 
 		break;
+	case W_BAREHAND:
+
+		// The number of ammunition in a magazine for this weapon
+		iMagRounds = 0;
+		// The maximum number of ammunition for this magazine for this weapon
+		iMaxMagRounds = 0;
+		// The current total number of rounds currently carried by this player
+		iTotalRounds = 0;
+		// The max total number of rounds currently carried by this player
+		iMaxTotalRounds = 0;
+
+		// The time between shots
+		dTimeBetweenShots = 0.3333;
+		// The elapsed time (between shots)
+		dElapsedTime = 0.0;
+		// Boolean flag to indicate if weapon can fire now
+		bFire = true;
+
+		FiringTypeStatus = FIRINGTYPE::SINGLE;
+
+		dReloadElapsedTime = 0.0;
+		dReloadTime = 0.0;
+		bIsReloading = false;
+
+		type = Weapon_Type::W_BAREHAND;
+		fRecoilDeltaAngle = 0.f;
+		fDamage = 0;
+		fSpeedOfBullet = 0.0f;
+
+		break;
 	case W_M4:
 
 		// The number of ammunition in a magazine for this weapon
