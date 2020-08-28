@@ -933,10 +933,8 @@ void CEntityManager::FindAndDeletePoison(CEntity3D* cEntity3D)
 			{
 				poison->SetToDelete(true);
 			}
-
 		}
 	}
-
 }
 
 
