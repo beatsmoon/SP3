@@ -153,7 +153,6 @@ void CShop::Update(const double dElapsedTime)
 	{
 		if (cMouseController->IsButtonPressed(CMouseController::BUTTON_TYPE::LMB) && bouncetime < GetTickCount64())
 		{
-
 			//Buy sniper
 			if ((cMouseController->GetMousePositionX() >= m_windowWidth * 0.1 && cMouseController->GetMousePositionX() <= m_windowWidth * 0.2625)
 				&& (cMouseController->GetMousePositionY() >= m_windowHeight * 0.125 && cMouseController->GetMousePositionY() <= m_windowHeight * 0.375))
@@ -162,12 +161,6 @@ void CShop::Update(const double dElapsedTime)
 				{
 					sItemBought = "Not enough money";
 					return;
-				}
-
-				else
-				{
-					cScore->SetScore(cScore->GetScore() - iSniper);
-					iMoneySpent += iSniper;
 				}
 
 				// If player does not already have sniper
@@ -200,6 +193,9 @@ void CShop::Update(const double dElapsedTime)
 					cPlayer3D->GetWeapon()->SetBarrel(cGunBarrel);
 					cPlayer3D->GetWeapon()->SetExtMag(cGunExtMag);
 					cPlayer3D->GetWeapon()->SetScope(cGunScope);
+
+					cScore->SetScore(cScore->GetScore() - iSniper);
+					iMoneySpent += iSniper;
 				}
 
 				else
@@ -222,11 +218,6 @@ void CShop::Update(const double dElapsedTime)
 						return;
 					}
 
-					else
-					{
-						cScore->SetScore(cScore->GetScore() - iAK);
-						iMoneySpent += iAK;
-					}
 					sItemBought = "Bought AK47";
 					//Player buys AK47
 					delete cPlayer3D->GetInventoryWeapon(0);
@@ -255,6 +246,10 @@ void CShop::Update(const double dElapsedTime)
 					cPlayer3D->GetWeapon()->SetBarrel(cGunBarrel);
 					cPlayer3D->GetWeapon()->SetExtMag(cGunExtMag);
 					cPlayer3D->GetWeapon()->SetScope(cGunScope);
+
+					cScore->SetScore(cScore->GetScore() - iAK);
+					iMoneySpent += iAK;
+
 				}
 
 				else
@@ -271,12 +266,6 @@ void CShop::Update(const double dElapsedTime)
 				{
 					sItemBought = "Not enough money";
 					return;
-				}
-
-				else 
-				{
-					cScore->SetScore(cScore->GetScore() - iShotgun);
-					iMoneySpent += iShotgun;
 				}
 
 				if (cPlayer3D->GetInventoryWeapon(0)->GetWeaponName() != Weapon_Type::W_SHOTGUN)
@@ -308,6 +297,10 @@ void CShop::Update(const double dElapsedTime)
 					cPlayer3D->GetWeapon()->SetBarrel(cGunBarrel);
 					cPlayer3D->GetWeapon()->SetExtMag(cGunExtMag);
 					cPlayer3D->GetWeapon()->SetScope(cGunScope);
+
+					cScore->SetScore(cScore->GetScore() - iShotgun);
+					iMoneySpent += iShotgun;
+
 				}
 
 				else
@@ -328,19 +321,17 @@ void CShop::Update(const double dElapsedTime)
 						sItemBought = "Not enough money";
 						return;
 					}
-					else
-					{
-						cScore->SetScore(cScore->GetScore() - iExtMag);
-						iMoneySpent += iExtMag;
-					}
-
+				
 					if (cPlayer3D->GetInventoryWeapon(0)->GetExtMag()->GetTierLevel() != cPlayer3D->GetInventoryWeapon(0)->GetExtMag()->TIER3)
 					{
 
 						cPlayer3D->GetInventoryWeapon(0)->GetExtMag()->UpgradeExtMag();
 						cPlayer3D->GetInventoryWeapon(0)->SetMaxMagRound(cPlayer3D->GetInventoryWeapon(0)->GetMaxMagRound()
 							+ cPlayer3D->GetInventoryWeapon(0)->GetExtMag()->GetAdditionMag());
-						sItemBought = "Bought a tier " + std::to_string(static_cast<int>(cPlayer3D->GetInventoryWeapon(0)->GetExtMag()->GetTierLevel())) + "Extended Magazine";
+						sItemBought = "Bought a tier " + std::to_string(static_cast<int>(cPlayer3D->GetInventoryWeapon(0)->GetExtMag()->GetTierLevel())) + " Extended Magazine";
+
+						cScore->SetScore(cScore->GetScore() - iExtMag);
+						iMoneySpent += iExtMag;
 					}
 
 					else
@@ -358,16 +349,15 @@ void CShop::Update(const double dElapsedTime)
 						sItemBought = "Not enough money";
 						return;
 					}
-					else
-					{
-						cScore->SetScore(cScore->GetScore() - iScope);
-						iMoneySpent += iScope;
-					}
-
+				
 					if (cPlayer3D->GetInventoryWeapon(0)->GetScope()->GetTierLevel() != cPlayer3D->GetInventoryWeapon(0)->GetScope()->TIER3)
 					{
 						cPlayer3D->GetInventoryWeapon(0)->GetScope()->UpgradeScope();
 						sItemBought = "Bought a tier " + std::to_string(static_cast<int>(cPlayer3D->GetInventoryWeapon(0)->GetScope()->GetTierLevel())) + " Scope";
+
+						cScore->SetScore(cScore->GetScore() - iScope);
+						iMoneySpent += iScope;
+
 					}
 					else
 					{
@@ -384,12 +374,7 @@ void CShop::Update(const double dElapsedTime)
 						sItemBought = "Not enough money";
 						return;
 					}
-					else
-					{
-						cScore->SetScore(cScore->GetScore() - iBarrel);
-						iMoneySpent += iBarrel;
-					}
-
+				
 					//Player buys barrel attachment;
 					CGunBarrel* cGunBarrel = new CGunBarrel();
 					cGunBarrel->Init();
@@ -399,6 +384,10 @@ void CShop::Update(const double dElapsedTime)
 						cPlayer3D->GetInventoryWeapon(0)->GetBarrel()->UpgradeBarrel();
 						//cout << static_cast<int>(cPlayer3D->GetInventoryWeapon(0)->GetBarrel()->GetTierLevel()) << endl;
 						sItemBought = "Bought a tier " + std::to_string(static_cast<int>(cPlayer3D->GetInventoryWeapon(0)->GetBarrel()->GetTierLevel())) + " Barrel";
+
+						cScore->SetScore(cScore->GetScore() - iBarrel);
+						iMoneySpent += iBarrel;
+
 					}
 					else
 					{
@@ -416,26 +405,28 @@ void CShop::Update(const double dElapsedTime)
 						sItemBought = "Not enough money";
 						return;
 					}
-					else
+
+					if (cPlayer3D->GetInventoryWeapon(0)->GetTotalRound() < cPlayer3D->GetInventoryWeapon(0)->GetMaxTotalRound())
 					{
+						sItemBought = "Ammo Bought" + std::to_string(cPlayer3D->GetInventoryWeapon(0)->GetMagRound()) + " / "
+							+ std::to_string(cPlayer3D->GetInventoryWeapon(0)->GetTotalRound() + cPlayer3D->GetInventoryWeapon(0)->GetMaxMagRound());
+						//Player buys Ammo
+						cPlayer3D->GetInventoryWeapon(0)->AddRounds(cPlayer3D->GetInventoryWeapon(0)->GetMaxMagRound());
+
 						cScore->SetScore(cScore->GetScore() - iAmmo);
 						iMoneySpent += iAmmo;
 					}
 
-					//Bottom Left Box
-					if ((cMouseController->GetMousePositionX() >= m_windowWidth * 0.076562 && cMouseController->GetMousePositionX() <= m_windowWidth * 0.1625)
-						&& (cMouseController->GetMousePositionY() >= m_windowHeight * 0.76973 && cMouseController->GetMousePositionY() <= m_windowHeight * 0.92105))
+					else
 					{
-						cout << "Ammo Bought" << endl;
-						//Player buys Ammo
-						cPlayer3D->GetInventoryWeapon(0)->AddRounds(30);
-
+						sItemBought = "Max ammo reached";	
 					}
-						
-					bouncetime = GetTickCount64() + 500;
+
 				}
+				
 			}
 
+			bouncetime = GetTickCount64() + 500;
 		}
 	}
 }

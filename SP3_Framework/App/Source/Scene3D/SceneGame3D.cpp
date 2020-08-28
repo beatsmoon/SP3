@@ -47,6 +47,7 @@ CSceneGame3D::CSceneGame3D(void)
 	, cGroundMap(NULL)
 	, cWave(NULL)
 	, cScore(NULL)
+
 {
 }
 
@@ -324,17 +325,7 @@ bool CSceneGame3D::Init(void)
 
 	}
 
-	/*CBoss3D* cEnemy3D = new CBoss3D(glm::vec3(Math::RandFloatMinMax(-100.0f, 100.0f), 0.5f, Math::RandFloatMinMax(-100.0f, 100.0f)), 0);
-	cEnemy3D->SetShader(cShader);
-	cEnemy3D->Init();
-	cEnemy3D->ActivateCollider(cSimpleShader);
-	cEntityManager->Add(cEnemy3D);
-
-	CPoison3D* cPoison3D = new CPoison3D(cEnemy3D->GetPosition(), glm::uvec2(1,0), cEnemy3D);
-	cPoison3D->SetShader(cShader);
-	cPoison3D->Init();
-	cPoison3D->ActivateCollider(cSimpleShader);
-	cEntityManager->Add(cPoison3D);*/
+	
 
 	CStructure3D* cBarricade = new CStructure3D(glm::vec3(0.f, 0.5f, 20.f), CEntity3D::TYPE::BARRICADE);
 	cBarricade->SetShader(cShader);
@@ -352,6 +343,10 @@ bool CSceneGame3D::Init(void)
 		cEntityManager->Add(cExplosiveBarrel);
 		pos += 5.f;
 	}
+
+	//Initialise type of enemy
+
+	dWaveResetTimer = 0.0f;
 
 	return true;
 }
@@ -607,6 +602,7 @@ void CSceneGame3D::Update(const double dElapsedTime)
 		for (int i = 0; i < BulletPerShot; ++i)
 		{
 			CProjectile* cProjectile = cPlayer3D->DischargeWeapon();
+			
 			if (cProjectile)
 			{
 				cProjectile->SetGravityMultiplier(cPlayer3D->GetWeapon()->CalculateGravityMultiplier());
@@ -674,9 +670,14 @@ void CSceneGame3D::Update(const double dElapsedTime)
 	static double dMainWaveTimer = 0.0f, dBossTimer = 0.0f;
 	static int iPrevWaveScore = 0;
 
-	if (CKeyboardController::GetInstance()->IsKeyPressed(GLFW_KEY_O) && cEntityManager->GetWaveStarted() == false)
+	if (cEntityManager->GetWaveStarted() == false)
 	{
-		cout << cWave->GetWaveNumber() << endl;
+		dWaveResetTimer += dElapsedTime;
+	}
+
+	if (CKeyboardController::GetInstance()->IsKeyPressed(GLFW_KEY_O) && cEntityManager->GetWaveStarted() == false || dWaveResetTimer >= 20)
+	{
+		dWaveResetTimer = 0.0f;
 		cWave->StartWave(cWave->GetWaveNumber());
 	}
 
@@ -691,10 +692,19 @@ void CSceneGame3D::Update(const double dElapsedTime)
 		//If player dies during main wave, reset wave and reset score
 		if (cPlayer3D->GetCurrHealth() < 1)
 		{
+			if (cWave->GetWaveNumber() == 1)
+			{
+				cScore->SetScore(0);
+			}
+			else
+			{
+				cScore->SetScore(iPrevWaveScore - CShop::GetInstance()->GetMoneySpent());
+			}
+
 			cPlayer3D->SetPosition(glm::vec3(0.0f, 0.5f, 0.0f));
 			cPlayer3D->SetCurrHealth(cPlayer3D->GetMaxHealth());
 			cEntityManager->DeleteEnemies();
-			cScore->SetScore(iPrevWaveScore - CShop::GetInstance()->GetMoneySpent());
+			
 			
 		}
 	}
@@ -1049,6 +1059,12 @@ void CSceneGame3D::Render(void)
 	cTextRenderer->Render(std::to_string(cPlayer3D->GetCurrHealth()) + " / " + std::to_string(cPlayer3D->GetMaxHealth()), cSettings->iWindowWidth * 0.1, cSettings->iWindowHeight * 0.95, 0.75f, glm::vec3(1.f, 1.f, 1.f));
 
 	cTextRenderer->Render("Wave: " + std::to_string(cWave->GetWaveNumber()), cSettings->iWindowWidth * 0.01, cSettings->iWindowHeight * 0.83, 1.f, glm::vec3(0.f, 1.f, 0.f));
+
+	if (cEntityManager->GetWaveStarted() == false)
+	{
+		cTextRenderer->Render(std::to_string(20 -dWaveResetTimer) + " until wave starts", cSettings->iWindowWidth * 0.01, cSettings->iWindowHeight * 0.78, 0.75f, glm::vec3(0.f, 1.f, 0.f));
+		cTextRenderer->Render("or press 'O' to start the wave", cSettings->iWindowWidth * 0.01, cSettings->iWindowHeight * 0.73, 0.75f, glm::vec3(0.f, 1.f, 0.f));
+	}
 
 	// Call the cTextRenderer's PostRender()
 	cTextRenderer->PostRender();
