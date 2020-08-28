@@ -1,4 +1,5 @@
 #include "Wave.h"
+#include <algorithm>
 
 CWave::CWave()
 	: cShader(NULL)
@@ -189,4 +190,9 @@ void CWave::SetWriteStatus(bool bWriteScore)
 std::vector<CEntity3D*>& CWave::GetEnemies()
 {
 	return vEnemies;
+}
+
+void CWave::DeleteEnemy(CEntity3D* enemy)
+{
+	vEnemies.erase(std::find(vEnemies.begin(), vEnemies.end(), enemy));
 }

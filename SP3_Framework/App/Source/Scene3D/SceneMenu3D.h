@@ -127,6 +127,8 @@ protected:
 
 	bool bHighscoreEnabled;
 
+	double dInitialisationTime;
+
 public:
 };
 

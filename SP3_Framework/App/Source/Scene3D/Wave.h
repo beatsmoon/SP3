@@ -50,6 +50,7 @@ public:
 	virtual void SetWriteStatus(bool bWriteScore);
 
 	std::vector<CEntity3D*>& GetEnemies();
+	void DeleteEnemy(CEntity3D* enemy);
 
 protected:
 	

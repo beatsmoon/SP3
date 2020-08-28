@@ -283,27 +283,29 @@ void Application::Run(void)
 		&& cSceneManager->CheckForApplicationEnd() == false)
 	{
 		// TODO: Add conditions for how scenes should be changed. E.g. Press A to change to second scene
-		if (CKeyboardController::GetInstance()->IsKeyPressed(GLFW_KEY_P) && CShop::GetInstance()->GetStatus() == false)
+		if (cSceneManager->GetCurrentScene() == SCENES::GAME || cSceneManager->GetCurrentScene() == SCENES::SHOP)
 		{
-			static double InputDelay = 5.f;
-			if (InputDelay < 5.f)
+			if (CKeyboardController::GetInstance()->IsKeyPressed(GLFW_KEY_P) && CShop::GetInstance()->GetStatus() == false)
 			{
-				InputDelay += 1.f;
+				static double InputDelay = 5.f;
+				if (InputDelay < 5.f)
+				{
+					InputDelay += 1.f;
 
+				}
+
+				else
+				{
+					InputDelay = 0.f;
+					cSettings->SetMousePointer(false, true);
+					CShop::GetInstance()->ActivateShop();
+					CSceneManager::GetInstance()->EnableScene(SCENES::SHOP);
+					CSceneManager::GetInstance()->DisableScene(SCENES::GAME);
+
+					isShopOpened = true;
+				}
 			}
-
-			else
-			{
-				InputDelay = 0.f;
-				cSettings->SetMousePointer(false, true);
-				CShop::GetInstance()->ActivateShop();
-				CSceneManager::GetInstance()->EnableScene(SCENES::SHOP);
-				CSceneManager::GetInstance()->DisableScene(SCENES::GAME);
-
-				isShopOpened = true;
-			}
-		}
-		else if (CKeyboardController::GetInstance()->IsKeyPressed(GLFW_KEY_P) && CShop::GetInstance()->GetStatus() == true)
+			else if (CKeyboardController::GetInstance()->IsKeyPressed(GLFW_KEY_P) && CShop::GetInstance()->GetStatus() == true)
 		{
 			static double InputDelay = 5.f;
 			if (InputDelay < 5.f)
@@ -322,6 +324,7 @@ void Application::Run(void)
 
 				isShopOpened = false;
 			}
+		}
 		}
 
 		if (CKeyboardController::GetInstance()->IsKeyPressed(GLFW_KEY_ESCAPE))

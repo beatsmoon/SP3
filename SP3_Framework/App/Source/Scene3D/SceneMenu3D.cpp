@@ -56,6 +56,7 @@ CSceneMenu3D::CSceneMenu3D(void)
 	, cPistol(NULL)
 	, bHighscoreEnabled(false)
 	, cCrossHair(NULL) 
+	, dInitialisationTime(0.0)
 {
 }
 
@@ -141,7 +142,14 @@ bool CSceneMenu3D::Init(void)
 */
 void CSceneMenu3D::Update(const double dElapsedTime)
 {
-	
+	// Give the compiler about 0.125s to calculate cursor pos and set it to center.
+	// This prevents menu bug where camera turns towards the cursor position at the start of the application
+	if (dInitialisationTime < 0.125)
+	{
+		dInitialisationTime += dElapsedTime;
+		return;
+	}
+
 	if (cPlayer3D->IsCameraAttached())
 	{
 		// Get Mouse updates
@@ -183,7 +191,7 @@ void CSceneMenu3D::Update(const double dElapsedTime)
 			}
 			//if (i == BulletPerShot - 1)
 			{
-				cPistol->SetMagRound((cPistol->GetMagRound()) - 1);
+				//cPistol->SetMagRound((cPistol->GetMagRound()) - 1);
 				//cPistol->SetCanFire(false);
 			}
 		}
