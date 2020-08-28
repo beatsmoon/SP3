@@ -561,7 +561,7 @@ void CEntityManager::Update(const double dElapsedTime)
 						if (cExplosiveBarrel->GetHealth() > 0)
 						{
 							cExplosiveBarrel->SetHealth(cExplosiveBarrel->GetHealth() - cPlayer3D->GetWeapon()->GetDamageOutput());
-							//cSoundController->PlaySoundByID(5);
+							cSoundController->PlaySoundByID(19);
 						}
 						else if (cExplosiveBarrel->GetDespawnQueue() == false)
 						{
@@ -601,7 +601,7 @@ void CEntityManager::Update(const double dElapsedTime)
 						if (cExplosiveBarrel->GetHealth() > 0)
 						{
 							cExplosiveBarrel->SetHealth(cExplosiveBarrel->GetHealth() - cPlayer3D->GetWeapon()->GetDamageOutput());
-							//cSoundController->PlaySoundByID(5);
+							cSoundController->PlaySoundByID(19);
 						}
 						else if (cExplosiveBarrel->GetDespawnQueue() == false)
 						{
@@ -642,7 +642,7 @@ void CEntityManager::Update(const double dElapsedTime)
 						if (cBarricade->GetHealth() > 0)
 						{
 							cBarricade->SetHealth(cBarricade->GetHealth() - (cPlayer3D->GetWeapon()->GetDamageOutput() * cPlayer3D->GetDmageMultiplier()));
-							//cSoundController->PlaySoundByID(5);
+							cSoundController->PlaySoundByID(19);
 						}
 						else if (cBarricade->GetDespawnQueue() == false)
 						{
@@ -660,7 +660,7 @@ void CEntityManager::Update(const double dElapsedTime)
 						if (cBarricade->GetHealth() > 0)
 						{
 							cBarricade->SetHealth(cBarricade->GetHealth() - (cPlayer3D->GetWeapon()->GetDamageOutput() * cPlayer3D->GetDmageMultiplier()));
-							//cSoundController->PlaySoundByID(5);
+							cSoundController->PlaySoundByID(19);
 						}
 						else if (cBarricade->GetDespawnQueue() == false)
 						{

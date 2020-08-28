@@ -101,7 +101,13 @@ bool CScene3D::Init(void)
 	cSoundController->LoadSound(FileSystem::getPath("Sounds\\boss.ogg"), 13, true);
 	cSoundController->LoadSound(FileSystem::getPath("Sounds\\menu.ogg"), 14, true);
 	cSoundController->LoadSound(FileSystem::getPath("Sounds\\hurt.ogg"), 15, true);
-	
+	cSoundController->LoadSound(FileSystem::getPath("Sounds\\shop_open.ogg"), 16, true);
+	cSoundController->LoadSound(FileSystem::getPath("Sounds\\shop_close.ogg"), 17, true);
+	cSoundController->LoadSound(FileSystem::getPath("Sounds\\shop_buy.ogg"), 18, true);
+	cSoundController->LoadSound(FileSystem::getPath("Sounds\\bullet_hit_metal.ogg"), 19, true);
+	cSoundController->LoadSound(FileSystem::getPath("Sounds\\bullet_empty.ogg"), 20, true);
+	cSoundController->LoadSound(FileSystem::getPath("Sounds\\wave_start.ogg"), 21, true);
+
 
 
 	for (int i = 0; i < 9; ++i)

@@ -293,10 +293,10 @@ void Application::Run(void)
 					InputDelay += 1.f;
 
 				}
-
 				else
 				{
 					InputDelay = 0.f;
+					CSoundController::GetInstance()->PlaySoundByID(16);
 					cSettings->SetMousePointer(false, true);
 					CShop::GetInstance()->ActivateShop();
 					CSceneManager::GetInstance()->EnableScene(SCENES::SHOP);
@@ -313,10 +313,10 @@ void Application::Run(void)
 					InputDelay += 1.f;
 
 				}
-
 				else
 				{
 					InputDelay = 0.f;
+					CSoundController::GetInstance()->PlaySoundByID(17);
 					cSettings->SetMousePointer(true, false);
 					CShop::GetInstance()->DeactivateShop();
 					CSceneManager::GetInstance()->DisableScene(SCENES::SHOP);

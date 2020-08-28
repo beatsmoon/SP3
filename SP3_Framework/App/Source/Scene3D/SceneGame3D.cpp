@@ -353,6 +353,8 @@ bool CSceneGame3D::Init(void)
 		pos += 5.f;
 	}
 
+	cScore->SetScore(100000);
+
 	return true;
 }
 
@@ -436,7 +438,7 @@ void CSceneGame3D::Update(const double dElapsedTime)
 			}
 			else
 			{
-				//cout << "there is no weapon to reload" << endl;
+				cout << "there is no weapon to reload" << endl;
 			}
 		}
 
@@ -578,8 +580,11 @@ void CSceneGame3D::Update(const double dElapsedTime)
 		cCamera->ProcessMouseScroll(	(float)cMouseController->GetMouseScrollStatus(
 											CMouseController::SCROLL_TYPE::SCROLL_TYPE_YOFFSET));
 	}
-
-	if (cMouseController->IsButtonDown(CMouseController::BUTTON_TYPE::LMB) && cPlayer3D->GetWeapon()->GetMagRound() > 0
+	if (cMouseController->IsButtonDown(CMouseController::BUTTON_TYPE::LMB) && cPlayer3D->GetWeapon()->GetMagRound() < 1)
+	{
+		cSoundController->PlaySoundByID(20);
+	}
+	else if (cMouseController->IsButtonDown(CMouseController::BUTTON_TYPE::LMB) && cPlayer3D->GetWeapon()->GetMagRound() > 0
 		&& cPlayer3D->GetWeapon()->GetFiringType() == CWeaponInfo::FIRINGTYPE::AUTO && cPlayer3D->GetWeapon()->GetCanFire()) 
 	{
 
@@ -1027,7 +1032,15 @@ void CSceneGame3D::Render(void)
 	{
 		cTextRenderer->Render(to_string(cPlayer3D->GetWeapon()->GetMagRound()), cSettings->iWindowWidth - 190, 60.0f, 1.5f, glm::vec3(1.0f, 1.0f, 1.0f));
 		cTextRenderer->Render("/", cSettings->iWindowWidth - 120, 60.0f, 1.5f, glm::vec3(1.0f, 1.0f, 1.0f));
-		cTextRenderer->Render(to_string(cPlayer3D->GetWeapon()->GetTotalRound()),  float(cSettings->iWindowWidth - 100), 60.0f, 1.f, glm::vec3(1.0f, 1.0f, 1.0f));
+		if (cPlayer3D->GetWeapon()->GetWeaponName() == Weapon_Type::W_PISTOL)
+		{
+			cTextRenderer->Render(to_string(99), float(cSettings->iWindowWidth - 100), 60.0f, 1.f, glm::vec3(1.0f, 1.0f, 1.0f));
+		}
+		else
+		{
+			cTextRenderer->Render(to_string(cPlayer3D->GetWeapon()->GetTotalRound()), float(cSettings->iWindowWidth - 100), 60.0f, 1.f, glm::vec3(1.0f, 1.0f, 1.0f));
+		}
+		
 		if (cPlayer3D->GetWeapon()->GetIsReloadStatus())
 		{
 			cTextRenderer->Render("Reloading :", 10, 150.0f, 0.5f, glm::vec3(1.0f, 0.0f, 0.0f));

@@ -35,6 +35,8 @@ void CWave::Init(void)
 //Set the number and stats of enemies in each wave
 void CWave::StartWave(int waveNumber)
 {
+	CSoundController::GetInstance()->PlaySoundByID(21);
+
 	//Zombie Zombie Type 1
 	CEnemy3D* cEnemy3DType1 = NULL;
 	CEnemy3D* cEnemy3DType2 = NULL;
@@ -44,6 +46,7 @@ void CWave::StartWave(int waveNumber)
 	//Immediately spawn enemies 
 	for (int i = 0; i < waveNumber + 3; ++i)
 	{
+
 		int k;
 		if (waveNumber <= 3)
 		{

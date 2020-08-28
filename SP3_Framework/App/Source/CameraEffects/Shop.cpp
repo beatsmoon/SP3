@@ -158,21 +158,22 @@ void CShop::Update(const double dElapsedTime)
 			if ((cMouseController->GetMousePositionX() >= m_windowWidth * 0.1 && cMouseController->GetMousePositionX() <= m_windowWidth * 0.2625)
 				&& (cMouseController->GetMousePositionY() >= m_windowHeight * 0.125 && cMouseController->GetMousePositionY() <= m_windowHeight * 0.375))
 			{
-				if (cScore->GetScore() < 1500)
-				{
-					sItemBought = "Not enough money";
-					return;
-				}
-
-				else
-				{
-					cScore->SetScore(cScore->GetScore() - iSniper);
-					iMoneySpent += iSniper;
-				}
-
+				
 				// If player does not already have sniper
 				if (cPlayer3D->GetInventoryWeapon(0)->GetWeaponName() != Weapon_Type::W_SNIPER)
 				{
+					if (cScore->GetScore() < 1500)
+					{
+						sItemBought = "Not enough money";
+						return;
+					}
+					else
+					{
+						cScore->SetScore(cScore->GetScore() - iSniper);
+						iMoneySpent += iSniper;
+					}
+
+					CSoundController::GetInstance()->PlaySoundByID(18);
 					sItemBought = "Bought Sniper Rifle";
 					delete cPlayer3D->GetInventoryWeapon(0);
 
@@ -201,14 +202,11 @@ void CShop::Update(const double dElapsedTime)
 					cPlayer3D->GetWeapon()->SetExtMag(cGunExtMag);
 					cPlayer3D->GetWeapon()->SetScope(cGunScope);
 				}
-
 				else
 				{
 					sItemBought = "You already have a Sniper Rifle";
 				}
 			}
-
-
 			//Buy AK47
 			if ((cMouseController->GetMousePositionX() >= m_windowWidth * 0.7375 && cMouseController->GetMousePositionX() <= m_windowWidth * 0.9)
 				&& (cMouseController->GetMousePositionY() >= m_windowHeight * 0.125 && cMouseController->GetMousePositionY() <= m_windowHeight * 0.375))
@@ -227,6 +225,8 @@ void CShop::Update(const double dElapsedTime)
 						cScore->SetScore(cScore->GetScore() - iAK);
 						iMoneySpent += iAK;
 					}
+
+					CSoundController::GetInstance()->PlaySoundByID(18);
 					sItemBought = "Bought AK47";
 					//Player buys AK47
 					delete cPlayer3D->GetInventoryWeapon(0);
@@ -255,6 +255,7 @@ void CShop::Update(const double dElapsedTime)
 					cPlayer3D->GetWeapon()->SetBarrel(cGunBarrel);
 					cPlayer3D->GetWeapon()->SetExtMag(cGunExtMag);
 					cPlayer3D->GetWeapon()->SetScope(cGunScope);
+					
 				}
 
 				else
@@ -267,20 +268,21 @@ void CShop::Update(const double dElapsedTime)
 			if ((cMouseController->GetMousePositionX() >= m_windowWidth * 0.41875 && cMouseController->GetMousePositionX() <= m_windowWidth * 0.58125)
 				&& (cMouseController->GetMousePositionY() >= m_windowHeight * 0.125 && cMouseController->GetMousePositionY() <= m_windowHeight * 0.375))
 			{
-				if (cScore->GetScore() < 1000)
-				{
-					sItemBought = "Not enough money";
-					return;
-				}
-
-				else 
-				{
-					cScore->SetScore(cScore->GetScore() - iShotgun);
-					iMoneySpent += iShotgun;
-				}
-
 				if (cPlayer3D->GetInventoryWeapon(0)->GetWeaponName() != Weapon_Type::W_SHOTGUN)
 				{
+					if (cScore->GetScore() < 1000)
+					{
+						sItemBought = "Not enough money";
+						return;
+					}
+
+					else
+					{
+						cScore->SetScore(cScore->GetScore() - iShotgun);
+						iMoneySpent += iShotgun;
+					}
+
+					CSoundController::GetInstance()->PlaySoundByID(18);
 					sItemBought = "Bought Shotgun";
 					//Player buys shotgun
 					delete cPlayer3D->GetInventoryWeapon(0);
@@ -323,26 +325,25 @@ void CShop::Update(const double dElapsedTime)
 				if ((cMouseController->GetMousePositionX() >= m_windowWidth * 0.08984 && cMouseController->GetMousePositionX() <= m_windowWidth * 0.22265)
 					&& (cMouseController->GetMousePositionY() >= m_windowHeight * 0.51315 && cMouseController->GetMousePositionY() <= m_windowHeight * 0.67105))
 				{
-					if (cScore->GetScore() < 750)
-					{
-						sItemBought = "Not enough money";
-						return;
-					}
-					else
-					{
-						cScore->SetScore(cScore->GetScore() - iExtMag);
-						iMoneySpent += iExtMag;
-					}
-
 					if (cPlayer3D->GetInventoryWeapon(0)->GetExtMag()->GetTierLevel() != cPlayer3D->GetInventoryWeapon(0)->GetExtMag()->TIER3)
 					{
+						if (cScore->GetScore() < 750)
+						{
+							sItemBought = "Not enough money";
+							return;
+						}
+						else
+						{
+							cScore->SetScore(cScore->GetScore() - iExtMag);
+							iMoneySpent += iExtMag;
+						}
 
+						CSoundController::GetInstance()->PlaySoundByID(18);
 						cPlayer3D->GetInventoryWeapon(0)->GetExtMag()->UpgradeExtMag();
 						cPlayer3D->GetInventoryWeapon(0)->SetMaxMagRound(cPlayer3D->GetInventoryWeapon(0)->GetMaxMagRound()
 							+ cPlayer3D->GetInventoryWeapon(0)->GetExtMag()->GetAdditionMag());
 						sItemBought = "Bought a tier " + std::to_string(static_cast<int>(cPlayer3D->GetInventoryWeapon(0)->GetExtMag()->GetTierLevel())) + "Extended Magazine";
 					}
-
 					else
 					{
 						sItemBought = "Extended Magazine is maxed";
@@ -353,19 +354,20 @@ void CShop::Update(const double dElapsedTime)
 				if ((cMouseController->GetMousePositionX() >= m_windowWidth * 0.31641 && cMouseController->GetMousePositionX() <= m_windowWidth * 0.44921)
 					&& (cMouseController->GetMousePositionY() >= m_windowHeight * 0.51315 && cMouseController->GetMousePositionY() <= m_windowHeight * 0.67105))
 				{
-					if (cScore->GetScore() < 900)
-					{
-						sItemBought = "Not enough money";
-						return;
-					}
-					else
-					{
-						cScore->SetScore(cScore->GetScore() - iScope);
-						iMoneySpent += iScope;
-					}
-
 					if (cPlayer3D->GetInventoryWeapon(0)->GetScope()->GetTierLevel() != cPlayer3D->GetInventoryWeapon(0)->GetScope()->TIER3)
 					{
+						if (cScore->GetScore() < 900)
+						{
+							sItemBought = "Not enough money";
+							return;
+						}
+						else
+						{
+							cScore->SetScore(cScore->GetScore() - iScope);
+							iMoneySpent += iScope;
+						}
+
+						CSoundController::GetInstance()->PlaySoundByID(18);
 						cPlayer3D->GetInventoryWeapon(0)->GetScope()->UpgradeScope();
 						sItemBought = "Bought a tier " + std::to_string(static_cast<int>(cPlayer3D->GetInventoryWeapon(0)->GetScope()->GetTierLevel())) + " Scope";
 					}
@@ -379,23 +381,24 @@ void CShop::Update(const double dElapsedTime)
 				if ((cMouseController->GetMousePositionX() >= m_windowWidth * 0.54297 && cMouseController->GetMousePositionX() <= m_windowWidth * 0.67578)
 					&& (cMouseController->GetMousePositionY() >= m_windowHeight * 0.51315 && cMouseController->GetMousePositionY() <= m_windowHeight * 0.67105))
 				{
-					if (cScore->GetScore() < 1200)
-					{
-						sItemBought = "Not enough money";
-						return;
-					}
-					else
-					{
-						cScore->SetScore(cScore->GetScore() - iBarrel);
-						iMoneySpent += iBarrel;
-					}
-
-					//Player buys barrel attachment;
-					CGunBarrel* cGunBarrel = new CGunBarrel();
-					cGunBarrel->Init();
-
 					if (cPlayer3D->GetInventoryWeapon(0)->GetBarrel()->GetTierLevel() != cPlayer3D->GetInventoryWeapon(0)->GetBarrel()->TIER3)
 					{
+						if (cScore->GetScore() < 1200)
+						{
+							sItemBought = "Not enough money";
+							return;
+						}
+						else
+						{
+							cScore->SetScore(cScore->GetScore() - iBarrel);
+							iMoneySpent += iBarrel;
+						}
+
+						//Player buys barrel attachment;
+						CGunBarrel* cGunBarrel = new CGunBarrel();
+						cGunBarrel->Init();
+
+						CSoundController::GetInstance()->PlaySoundByID(18);
 						cPlayer3D->GetInventoryWeapon(0)->GetBarrel()->UpgradeBarrel();
 						//cout << static_cast<int>(cPlayer3D->GetInventoryWeapon(0)->GetBarrel()->GetTierLevel()) << endl;
 						sItemBought = "Bought a tier " + std::to_string(static_cast<int>(cPlayer3D->GetInventoryWeapon(0)->GetBarrel()->GetTierLevel())) + " Barrel";
@@ -404,9 +407,7 @@ void CShop::Update(const double dElapsedTime)
 					{
 						sItemBought = "Barrel is maxed";
 					}
-
 				}
-
 				//Bottom Left Box
 				if ((cMouseController->GetMousePositionX() >= m_windowWidth * 0.076562 && cMouseController->GetMousePositionX() <= m_windowWidth * 0.1625)
 					&& (cMouseController->GetMousePositionY() >= m_windowHeight * 0.76973 && cMouseController->GetMousePositionY() <= m_windowHeight * 0.92105))
@@ -416,24 +417,25 @@ void CShop::Update(const double dElapsedTime)
 						sItemBought = "Not enough money";
 						return;
 					}
-					else
+
+					if (cPlayer3D->GetInventoryWeapon(0)->GetTotalRound() < cPlayer3D->GetInventoryWeapon(0)->GetMaxTotalRound())
 					{
+						sItemBought = "Ammo Bought" + std::to_string(cPlayer3D->GetInventoryWeapon(0)->GetMagRound()) + " / "
+							+ std::to_string(cPlayer3D->GetInventoryWeapon(0)->GetTotalRound() + cPlayer3D->GetInventoryWeapon(0)->GetMaxMagRound());
+						//Player buys Ammo
+						cPlayer3D->GetInventoryWeapon(0)->AddRounds(cPlayer3D->GetInventoryWeapon(0)->GetMaxMagRound());
+
 						cScore->SetScore(cScore->GetScore() - iAmmo);
 						iMoneySpent += iAmmo;
 					}
 
-					//Bottom Left Box
-					if ((cMouseController->GetMousePositionX() >= m_windowWidth * 0.076562 && cMouseController->GetMousePositionX() <= m_windowWidth * 0.1625)
-						&& (cMouseController->GetMousePositionY() >= m_windowHeight * 0.76973 && cMouseController->GetMousePositionY() <= m_windowHeight * 0.92105))
+					else
 					{
-						cout << "Ammo Bought" << endl;
-						//Player buys Ammo
-						cPlayer3D->GetInventoryWeapon(0)->AddRounds(30);
-
+						sItemBought = "Max ammo reached";
 					}
-						
-					bouncetime = GetTickCount64() + 500;
+
 				}
+
 			}
 
 		}
