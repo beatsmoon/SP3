@@ -373,15 +373,6 @@ void CSceneGame3D::Update(const double dElapsedTime)
 
 	cPlayer3D->StorePositionForRollback();
 
-	if (!cEntityManager->GetWaveStarted())
-	{
-		if (cPlayer3D->GetCurrHealth() < 1)
-		{
-			cPlayer3D->SetPosition(glm::vec3(0.0f, 0.5f, 0.0f));
-			cPlayer3D->SetCurrHealth(cPlayer3D->GetMaxHealth());
-		}
-	}
-
 	static float dCountdown = 500;
 	dCountdown += dElapsedTime;
 	if (dCountdown > 500)
@@ -697,6 +688,23 @@ void CSceneGame3D::Update(const double dElapsedTime)
 	{
 		dWaveResetTimer = 0.0f;
 		cWave->StartWave(cWave->GetWaveNumber());
+	}
+
+	if (!cEntityManager->GetWaveStarted())
+	{
+		if (cPlayer3D->GetCurrHealth() < 1)
+		{
+			cPlayer3D->SetPosition(glm::vec3(0.0f, 0.5f, 0.0f));
+			cPlayer3D->SetCurrHealth(cPlayer3D->GetMaxHealth());
+			if (cWave->GetWaveNumber() == 1)
+			{
+				cScore->SetScore(0);
+			}
+			else
+			{
+				cScore->SetScore(iPrevWaveScore - CShop::GetInstance()->GetMoneySpent());
+			}
+		}
 	}
 
 	//While wave is ongoing
