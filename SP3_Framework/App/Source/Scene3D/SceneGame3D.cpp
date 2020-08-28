@@ -26,6 +26,8 @@
 
 #include "CVirus.h"
 
+#include "../SceneControl/SceneManager.h"
+
 using namespace std;
 
 /**
@@ -354,6 +356,21 @@ bool CSceneGame3D::Init(void)
 */
 void CSceneGame3D::Update(const double dElapsedTime)
 {
+	cScore->Update(dElapsedTime);
+
+	if (cKeyboardController->IsKeyPressed(GLFW_KEY_L))
+	{
+		cWave->SetWaveNumber(11);
+	}
+	if (cWave->GetWaveNumber() > CWave::MAX_WAVE_COUNT)
+	{
+		CSceneManager* cSceneManager = CSceneManager::GetInstance();
+		cSceneManager->DisableScene(cSceneManager->GetCurrentScene());
+		cSceneManager->EnableScene(SCENES::GAME_END);
+		cScore->SetFinalGameTime(cScore->GetGameTime());
+		cScore->SetGameTime(0.0);
+	}
+
 	cPlayer3D->StorePositionForRollback();
 
 	if (!cEntityManager->GetWaveStarted())

@@ -692,14 +692,16 @@ void CEntityManager::CleanUp(void)
 	{
 		if ((*it)->IsToDelete())
 		{
-			if ((*it)->GetType() == CEntity3D::TYPE::ZOMBIE || (*it)->GetType() == CEntity3D::TYPE::BOSS)
+			if ((*it)->GetType() == CEntity3D::TYPE::ZOMBIE)
 			{
 				std::vector<CEntity3D*> tempEntity = CWave::GetInstance()->GetEnemies();
 				for (size_t i = 0; i < tempEntity.size(); ++i)
 				{
-					if ((*it) == tempEntity.at(i))
+					if (tempEntity.at(i) == (*it))
 					{
-						tempEntity.erase(tempEntity.begin() + i);
+						CWave::GetInstance()->DeleteEnemy((*it));
+						std::cout << CWave::GetInstance()->GetEnemies().size() << std::endl;
+						break;
 					}
 				}
 			}
@@ -799,9 +801,11 @@ bool CEntityManager::CheckWave(void)
 
 			if (EntityCounter == lEntity3D.size())
 			{
+				CWave::GetInstance()->GetEnemies().clear();
 				return true;
 			}
 		}
+
 	}
 }
 
@@ -827,6 +831,7 @@ bool CEntityManager::CheckBoss(void)
 		{
 			SetWaveStarted(false);
 			bIsBossAlive = false;
+			CWave::GetInstance()->GetEnemies().clear();
 			return true;
 		}
 	}
@@ -866,6 +871,15 @@ void CEntityManager::DeleteEnemies(void)
 	{
 		if ((*it)->GetType() == CEntity3D::TYPE::ZOMBIE || (*it)->GetType() == CEntity3D::TYPE::POISON)
 		{
+			std::vector<CEntity3D*> tempEntity = CWave::GetInstance()->GetEnemies();
+			for (size_t i = 0; i < tempEntity.size(); ++i)
+			{
+				if (tempEntity.at(i) == (*it))
+				{
+					CWave::GetInstance()->DeleteEnemy((*it));
+					break;
+				}
+			}
 			(*it)->SetToDelete(true);
 		}
 	}
