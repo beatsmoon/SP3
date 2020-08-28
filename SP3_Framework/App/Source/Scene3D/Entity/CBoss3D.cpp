@@ -178,7 +178,7 @@ bool CBoss3D::Init(void)
 	case T_BOSS3:
 	{
 		health = 400;
-		speed = Math::RandFloatMinMax(0.1f, 0.7f);
+		speed = Math::RandFloatMinMax(1.0f, 1.3f);
 		rangeOfSight = 10.f;
 		splitting = 3;
 
@@ -433,6 +433,7 @@ void CBoss3D::Update(const double dElapsedTime)
 				// shoot projectiles at the player
 				static float dCountdown = 0.0f;				
 				dCountdown += dElapsedTime;
+
 				if (dCountdown > 1)
 				{
 					CEntity3D* currEntity = dynamic_cast<CEntity3D*>(this);

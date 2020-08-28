@@ -437,7 +437,7 @@ void CShop::Update(const double dElapsedTime)
 				}
 
 			}
-
+			bouncetime = GetTickCount64() + 500;
 		}
 	}
 }

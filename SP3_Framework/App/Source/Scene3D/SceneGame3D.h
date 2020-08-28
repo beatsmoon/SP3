@@ -135,6 +135,8 @@ protected:
 	CSceneGame3D(void);
 	// Destructor
 	virtual ~CSceneGame3D(void);
+
+	double dWaveResetTimer;
 	
 };
 

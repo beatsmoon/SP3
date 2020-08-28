@@ -141,24 +141,29 @@ bool CEntityManager::CollisionCheck(CEntity3D* cEntity3D)
 			case CEntity3D::TYPE::POISON:
 			{
 				// Rollback the cEntity3D's position
-				static double damageDelay = 10.0f;
-				if (damageDelay < 10.0f)
+				CPoison3D* poison = dynamic_cast<CPoison3D*>(*it);
+				static double damageDelay = 5.0f;
+				if (damageDelay < 5.0f)
 				{
 					damageDelay += 1.f;
+
 				}
-				else
+
+				else 
 				{
 					damageDelay = 0.f;
 					//cEntity3D->RollbackPosition();
 					// Rollback the NPC's position
 					//(*it)->RollbackPosition();
 					cout << "** Collision between Player and poison ***" << endl;
-					
+
 					cCameraEffects->Activate_BloodScreen();
 					cSoundController->PlaySoundByID(15);
 
-					cPlayer3D->SetCurrHealth(cPlayer3D->GetCurrHealth() - 2);
+					cPlayer3D->SetCurrHealth(cPlayer3D->GetCurrHealth() - 1);
 					bResult = true;
+
+
 				}
 				// Quit this loop since a collision has been found
 				break;
