@@ -190,15 +190,14 @@ bool CSceneGame3D::Init(void)
 	cGunExtMag->Init();
 	cGunExtMag->SetTierLevel(CGunExtMag::TIERLEVEL::NOTIER);
 
-	// add weapon to player
-	CWeapon* cPistol = new CWeapon(Weapon_Type::W_PISTOL);
-	cPistol->Init();
-	cPistol->SetShader(cSimpleShader);
-	cPlayer3D->SetWeapon(1, cPistol);
-	cPlayer3D->SetCurrentWeapon(1);
-	cPlayer3D->GetWeapon()->SetScope(cGunScope);
+	CWeapon* rifle = new CWeapon(Weapon_Type::W_BAREHAND);
+	rifle->Init();
+	rifle->SetShader(cSimpleShader);
+	cPlayer3D->SetWeapon(0, rifle);
+	cPlayer3D->SetCurrentWeapon(0);
 	cPlayer3D->GetWeapon()->SetBarrel(cGunBarrel);
 	cPlayer3D->GetWeapon()->SetExtMag(cGunExtMag);
+	cPlayer3D->GetWeapon()->SetScope(cGunScope);
 
 	//Creating Attachment
 	cGunBarrel = new CGunBarrel();
@@ -214,14 +213,15 @@ bool CSceneGame3D::Init(void)
 	cGunScope->Init();
 	cGunScope->SetTierLevel(CGunScope::TIERLEVEL::NOTIER);
 
-	CWeapon* rifle = new CWeapon(Weapon_Type::W_BAREHAND);
-	rifle->Init();
-	rifle->SetShader(cSimpleShader);
-	cPlayer3D->SetWeapon(0, rifle);
-	cPlayer3D->SetCurrentWeapon(0);
+	// add weapon to player
+	CWeapon* cPistol = new CWeapon(Weapon_Type::W_PISTOL);
+	cPistol->Init();
+	cPistol->SetShader(cSimpleShader);
+	cPlayer3D->SetWeapon(1, cPistol);
+	cPlayer3D->SetCurrentWeapon(1);
+	cPlayer3D->GetWeapon()->SetScope(cGunScope);
 	cPlayer3D->GetWeapon()->SetBarrel(cGunBarrel);
 	cPlayer3D->GetWeapon()->SetExtMag(cGunExtMag);
-	cPlayer3D->GetWeapon()->SetScope(cGunScope);
 	
 	// attach camera
 	cPlayer3D->AttachCamera(cCamera);

@@ -154,63 +154,25 @@ void CSceneMenu3D::Update(const double dElapsedTime)
 	if (cMouseController->IsButtonDown(CMouseController::BUTTON_TYPE::LMB) && cPistol->GetMagRound() > 0
 		&& cPistol->GetFiringType() == CWeaponInfo::FIRINGTYPE::AUTO)
 	{
+		CProjectile* cProjectile = cPistol->Discharge(cPlayer3D->GetPosition(), cPlayer3D->GetFront(), cPlayer3D);
+		if (cProjectile)
 		{
-			CProjectile* cProjectile = cPistol->Discharge(cPlayer3D->GetPosition(), cPlayer3D->GetFront(), cPlayer3D);
-			if (cProjectile)
-			{
-				cProjectile->SetGravityMultiplier(cPistol->CalculateGravityMultiplier());
-
-				cEntityManager->Add(cProjectile);
-				cPlayer3D->TriggerRecoil();
-			}
-			//if (i == BulletPerShot - 1)
-			{
-				cPistol->SetMagRound(cPistol->GetMagRound() - 1);
-				//cPistol->SetCanFire(false);
-			}
+			cProjectile->SetGravityMultiplier(cPistol->CalculateGravityMultiplier());
+			cSoundController->PlaySoundByID(10);
+			cEntityManager->Add(cProjectile);
+			cPlayer3D->TriggerRecoil();
 		}
 	}
 	else if (cMouseController->IsButtonReleased(CMouseController::BUTTON_TYPE::LMB) && cPistol->GetMagRound() > 0
 		&& cPistol->GetFiringType() == CWeaponInfo::FIRINGTYPE::SINGLE)
 	{
+		CProjectile* cProjectile = cPistol->Discharge(cPlayer3D->GetPosition(), cPlayer3D->GetFront(), cPlayer3D);
+		if (cProjectile)
 		{
-			CProjectile* cProjectile = cPistol->Discharge(cPlayer3D->GetPosition(), cPlayer3D->GetFront(), cPlayer3D);
-			if (cProjectile)
-			{
-				cProjectile->SetGravityMultiplier(cPistol->CalculateGravityMultiplier());
-				cEntityManager->Add(cProjectile);
-				cPlayer3D->TriggerRecoil();
-			}
-			//if (i == BulletPerShot - 1)
-			{
-				cPistol->SetMagRound((cPistol->GetMagRound()) - 1);
-				//cPistol->SetCanFire(false);
-			}
-		}
-	}
-
-	if (CKeyboardController::GetInstance()->IsKeyPressed(GLFW_KEY_R)
-		&& cPistol->GetMagRound() < cPistol->GetMaxMagRound())
-	{
-		static double InputDelay = 10.f;
-		if (InputDelay < 10.f)
-		{
-			InputDelay += 1.f;
-
-		}
-		else
-		{
-			InputDelay = 0.f;
-			if (cPistol != NULL)
-			{
-				cPistol->Reload();
-				//cPlayer3D->GetWeapon()->SetCanFire(false);
-
-			}
-			else
-			{
-				cout << "there is no weapon to reload" << endl;
-			}
+			cProjectile->SetGravityMultiplier(cPistol->CalculateGravityMultiplier());
+			cSoundController->PlaySoundByID(10);
+			cEntityManager->Add(cProjectile);
+			cPlayer3D->TriggerRecoil();
 		}
 	}
 

@@ -146,7 +146,7 @@ void CSceneShop3D::Render(void)
 
 	//Third Row
 
-	cTextRenderer->Render(std::to_string(cShop->GetPrice(BARREL)), cSettings->iWindowWidth * 0.09656, cSettings->iWindowHeight * 0.23342, 0.6f, glm::vec3(1.f, 1.f, 1.f));
+	cTextRenderer->Render(std::to_string(cShop->GetPrice(AMMOITEM)), cSettings->iWindowWidth * 0.09656, cSettings->iWindowHeight * 0.23342, 0.6f, glm::vec3(1.f, 1.f, 1.f));
 
 	cTextRenderer->PostRender();
 }

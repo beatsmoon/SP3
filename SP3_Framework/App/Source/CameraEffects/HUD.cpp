@@ -81,36 +81,40 @@ bool CHUD::Init(void)
 		return false;
 	}
 
-	//switch (type)
-	//{
-	//case W_PISTOL:
-	//	vec3Position = glm::vec3(0.5f, -0.5f, 0.0f);
-	//	vec3Scale.x = 0.5;
-	//	vec3Scale.y = 0.5;
-	//	// load and create a texture 
-	//	iTextureID = LoadTexture("Images/GUI/holding_rifle.tga");
-	//	if (iTextureID == 0)
-	//	{
-	//		cout << "Unable to load ImageS/GUI/holding_rifle.tga" << endl;
-	//		return false;
-	//	}
+	switch (currentType)
+	{
+	case Weapon_Type::W_PISTOL:
+	{
+		iTextureID = LoadTexture("Images/GUI/NoAttachment/Scene3D_Holding_Pistol.tga");
+	}
+	break;
+	case Weapon_Type::W_SHOTGUN:
+	{
+		iTextureID = LoadTexture("Images/GUI/NoAttachment/Scene3D_Holding_Shotgun.tga");
+	}
+	break;
+	case Weapon_Type::W_AK47:
+	{
+		iTextureID = LoadTexture("Images/GUI/NoAttachment/Scene3D_Holding_AK47.tga");
+	}
+	break;
+	case Weapon_Type::W_M4:
+	{
+		iTextureID = LoadTexture("Images/GUI/Scene3D_Holding_M4.tga");
+	}
+	break;
+	case Weapon_Type::W_SNIPER:
+	{
+		iTextureID = LoadTexture("Images/GUI/NoAttachment/Scene3D_Holding_Sniper.tga");
+	}
+	break;
+	case Weapon_Type::W_BAREHAND:
+	{
+		iTextureID = 0;
+	}
+	break;
+	}
 
-	//	break;
-	//case H_SELECTION_GUN:
-	//	vec3Position = glm::vec3(0.8, -0.8, 0.0f);
-	//	vec3Scale.x = 0.1;
-	//	vec3Scale.y = 0.1;
-	//	// load and create a texture 
-	//	iTextureID = LoadTexture("Images/GUI/rifle_HUD.tga");
-	//	if (iTextureID == 0)
-	//	{
-	//		cout << "Unable to load ImageS/GUI/rifle_HUD.tga" << endl;
-	//		return false;
-	//	}
-	//	break;
-	//default:
-	//	break;
-	//}
 	vec3Position = glm::vec3(0.5f, -0.9f, 0.0f);
 	vec3Scale.x = 0.5;
 	vec3Scale.y = 0.8;
@@ -238,11 +242,6 @@ void CHUD::UpdateFullStatus()
 		iTextureID = LoadTexture("Images/GUI/FullAttachment/Scene3D_Holding_AK47_Full.tga");
 	}
 	break;
-	//case Weapon_Type::W_M4:
-	//{
-	//	iTextureID = LoadTexture("Images/GUI/BarrelAttachment/Scene3D_Holding_M4.tga");
-	//}
-	//break;
 	case Weapon_Type::W_SNIPER:
 	{
 		iTextureID = LoadTexture("Images/GUI/FullAttachment/Scene3D_Holding_Sniper.tga");
@@ -361,12 +360,6 @@ void CHUD::Update(const double dElapsedTime)
 		}
 		else
 		{
-			//if gun have no barrel and scope
-			//if (currentType == prevType)
-			//{
-			//	return;
-			//}
-			//prevtype = type;
 			switch (currentType)
 			{
 			case Weapon_Type::W_PISTOL:
