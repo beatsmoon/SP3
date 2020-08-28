@@ -214,15 +214,6 @@ bool CSceneGame3D::Init(void)
 	cGunScope->Init();
 	cGunScope->SetTierLevel(CGunScope::TIERLEVEL::NOTIER);
 
-	//CWeapon* rifle = new CWeapon(Weapon_Type::W_AK47);
-	//rifle->Init();
-	//rifle->SetShader(cSimpleShader);
-	//cPlayer3D->SetWeapon(0, rifle);
-	//cPlayer3D->SetCurrentWeapon(0);
-	//cPlayer3D->GetWeapon()->SetBarrel(cGunBarrel);
-	//cPlayer3D->GetWeapon()->SetExtMag(cGunExtMag);
-	//cPlayer3D->GetWeapon()->SetScope(cGunScope);
-
 	CWeapon* rifle = new CWeapon(Weapon_Type::W_BAREHAND);
 	rifle->Init();
 	rifle->SetShader(cSimpleShader);
@@ -231,9 +222,7 @@ bool CSceneGame3D::Init(void)
 	cPlayer3D->GetWeapon()->SetBarrel(cGunBarrel);
 	cPlayer3D->GetWeapon()->SetExtMag(cGunExtMag);
 	cPlayer3D->GetWeapon()->SetScope(cGunScope);
-
-
-
+	
 	// attach camera
 	cPlayer3D->AttachCamera(cCamera);
 
@@ -363,6 +352,8 @@ bool CSceneGame3D::Init(void)
 		cEntityManager->Add(cExplosiveBarrel);
 		pos += 5.f;
 	}
+
+	return true;
 }
 
 /**
@@ -703,16 +694,14 @@ void CSceneGame3D::Update(const double dElapsedTime)
 			cPlayer3D->SetPosition(glm::vec3(0.0f, 0.5f, 0.0f));
 			cPlayer3D->SetCurrHealth(cPlayer3D->GetMaxHealth());
 			cEntityManager->DeleteEnemies();
-			cScore->SetScore(iPrevWaveScore);
-
+			cScore->SetScore(iPrevWaveScore - CShop::GetInstance()->GetMoneySpent());
+			
 		}
 	}
 	//If player clears the wave
 	else if (cEntityManager->CheckWave() == true)
 	{
 		cWave->SpawnBoss();
-		//cout << "Boss Spawned" << endl;
-
 	}
 
 
@@ -757,6 +746,9 @@ void CSceneGame3D::Update(const double dElapsedTime)
 		//Reset timers
 		dMainWaveTimer = 0.0f;
 		dBossTimer = 0.0f;
+
+		cPlayer3D->SetCurrHealth(cPlayer3D->GetMaxHealth());
+		CShop::GetInstance()->SetMoneySpent(0);
 
 	}
 	//If Player has not killed the boss

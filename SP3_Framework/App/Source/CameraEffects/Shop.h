@@ -32,6 +32,18 @@
 #include "../App/Source/Scene3D/WeaponInfo/WeaponAttachments/AttachmentScope.h"
 
 
+enum ITEM
+{
+	SNIPER,
+	AK47,
+	SHOTGUN,
+	EXTMAG,
+	SCOPE,
+	BARREL,
+	AMMOITEM,
+	NUM_ITEMS
+};
+
 class CShop : public CEntity3D, public CSingletonTemplate<CShop>
 {
 	friend class CSingletonTemplate<CShop>;
@@ -71,11 +83,21 @@ public:
 	//Changes flag to deactivate shop UI
 	void DeactivateShop(void);
 
+	//Return the string for the item player is buying
 	std::string GetItemBought(void);
 
+	//Set the string for shop UI
 	void SetItemBought(std::string);
 
+	//Update the prices depending on how much money the player has
+	void SetPrices(void);
 
+	//Get the price for each item in the shop
+	int GetPrice(ITEM eItem);
+
+	void SetMoneySpent(int iMoneySpent);
+
+	int GetMoneySpent(void);
 
 
 protected:
@@ -90,10 +112,11 @@ protected:
 
 	std::string sItemBought;
 	
-	
 	bool bActive;
 	bool bShopActive;
-	
+	int iSniper, iAK, iShotgun, iBarrel, iScope, iExtMag, iAmmo;
+
+	int iMoneySpent;
 
 	// Constructor
 	CShop(void);
